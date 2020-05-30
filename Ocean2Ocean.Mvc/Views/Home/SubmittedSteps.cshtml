@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Step>
+@{
+    ViewData["Title"] = "Add Steps";
+}
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1 class="display-4 pt-3">
+                Steps Submitted for @Model?.FirstOrDefault()?.Email
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-borderless">
+                    <thead>
+                        <tr>
+                            <th>
+                                Steps
+                            </th>
+                            <th>
+                                Date Submitted
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            foreach (var entry in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @entry?.Steps.ToString("N0")
+                                    </td>
+                                    <td>
+                                        @entry?.Created
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

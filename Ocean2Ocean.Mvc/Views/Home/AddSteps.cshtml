@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Step>
+@{
+    ViewData["Title"] = "Add Steps";
+}
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<div class="container">
+    @*<div class="row">
+            <div class="col">
+                <h1 class="display-4 pt-3">
+                    Add Your Steps
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <form>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Work Email Address</label>
+                        <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" value="@Model?.FirstOrDefault()?.Email">
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Steps Taken</label>
+                        <input type="number" name="steps" class="form-control" id="exampleInputPassword1" placeholder="1337">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                        <a asp-action="Index" class="btn btn-info btn-lg">Return to the Map</a>
+                    </div>
+                </form>
+            </div>
+        </div>*@
+    @{
+        if (Model != null && Model.Any())
+        {
+            <div class="row">
+                <div class="col">
+                    <h1 class="display-4 pt-3">
+                        Steps Submitted for @Model?.FirstOrDefault()?.Email
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="alert alert-success mt-3" role="alert">
+                        You've contributed <strong>@Model?.Sum(x => x.Steps).ToString("N0")</strong> Steps to our Journey so far!
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Steps
+                                    </th>
+                                    <th>
+                                        Date Submitted
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var entry in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @entry?.Steps.ToString("N0")
+                                            </td>
+                                            <td>
+                                                @entry?.Created
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    <a class="btn btn-primary btn-lg" asp-action="Index">
+        Return to the Map
+    </a>
+</div>
