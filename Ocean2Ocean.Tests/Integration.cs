@@ -31,7 +31,6 @@ namespace Ocean2Ocean.Tests
             _azureSql = _configuration.GetConnectionString("AzureSQL");
         }
 
-
         [Fact]
         public async Task SumSteps()
         {

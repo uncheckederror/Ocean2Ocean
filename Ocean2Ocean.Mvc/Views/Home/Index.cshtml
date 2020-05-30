@@ -46,10 +46,12 @@
                     <label for="exampleInputPassword1">Steps Taken Today</label>
                     <input type="number" name="steps" class="form-control" id="exampleInputPassword1" placeholder="1337" value="@Model?.Step?.Steps">
                     <small id="emailHelp" class="form-text text-muted">1 Mile is about 2000 steps.</small>
+                    <input type="number" id="stepsTaken" name="stepsTaken" hidden />
+                    <input type="number" id="stepsInRoute" name="stepsInRoute" hidden />
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-lg" asp-action="AddSteps">🚀 Submit</button>
-                    <a class="btn btn-info btn-lg" href="#" target="_blank">👓 Github</a>
+                    <a class="btn btn-info btn-lg" href="https://github.com/uncheckederror/Ocean2Ocean" target="_blank">👓 Github</a>
                 </div>
             </form>
         </div>
@@ -1243,6 +1245,8 @@
     var totalSteps = Math.round(totalStepsUnrounded);
     console.log("totalSteps: " + totalSteps);
     document.getElementById("stats").innerHTML += " &#8226; " + addCommas(totalSteps) + " Steps";
+    document.getElementById("stepsInRoute").value = totalSteps;
+    document.getElementById("stepsTaken").value = stepsTaken;
 
     // Calculate the distance traveled.
     var milesFromSteps = stepsTaken / 2000;

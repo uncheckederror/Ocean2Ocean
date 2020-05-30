@@ -12,6 +12,8 @@ namespace Ocean2Ocean.Models
     {
         public string Email { get; set; }
         public int Steps { get; set; }
+        public int StepsTaken { get; set; }
+        public int StepsInRoute { get; set; }
         public DateTime Created { get; set; }
 
         public static async Task<IEnumerable<Step>> GetAllAsync(string connectionString)
@@ -33,7 +35,7 @@ namespace Ocean2Ocean.Models
             email = $"%{email}%";
 
             var result = await connection
-                .QueryAsync<Step>("SELECT [Email], [Steps] ,[Created], [EntryId] FROM [dbo].[Entries] WHERE [Email] LIKE @email",
+                .QueryAsync<Step>("SELECT [Email], [Steps] ,[Created], [EntryId] FROM [dbo].[Entries] WHERE [Email] LIKE @email ORDER BY [Created] DESC",
                 new { email })
                 .ConfigureAwait(false);
 

@@ -58,10 +58,17 @@ namespace Ocean2Ocean.Controllers
             });
         }
 
-        public async Task<IActionResult> AddSteps([Bind("Email,Steps")] Step step)
+        public async Task<IActionResult> AddSteps([Bind("Email,Steps,StepsTaken,StepsInRoute")] Step step)
         {
             if (step != null && !string.IsNullOrWhiteSpace(step.Email) && step.Steps > 1)
             {
+                // Block step values that are too large.
+                if (step.StepsInRoute - (step.StepsTaken + step.Steps) < 0)
+                {
+                    // Let them know this was bad input maybe?
+                    return RedirectToAction("Index");
+                }
+
                 // Save this entry to the db.
                 var checkSubmitted = await step.PostAsync(_azureSQL);
 
