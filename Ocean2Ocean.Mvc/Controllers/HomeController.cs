@@ -28,7 +28,7 @@ namespace Ocean2Ocean.Controllers
             _azureSQL = _configuration.GetConnectionString("AzureSQL");
         }
 
-        public async Task<IActionResult> IndexAsync(DateTime? Date, int steps)
+        public async Task<IActionResult> IndexAsync(DateTime? Date, int steps, string journeyName)
         {
             // Using today's date get the sum of all steps up to this point.
             var currentDate = Date ?? DateTime.Now;
@@ -45,6 +45,13 @@ namespace Ocean2Ocean.Controllers
                     MapboxAccessToken = _mapboxAccessToken
                 });
             }
+
+            // Lookup a specific journey.
+            if (!string.IsNullOrWhiteSpace(journeyName))
+            {
+                // Make a query to the db.
+            }
+
 
             var results = await Step.GetAllAsync(_azureSQL);
             steps = results.Sum(x => x.Steps);
@@ -75,7 +82,7 @@ namespace Ocean2Ocean.Controllers
 
                 if (checkSubmitted)
                 {
-                    var results = await Step.GetByEmail(step.Email, _azureSQL);
+                    var results = await Step.GetByEmailAsync(step.Email, _azureSQL);
                     return View("AddSteps", results);
                 }
             }
