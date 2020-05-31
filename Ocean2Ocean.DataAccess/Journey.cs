@@ -7,6 +7,7 @@ namespace Ocean2Ocean.DataAccess
 {
     public class Journey
     {
+        public string JourneyName { get; set; }
         public int StepsTaken { get; set; }
         public int Participants { get; set; }
         public DateTime Date { get; set; }

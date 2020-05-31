@@ -24,11 +24,19 @@ namespace Ocean2Ocean.DataAccess
         {
             using var connection = new SqlConnection(connectionString);
 
-            var result = await connection
+            return await connection
                 .QueryAsync<Step>("SELECT [EntryId], [Email], [JourneyName], [Steps], [Created] FROM [dbo].[Entries]")
                 .ConfigureAwait(false);
+        }
 
-            return result;
+        public static async Task<Step> GetByIdAsync(int entryId, string connectionString)
+        {
+            using var connection = new SqlConnection(connectionString);
+
+            return await connection
+                .QueryFirstOrDefaultAsync<Step>("SELECT [EntryId], [Email], [JourneyName], [Steps], [Created] FROM [dbo].[Entries] WHERE [EntryId] = @entryId",
+                new { entryId })
+                .ConfigureAwait(false);
         }
 
         public static async Task<IEnumerable<Step>> GetByEmailAsync(string email, string connectionString)
@@ -36,14 +44,13 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             // Make the query more general.
+            // Make the query more general.
             email = $"%{email}%";
 
-            var result = await connection
+            return await connection
                 .QueryAsync<Step>("SELECT [EntryId], [Email], [JourneyName], [Steps], [Created] FROM [dbo].[Entries] WHERE [Email] LIKE @email ORDER BY [Created] DESC",
                 new { email })
                 .ConfigureAwait(false);
-
-            return result;
         }
 
         public static async Task<IEnumerable<Step>> GetByJourneyAsync(string journeyName, string connectionString)
@@ -53,12 +60,31 @@ namespace Ocean2Ocean.DataAccess
             // Make the query more general.
             journeyName = $"%{journeyName}%";
 
-            var result = await connection
+            return await connection
                 .QueryAsync<Step>("SELECT [EntryId], [Email], [JourneyName], [Steps], [Created] FROM [dbo].[Entries] WHERE [JourneyName] LIKE @journeyName ORDER BY [Created] DESC",
                 new { journeyName })
                 .ConfigureAwait(false);
+        }
 
-            return result;
+        public async Task<bool> CheckForDuplicateAsync(string connectionString)
+        {
+            using var connection = new SqlConnection(connectionString);
+
+            var timeRange = DateTime.Now.AddHours(-1);
+
+            var result = await connection
+                .QueryFirstOrDefaultAsync<Step>("SELECT [EntryId], [Email], [JourneyName], [Steps], [Created] FROM [dbo].[Entries] WHERE [Email] = @Email AND [JourneyName] = @JourneyName AND [Steps] = @Steps AND [Created] > @timeRange",
+                new { Email, JourneyName, Steps, timeRange })
+                .ConfigureAwait(false);
+
+            if (result != null && result.Steps > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public async Task<bool> PostAsync(string connectionString)
