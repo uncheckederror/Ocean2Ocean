@@ -76,16 +76,16 @@
                                                 @entry?.Created
                                             </td>
                                             <td>
-                                                <a class="btn btn-primary" href="/@entry.JourneyName">
-                                                    @entry?.JourneyName
-                                                </a>
-                                            </td>
-                                            <td>
                                                 <form asp-action="RemoveSteps" asp-route-journeyName="@entry?.JourneyName" asp-route-entryId="@entry?.EntryId">
                                                     <button type="submit" class="btn btn-danger">
                                                         Delete
                                                     </button>
                                                 </form>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-primary" href="/@entry.JourneyName">
+                                                    View @entry?.JourneyName
+                                                </a>
                                             </td>
                                         </tr>
                                     }
