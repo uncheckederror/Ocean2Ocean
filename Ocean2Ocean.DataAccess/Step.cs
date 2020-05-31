@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Ocean2Ocean.Models
+namespace Ocean2Ocean.DataAccess
 {
     public class Step
     {

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 
-using Ocean2Ocean.Models;
+using Ocean2Ocean.DataAccess;
 
 using System;
 using System.Linq;

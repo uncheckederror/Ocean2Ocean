@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ocean2Ocean", "Ocean2Ocean.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ocean2Ocean.Tests", "Ocean2Ocean.Tests\Ocean2Ocean.Tests.csproj", "{688653AC-7D16-4670-9074-0587EAC0B72A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocean2Ocean.DataAccess", "Ocean2Ocean.DataAccess\Ocean2Ocean.DataAccess.csproj", "{9FCCCDA7-7E09-45D2-8CA3-304BF5C7FC43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{688653AC-7D16-4670-9074-0587EAC0B72A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{688653AC-7D16-4670-9074-0587EAC0B72A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{688653AC-7D16-4670-9074-0587EAC0B72A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FCCCDA7-7E09-45D2-8CA3-304BF5C7FC43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FCCCDA7-7E09-45D2-8CA3-304BF5C7FC43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FCCCDA7-7E09-45D2-8CA3-304BF5C7FC43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FCCCDA7-7E09-45D2-8CA3-304BF5C7FC43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
