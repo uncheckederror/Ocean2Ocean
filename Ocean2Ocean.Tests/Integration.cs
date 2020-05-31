@@ -43,7 +43,16 @@ namespace Ocean2Ocean.Tests
         [Fact]
         public async Task GetByEmail()
         {
-            var results = await Step.GetByEmail("batman", _azureSql);
+            var results = await Step.GetByEmailAsync("batman", _azureSql);
+            Assert.NotNull(results);
+            Assert.True(results.Any());
+            _output.WriteLine(results.Sum(x => x.Steps).ToString() + " Steps in Total");
+        }
+
+        [Fact]
+        public async Task GetByJourneyName()
+        {
+            var results = await Step.GetByJourneyAsync("test", _azureSql);
             Assert.NotNull(results);
             Assert.True(results.Any());
             _output.WriteLine(results.Sum(x => x.Steps).ToString() + " Steps in Total");
@@ -55,6 +64,7 @@ namespace Ocean2Ocean.Tests
             var entry = new Step
             {
                 Email = "batman@theBestCounty.gov",
+                JourneyName = "test",
                 Steps = 100,
                 Created = DateTime.Now
             };
@@ -62,6 +72,29 @@ namespace Ocean2Ocean.Tests
             var checkSubmitted = await entry.PostAsync(_azureSql);
 
             Assert.True(checkSubmitted);
+        }
+
+        [Fact]
+        public async Task AddAndDeleteAnEntry()
+        {
+            var entry = new Step
+            {
+                Email = "batman@theBestCounty.gov",
+                JourneyName = "test",
+                Steps = 100,
+                Created = DateTime.Now
+            };
+
+            var checkSubmitted = await entry.PostAsync(_azureSql);
+
+            Assert.True(checkSubmitted);
+
+            var results = await Step.GetByEmailAsync("batman@theBestCounty.gov", _azureSql);
+            var deleteMe = results.FirstOrDefault();
+
+            var checkDelete = await deleteMe.DeleteAsync(_azureSql);
+
+            Assert.True(checkDelete);
         }
     }
 }
