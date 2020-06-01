@@ -134,7 +134,7 @@ namespace Ocean2Ocean.Controllers
             }
             else if (step?.Steps == 0 && !string.IsNullOrWhiteSpace(step.JourneyName))
             {
-                var results = await Step.GetByJourneyAsync(step.JourneyName, _azureSQL);
+                var results = await Step.GetRankingsAsync(step.JourneyName, _azureSQL);
                 return View("Leaderboard", results);
             }
 
@@ -146,7 +146,7 @@ namespace Ocean2Ocean.Controllers
         {
             if (!string.IsNullOrWhiteSpace(journeyName))
             {
-                var results = await Step.GetByJourneyAsync(journeyName, _azureSQL);
+                var results = await Step.GetRankingsAsync(journeyName, _azureSQL);
 
                 if (results.Any())
                 {

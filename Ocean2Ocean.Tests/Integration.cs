@@ -76,6 +76,20 @@ namespace Ocean2Ocean.Tests
         }
 
         [Fact]
+        public async Task GetRankingsByJourneyName()
+        {
+            var results = await Step.GetByJourneyAsync("test", _azureSql);
+            Assert.NotNull(results);
+            Assert.True(results.Any());
+
+            var journey = results.FirstOrDefault();
+
+            var leaders = await Step.GetRankingsAsync(journey.JourneyName, _azureSql);
+            Assert.NotNull(leaders);
+            Assert.True(leaders.Any());
+        }
+
+        [Fact]
         public async Task AddAnEntry()
         {
             var entry = new Step

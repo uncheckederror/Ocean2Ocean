@@ -17,26 +17,6 @@
     @{
         if (Model != null && Model.Any())
         {
-            var players = new Dictionary<string, int>();
-
-            foreach (var entry in Model)
-            {
-                var checkKey = players.ContainsKey(entry.Email);
-                if (checkKey)
-                {
-                    var player = players[entry.Email];
-                    player += entry.Steps;
-                    players[entry.Email] = player;
-                }
-                else
-                {
-                    players[entry.Email] = entry.Steps;
-                }
-            }
-
-            var names = players.Keys.ToArray();
-            var ranks = players.Values.ToArray();
-
             <div class="row">
                 <div class="col">
                     <h1 class="display-4 pt-3">
@@ -47,16 +27,17 @@
             <div class="row">
                 <div class="col">
                     <div class="alert alert-success mt-3" role="alert">
-                        @Model?.FirstOrDefault()?.JourneyName has made it <strong>@Model?.Sum(x => x.Steps).ToString("N0")</strong> steps into its Journey so far!
+                        @Model?.FirstOrDefault()?.JourneyName has made it <strong>@Model?.Sum(x => x.TotalSteps).ToString("N0")</strong> steps into its Journey so far!
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover table-borderless">
                             <tbody>
                                 @{
+                                    var names = Model?.ToArray();
                                     for (int i = 0; i < names.Length; i++)
                                     {
                                         var postion = i + 1;
-                                        decimal portion = Decimal.Divide(ranks[i], Model?.Sum(x => x.Steps) ?? 1);
+                                        decimal portion = Decimal.Divide(names[i].TotalSteps, names.Sum(x => x.TotalSteps));
                                         string formattedPortion = (portion * 100M).ToString("N2") + " %";
 
                                         // First place
@@ -67,10 +48,10 @@
                                                     <strong>@postion 🏆</strong>
                                                 </td>
                                                 <td>
-                                                    @names[i]
+                                                    @names[i].Email
                                                 </td>
                                                 <td>
-                                                    @ranks[i] Steps
+                                                    @names[i].TotalSteps Steps
                                                 </td>
                                                 <td>
                                                     @formattedPortion
@@ -84,10 +65,10 @@
                                                     <strong>@postion 🏳️</strong>
                                                 </td>
                                                 <td>
-                                                    @names[i]
+                                                    @names[i].Email
                                                 </td>
                                                 <td>
-                                                    @ranks[i] Steps
+                                                    @names[i].TotalSteps Steps
                                                 </td>
                                                 <td>
                                                     @formattedPortion
@@ -101,10 +82,10 @@
                                                     <strong>@postion</strong>
                                                 </td>
                                                 <td>
-                                                    @names[i]
+                                                    @names[i].Email
                                                 </td>
                                                 <td>
-                                                    @ranks[i] Steps
+                                                    @names[i].TotalSteps Steps
                                                 </td>
                                                 <td>
                                                     @formattedPortion
@@ -120,9 +101,9 @@
                         🗺️ Return to the Map
                     </a>
                     @*<button class="btn btn-success" onclick="Share()">
-                        🔗 Share This
-                    </button>
-                    <textarea id="url" rows="1" cols="30" hidden></textarea>*@
+                            🔗 Share This
+                        </button>
+                        <textarea id="url" rows="1" cols="30" hidden></textarea>*@
                 </div>
             </div>
         }

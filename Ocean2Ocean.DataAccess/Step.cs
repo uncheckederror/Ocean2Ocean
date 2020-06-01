@@ -15,7 +15,8 @@ namespace Ocean2Ocean.DataAccess
         public int Steps { get; set; }
         public DateTime Created { get; set; }
         public string JourneyName { get; set; }
-
+        // This is a sum field for a specific query.
+        public int TotalSteps { get; set; }
         // These properties are for convenience and not present in the Db.
         public int StepsTaken { get; set; }
         public int StepsInRoute { get; set; }
@@ -62,6 +63,16 @@ namespace Ocean2Ocean.DataAccess
 
             return await connection
                 .QueryAsync<Step>("SELECT [EntryId], [Email], [JourneyName], [Steps], [Created] FROM [dbo].[Entries] WHERE [JourneyName] LIKE @journeyName ORDER BY [Created] DESC",
+                new { journeyName })
+                .ConfigureAwait(false);
+        }
+
+        public static async Task<IEnumerable<Step>> GetRankingsAsync(string journeyName, string connectionString)
+        {
+            using var connection = new SqlConnection(connectionString);
+
+            return await connection
+                .QueryAsync<Step>("SELECT [Email], [JourneyName], SUM(Steps) As TotalSteps FROM [dbo].[Entries] WHERE [JourneyName] = @journeyName GROUP BY [Email], [JourneyName] ORDER BY TotalSteps DESC",
                 new { journeyName })
                 .ConfigureAwait(false);
         }
