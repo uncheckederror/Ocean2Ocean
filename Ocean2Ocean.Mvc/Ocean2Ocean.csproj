@@ -18,4 +18,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Ocean2Ocean.DataAccess\Ocean2Ocean.DataAccess.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="wwwroot\js\route.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\js\site.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
