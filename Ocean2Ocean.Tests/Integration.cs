@@ -81,7 +81,7 @@ namespace Ocean2Ocean.Tests
             var entry = new Step
             {
                 Email = "batman@theBestCounty.gov",
-                JourneyName = "test",
+                JourneyName = "Test",
                 Steps = 100,
                 Created = DateTime.Now
             };
@@ -97,7 +97,7 @@ namespace Ocean2Ocean.Tests
             var entry = new Step
             {
                 Email = "batman@theBestCounty.gov",
-                JourneyName = "test",
+                JourneyName = "Test",
                 Steps = 100,
                 Created = DateTime.Now
             };
@@ -117,7 +117,7 @@ namespace Ocean2Ocean.Tests
             var entry = new Step
             {
                 Email = "batman@theBestCounty.gov",
-                JourneyName = "test",
+                JourneyName = "Test",
                 Steps = 100,
                 Created = DateTime.Now
             };
