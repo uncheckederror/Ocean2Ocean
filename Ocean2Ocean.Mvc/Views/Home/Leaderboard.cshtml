@@ -1,39 +1,180 @@
-﻿@model IEnumerable<Ocean2Ocean.DataAccess.Step>
+﻿@model Ocean2Ocean.DataAccess.Leaderboard
 @{
     ViewData["Title"] = "Leaderboard";
 }
 
 <script>
     function Share() {
-  var Url = document.getElementById("url");
-  Url.innerHTML = window.location.href;
-  console.log(Url.innerHTML)
-  Url.select();
-  document.execCommand("copy");
+        var Url = document.getElementById("url");
+        Url.innerHTML = window.location.href;
+        console.log(Url.innerHTML)
+        Url.select();
+        document.execCommand("copy");
     }
 </script>
 
 <div class="container">
     @{
-        if (Model != null && Model.Any())
+        int dailyGoal = 5000;
+        if (Model.DailyRankings != null && Model.DailyRankings.Any())
         {
             <div class="row">
                 <div class="col">
                     <h1 class="display-4 pt-3">
-                        Leaderboard for @Model?.FirstOrDefault()?.JourneyName
+                        📅 Daily Leaderboard for @Model?.DailyRankings?.FirstOrDefault()?.JourneyName
                     </h1>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <div class="alert alert-success mt-3" role="alert">
-                        @Model?.FirstOrDefault()?.JourneyName has made it <strong>@Model?.Sum(x => x.TotalSteps).ToString("N0")</strong> steps into its Journey so far!
+                        @Model?.DailyRankings.FirstOrDefault()?.JourneyName has added <strong>@Model?.DailyRankings.Sum(x => x.Steps).ToString("N0")</strong> steps to its Journey today! The ⭐ Daily Goal is @dailyGoal.ToString("N0") steps.
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover table-borderless">
                             <tbody>
                                 @{
-                                    var names = Model?.ToArray();
+                                    int stars = 0;
+                                    var names = Model?.DailyRankings.ToArray();
+                                    for (int i = 0; i < names.Length; i++)
+                                    {
+                                        var postion = i + 1;
+                                        decimal portion = Decimal.Divide(names[i].Steps, names.Sum(x => x.Steps));
+                                        string formattedPortion = (portion * 100M).ToString("N2") + " %";
+
+                                        // First place
+                                        if (i == 0)
+                                        {
+                                            <tr>
+                                                <td scope="row">
+                                                    <strong>@postion 🏆</strong>
+                                                </td>
+                                                <td>
+                                                    @names[i].Email
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        string formattedSteps = string.Empty;
+                                                        if (names[i]?.Steps >= dailyGoal)
+                                                        {
+                                                            stars++;
+                                                            formattedSteps = $"⭐ {names[i]?.Steps.ToString("N0")} Steps";
+                                                        }
+                                                        else
+                                                        {
+                                                            formattedSteps = $"{names[i]?.Steps.ToString("N0")} Steps";
+                                                        }
+                                                    }
+                                                    @formattedSteps
+                                                </td>
+                                                <td>
+                                                    @names[i].Created
+                                                </td>
+                                                <td>
+                                                    @formattedPortion
+                                                </td>
+                                            </tr>
+                                        }
+                                        else if (i == names.Length - 1)
+                                        {
+                                            <tr>
+                                                <td scope="row">
+                                                    <strong>@postion 🏳️</strong>
+                                                </td>
+                                                <td>
+                                                    @names[i].Email
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        string formattedSteps = string.Empty;
+                                                        if (names[i]?.Steps >= dailyGoal)
+                                                        {
+                                                            stars++;
+                                                            formattedSteps = $"⭐ {names[i]?.Steps.ToString("N0")} Steps";
+                                                        }
+                                                        else
+                                                        {
+                                                            formattedSteps = $"{names[i]?.Steps.ToString("N0")} Steps";
+                                                        }
+                                                    }
+                                                    @formattedSteps
+                                                </td>
+                                                <td>
+                                                    @names[i].Created
+                                                </td>
+                                                <td>
+                                                    @formattedPortion
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td scope="row">
+                                                    <strong>@postion</strong>
+                                                </td>
+                                                <td>
+                                                    @names[i].Email
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        string formattedSteps = string.Empty;
+                                                        if (names[i]?.Steps >= dailyGoal)
+                                                        {
+                                                            stars++;
+                                                            formattedSteps = $"⭐ {names[i]?.Steps.ToString("N0")} Steps";
+                                                        }
+                                                        else
+                                                        {
+                                                            formattedSteps = $"{names[i]?.Steps.ToString("N0")} Steps";
+                                                        }
+                                                    }
+                                                    @formattedSteps
+                                                </td>
+                                                <td>
+                                                    @names[i].Created
+                                                </td>
+                                                <td>
+                                                    @formattedPortion
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <a class="btn btn-primary" href="/@Model?.DailyRankings?.FirstOrDefault()?.JourneyName">
+                        🗺️ Return to the Map
+                    </a>
+                    @*<button class="btn btn-success" onclick="Share()">
+                            🔗 Share This
+                        </button>
+                        <textarea id="url" rows="1" cols="30" hidden></textarea>*@
+                </div>
+            </div>
+        }
+    }
+    @{
+        if (Model.JourneyRankings != null && Model.JourneyRankings.Any())
+        {
+            <div class="row">
+                <div class="col">
+                    <h1 class="display-4 pt-3">
+                        🧭 Journey Leaderboard for @Model?.JourneyRankings?.FirstOrDefault()?.JourneyName
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="alert alert-success mt-3" role="alert">
+                        @Model?.JourneyRankings.FirstOrDefault()?.JourneyName has made it <strong>@Model?.JourneyRankings.Sum(x => x.TotalSteps).ToString("N0")</strong> steps into its Journey so far!
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-borderless">
+                            <tbody>
+                                @{
+                                    var names = Model?.JourneyRankings.ToArray();
                                     for (int i = 0; i < names.Length; i++)
                                     {
                                         var postion = i + 1;
@@ -97,13 +238,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <a class="btn btn-primary" href="/@Model?.FirstOrDefault()?.JourneyName">
-                        🗺️ Return to the Map
-                    </a>
-                    @*<button class="btn btn-success" onclick="Share()">
-                            🔗 Share This
-                        </button>
-                        <textarea id="url" rows="1" cols="30" hidden></textarea>*@
                 </div>
             </div>
         }

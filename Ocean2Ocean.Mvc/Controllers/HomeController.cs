@@ -147,7 +147,16 @@ namespace Ocean2Ocean.Controllers
             else if (step?.Steps == 0 && !string.IsNullOrWhiteSpace(step.JourneyName))
             {
                 var results = await Step.GetRankingsAsync(step.JourneyName, _azureSQL);
-                return View("Leaderboard", results);
+                var daily = await Step.GetDailyRankingsAsync(step.JourneyName, _azureSQL);
+
+                if (results.Any())
+                {
+                    return View("Leaderboard", new Leaderboard
+                    {
+                        JourneyRankings = results,
+                        DailyRankings = daily
+                    });
+                }
             }
 
             return Redirect($"/{step?.JourneyName}");
@@ -164,10 +173,15 @@ namespace Ocean2Ocean.Controllers
             if (!string.IsNullOrWhiteSpace(journeyName))
             {
                 var results = await Step.GetRankingsAsync(journeyName, _azureSQL);
+                var daily = await Step.GetDailyRankingsAsync(journeyName, _azureSQL);
 
                 if (results.Any())
                 {
-                    return View("Leaderboard", results);
+                    return View("Leaderboard", new Leaderboard
+                    {
+                        JourneyRankings = results,
+                        DailyRankings = daily
+                    });
                 }
             }
 

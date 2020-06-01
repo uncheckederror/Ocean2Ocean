@@ -77,6 +77,19 @@ namespace Ocean2Ocean.DataAccess
                 .ConfigureAwait(false);
         }
 
+        public static async Task<IEnumerable<Step>> GetDailyRankingsAsync(string journeyName, string connectionString)
+        {
+            using var connection = new SqlConnection(connectionString);
+
+            var yesterday = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var today = yesterday.AddDays(+1);
+
+            return await connection
+                .QueryAsync<Step>("SELECT [Email], [JourneyName], [Steps], [Created] FROM [dbo].[Entries] WHERE [JourneyName] = @journeyName AND [Created] >= @yesterday AND [Created] <= @today ORDER BY [Steps] DESC",
+                new { journeyName, yesterday, today })
+                .ConfigureAwait(false);
+        }
+
         public async Task<bool> CheckForDuplicateAsync(string connectionString)
         {
             using var connection = new SqlConnection(connectionString);
