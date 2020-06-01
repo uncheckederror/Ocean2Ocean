@@ -41,6 +41,19 @@ namespace Ocean2Ocean.Tests
         }
 
         [Fact]
+        public async Task GetJourneys()
+        {
+            var results = await Journey.GetAllAsync(_azureSql);
+            Assert.NotNull(results);
+            Assert.True(results.Any());
+            foreach (var result in results)
+            {
+                _output.WriteLine(result.JourneyName);
+                _output.WriteLine(result.StepsTaken.ToString());
+            }
+        }
+
+        [Fact]
         public async Task GetById()
         {
             var results = await Step.GetAllAsync(_azureSql);

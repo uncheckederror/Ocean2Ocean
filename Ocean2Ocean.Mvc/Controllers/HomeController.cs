@@ -28,6 +28,13 @@ namespace Ocean2Ocean.Controllers
             _azureSQL = _configuration.GetConnectionString("AzureSQL");
         }
 
+        /// <summary>
+        /// Render the route for a journey.
+        /// </summary>
+        /// <param name="Date"></param>
+        /// <param name="steps"></param>
+        /// <param name="journeyName"></param>
+        /// <returns></returns>
         [Route("/{journeyName}")]
         [Route("/")]
         public async Task<IActionResult> IndexAsync(DateTime? Date, int steps, string journeyName)
@@ -96,6 +103,11 @@ namespace Ocean2Ocean.Controllers
             }
         }
 
+        /// <summary>
+        /// Add steps to a Journey.
+        /// </summary>
+        /// <param name="step"></param>
+        /// <returns></returns>
         [Route("/Home/AddSteps/{journeyName}/")]
         [Route("/Home/AddSteps/")]
         public async Task<IActionResult> AddSteps([Bind("Email,JourneyName,Steps,StepsTaken,StepsInRoute")] Step step)
@@ -141,6 +153,11 @@ namespace Ocean2Ocean.Controllers
             return Redirect($"/{step?.JourneyName}");
         }
 
+        /// <summary>
+        /// Show the leaderboard for a specific journey.
+        /// </summary>
+        /// <param name="journeyName"></param>
+        /// <returns></returns>
         [Route("/Home/Leaderboard/{journeyName}/")]
         public async Task<IActionResult> Leaderboard(string journeyName)
         {
@@ -157,6 +174,24 @@ namespace Ocean2Ocean.Controllers
             return Redirect($"/{journeyName}");
         }
 
+        /// <summary>
+        /// See all of the Journeys in the Db.
+        /// </summary>
+        /// <returns></returns>
+        [Route("/Home/Journeys/")]
+        public async Task<IActionResult> JourneysAsync()
+        {
+            var results = await Journey.GetAllAsync(_azureSQL);
+
+            return View("Journeys", results);
+        }
+
+        /// <summary>
+        /// Delete a steps entry from a journey.
+        /// </summary>
+        /// <param name="entryId"></param>
+        /// <param name="journeyName"></param>
+        /// <returns></returns>
         [Route("/Home/RemoveSteps/{journeyName}/")]
         public async Task<IActionResult> RemoveSteps(int entryId, string journeyName)
         {

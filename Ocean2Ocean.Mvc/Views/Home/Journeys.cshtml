@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Ocean2Ocean.DataAccess.Journey>
+@{
+    ViewData["Title"] = "Journeys";
+}
+
+<div class="container">
+    @{
+        if (Model != null && Model.Any())
+        {
+            <div class="row">
+                <div class="col">
+                    <h1 class="display-4 pt-3">
+                        Active Journeys
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="alert alert-success mt-3" role="alert">
+                        There are @Model.Count() active Journeys right now.
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-borderless">
+                            <tbody>
+                                @{
+                                    foreach (var journey in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @journey.JourneyName
+                                            </td>
+                                            <td>
+                                                @journey.StepsTaken
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-primary" href="/@journey.JourneyName">
+                                                    🗺️ @journey.JourneyName
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
