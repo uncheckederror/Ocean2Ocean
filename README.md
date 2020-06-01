@@ -1,17 +1,19 @@
 # Ocean2Ocean
 Enter your daily step count and track your team's progress as you walk together from from Ocean to Ocean.
 
+[Try it out here!](https://ocean2ocean20200530093132.azurewebsites.net/KCIT)
+
 # How it's built
 This product is composed of three projects:
 * DataAccess is a shared library for data access
 * Mvc is a server-side rendered front-end
 * Tests is a testing project for the Mvc and DataAccess projects
 
-The Data Access project is a dotnet standard 2.0 library that uses a micro-ORM called Dapper to make queries against an Azure SQL instance.
+The Data Access project is a dotnet standard 2.0 library that uses a micro-ORM called [Dapper](https://github.com/StackExchange/Dapper) to make queries against an Azure SQL instance.
 
 The Mvc project uses the ASP.NET Core 3.1 framework to execute the business logic of this application and server-side rendering to handle the pages.
 
-Do to how computationally expensive geospatial operations are, in this application we handle all of them in client-side Javascript using the Mapbox GL JS library to render the interactive map and the Turf.js library to manipulate the geometry of the route and calculate the distance covered.
+Do to how computationally expensive geospatial operations are, in this application we handle all of them in client-side Javascript using the [Mapbox GL JS](https://docs.mapbox.com/mapbox-gl-js/examples/) library to render the interactive map and the [Turf.js](https://turfjs.org/) library to manipulate the geometry of the route and calculate the distance covered.
 
 This allows us to calculate the number of steps in the route and the two segments representing the distance we have traveled and the distance we have left to cover.
 
