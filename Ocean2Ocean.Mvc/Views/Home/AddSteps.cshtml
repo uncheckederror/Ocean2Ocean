@@ -44,7 +44,7 @@
             <div class="row">
                 <div class="col">
                     <div class="alert alert-success mt-3" role="alert">
-                        You've contributed <strong>@Model?.Sum(x => x.Steps).ToString("N0")</strong> Steps to our Journey so far!
+                        You've contributed <strong>@Model?.Sum(x => x.Steps).ToString("N0")</strong> Steps to @Model?.FirstOrDefault()?.JourneyName's Journey so far!
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover table-borderless">
@@ -78,14 +78,17 @@
                                             <td>
                                                 <form asp-action="RemoveSteps" asp-route-journeyName="@entry?.JourneyName" asp-route-entryId="@entry?.EntryId">
                                                     <button type="submit" class="btn btn-danger">
-                                                        Delete
+                                                        ❌ Delete
                                                     </button>
                                                 </form>
                                             </td>
                                             <td>
                                                 <a class="btn btn-primary" href="/@entry.JourneyName">
-                                                    View @entry?.JourneyName
+                                                    🗺️ View @entry?.JourneyName
                                                 </a>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-success" href="/Home/Leaderboard/@entry?.JourneyName">🌠 Leaderboard</a>
                                             </td>
                                         </tr>
                                     }

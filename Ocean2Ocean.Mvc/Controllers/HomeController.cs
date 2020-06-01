@@ -127,8 +127,34 @@ namespace Ocean2Ocean.Controllers
                     return View("AddSteps", results);
                 }
             }
+            else if (step != null && step.Steps == 0 && !string.IsNullOrWhiteSpace(step.JourneyName) && !string.IsNullOrWhiteSpace(step.Email))
+            {
+                var results = await Step.GetByEmailAsync(step.Email, _azureSQL);
+                return View("AddSteps", results);
+            }
+            else if (step?.Steps == 0 && !string.IsNullOrWhiteSpace(step.JourneyName))
+            {
+                var results = await Step.GetByJourneyAsync(step.JourneyName, _azureSQL);
+                return View("Leaderboard", results);
+            }
 
             return Redirect($"/{step?.JourneyName}");
+        }
+
+        [Route("/Home/Leaderboard/{journeyName}/")]
+        public async Task<IActionResult> Leaderboard(string journeyName)
+        {
+            if (!string.IsNullOrWhiteSpace(journeyName))
+            {
+                var results = await Step.GetByJourneyAsync(journeyName, _azureSQL);
+
+                if (results.Any())
+                {
+                    return View("Leaderboard", results);
+                }
+            }
+
+            return Redirect($"/{journeyName}");
         }
 
         [Route("/Home/RemoveSteps/{journeyName}/")]
