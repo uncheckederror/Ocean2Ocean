@@ -133,6 +133,22 @@ namespace Ocean2Ocean.Tests
         }
 
         [Fact]
+        public async Task UpdateAnEntry()
+        {
+            var results = await Step.GetByJourneyAsync("test", _azureSql);
+            Assert.NotNull(results);
+            Assert.True(results.Any());
+
+            var entry = results.FirstOrDefault();
+            entry.Steps = entry.Steps + 100;
+            entry.Created = DateTime.Now;
+
+            var checkSubmitted = await entry.PutAsync(_azureSql);
+
+            Assert.True(checkSubmitted);
+        }
+
+        [Fact]
         public async Task CheckForDuplicateEntry()
         {
             var entry = new Step

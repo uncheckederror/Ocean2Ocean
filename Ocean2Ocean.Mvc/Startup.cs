@@ -41,7 +41,11 @@ namespace Ocean2Ocean
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ServeUnknownFileTypes = true,
+                DefaultContentType = "text/json"
+            });
 
             app.UseRouting();
 

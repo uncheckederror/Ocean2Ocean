@@ -130,6 +130,25 @@ namespace Ocean2Ocean.DataAccess
             }
         }
 
+        public async Task<bool> PutAsync(string connectionString)
+        {
+            using var connection = new SqlConnection(connectionString);
+
+            var result = await connection
+                .ExecuteAsync("UPDATE [dbo].[Entries] SET [JourneyName] = @JourneyName, [Steps] = @Steps, [Created] = @Created WHERE [EntryId] = @EntryId",
+                new { EntryId, JourneyName, Steps, Created = DateTime.Now })
+                .ConfigureAwait(false);
+
+            if (result == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> DeleteAsync(string connectionString)
         {
             using var connection = new SqlConnection(connectionString);

@@ -18,22 +18,22 @@
         int dailyGoal = 5000;
         if (Model.DailyRankings != null && Model.DailyRankings.Any())
         {
-            <div class="row">
-                <div class="col">
-                    <h1 class="display-4 pt-3">
-                        📅 Daily Leaderboard for @Model?.DailyRankings?.FirstOrDefault()?.JourneyName
-                    </h1>
-                </div>
+        <div class="row">
+            <div class="col">
+                <h1 class="display-4 pt-3">
+                    📅 Daily Leaderboard for @Model?.DailyRankings?.FirstOrDefault()?.JourneyName
+                </h1>
             </div>
-            <div class="row">
-                <div class="col">
-                    <div class="alert alert-success mt-3" role="alert">
-                        @Model?.DailyRankings.FirstOrDefault()?.JourneyName has added <strong>@Model?.DailyRankings.Sum(x => x.Steps).ToString("N0")</strong> steps to its Journey today! The ⭐ Daily Goal is @dailyGoal.ToString("N0") steps.
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover table-borderless">
-                            <tbody>
-                                @{
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="alert alert-success mt-3" role="alert">
+                    @Model?.DailyRankings.FirstOrDefault()?.JourneyName has added <strong>@Model?.DailyRankings.Sum(x => x.Steps).ToString("N0")</strong> steps to its Journey today! The ⭐ Daily Goal is @dailyGoal.ToString("N0") steps.
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-borderless">
+                        <tbody>
+                            @{
                                     int stars = 0;
                                     var names = Model?.DailyRankings.ToArray();
                                     for (int i = 0; i < names.Length; i++)
@@ -45,15 +45,15 @@
                                         // First place
                                         if (i == 0)
                                         {
-                                            <tr>
-                                                <td scope="row">
-                                                    <strong>@postion 🏆</strong>
-                                                </td>
-                                                <td>
-                                                    @names[i].Email
-                                                </td>
-                                                <td>
-                                                    @{
+                                <tr>
+                                    <td scope="row">
+                                        <strong>@postion 🏆</strong>
+                                    </td>
+                                    <td>
+                                        @names[i].Email
+                                    </td>
+                                    <td>
+                                        @{
                                                         string formattedSteps = string.Empty;
                                                         if (names[i]?.Steps >= dailyGoal)
                                                         {
@@ -64,28 +64,28 @@
                                                         {
                                                             formattedSteps = $"{names[i]?.Steps.ToString("N0")} Steps";
                                                         }
-                                                    }
-                                                    @formattedSteps
-                                                </td>
-                                                <td>
-                                                    @names[i].Created
-                                                </td>
-                                                <td>
-                                                    @formattedPortion
-                                                </td>
-                                            </tr>
+                                        }
+                                        @formattedSteps
+                                    </td>
+                                    <td>
+                                        @names[i].Created
+                                    </td>
+                                    <td>
+                                        @formattedPortion
+                                    </td>
+                                </tr>
                                         }
                                         else if (i == names.Length - 1)
                                         {
-                                            <tr>
-                                                <td scope="row">
-                                                    <strong>@postion 🏳️</strong>
-                                                </td>
-                                                <td>
-                                                    @names[i].Email
-                                                </td>
-                                                <td>
-                                                    @{
+                                <tr>
+                                    <td scope="row">
+                                        <strong>@postion 🐌</strong>
+                                    </td>
+                                    <td>
+                                        @names[i].Email
+                                    </td>
+                                    <td>
+                                        @{
                                                         string formattedSteps = string.Empty;
                                                         if (names[i]?.Steps >= dailyGoal)
                                                         {
@@ -96,28 +96,28 @@
                                                         {
                                                             formattedSteps = $"{names[i]?.Steps.ToString("N0")} Steps";
                                                         }
-                                                    }
-                                                    @formattedSteps
-                                                </td>
-                                                <td>
-                                                    @names[i].Created
-                                                </td>
-                                                <td>
-                                                    @formattedPortion
-                                                </td>
-                                            </tr>
+                                        }
+                                        @formattedSteps
+                                    </td>
+                                    <td>
+                                        @names[i].Created
+                                    </td>
+                                    <td>
+                                        @formattedPortion
+                                    </td>
+                                </tr>
                                         }
                                         else
                                         {
-                                            <tr>
-                                                <td scope="row">
-                                                    <strong>@postion</strong>
-                                                </td>
-                                                <td>
-                                                    @names[i].Email
-                                                </td>
-                                                <td>
-                                                    @{
+                                <tr>
+                                    <td scope="row">
+                                        <strong>@postion</strong>
+                                    </td>
+                                    <td>
+                                        @names[i].Email
+                                    </td>
+                                    <td>
+                                        @{
                                                         string formattedSteps = string.Empty;
                                                         if (names[i]?.Steps >= dailyGoal)
                                                         {
@@ -128,52 +128,52 @@
                                                         {
                                                             formattedSteps = $"{names[i]?.Steps.ToString("N0")} Steps";
                                                         }
-                                                    }
-                                                    @formattedSteps
-                                                </td>
-                                                <td>
-                                                    @names[i].Created
-                                                </td>
-                                                <td>
-                                                    @formattedPortion
-                                                </td>
-                                            </tr>
+                                        }
+                                        @formattedSteps
+                                    </td>
+                                    <td>
+                                        @names[i].Created
+                                    </td>
+                                    <td>
+                                        @formattedPortion
+                                    </td>
+                                </tr>
                                         }
                                     }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <a class="btn btn-primary" href="/@Model?.DailyRankings?.FirstOrDefault()?.JourneyName">
-                        🗺️ Return to the Map
-                    </a>
-                    @*<button class="btn btn-success" onclick="Share()">
-                            🔗 Share This
-                        </button>
-                        <textarea id="url" rows="1" cols="30" hidden></textarea>*@
+                            }
+                        </tbody>
+                    </table>
                 </div>
+                <a class="btn btn-primary" href="/@Model?.DailyRankings?.FirstOrDefault()?.JourneyName">
+                    🗺️ Return to the Map
+                </a>
+                @*<button class="btn btn-success" onclick="Share()">
+                        🔗 Share This
+                    </button>
+                    <textarea id="url" rows="1" cols="30" hidden></textarea>*@
             </div>
+        </div>
         }
     }
     @{
         if (Model.JourneyRankings != null && Model.JourneyRankings.Any())
         {
-            <div class="row">
-                <div class="col">
-                    <h1 class="display-4 pt-3">
-                        🧭 Journey Leaderboard for @Model?.JourneyRankings?.FirstOrDefault()?.JourneyName
-                    </h1>
-                </div>
+        <div class="row">
+            <div class="col">
+                <h1 class="display-4 pt-3">
+                    🧭 Journey Leaderboard for @Model?.JourneyRankings?.FirstOrDefault()?.JourneyName
+                </h1>
             </div>
-            <div class="row">
-                <div class="col">
-                    <div class="alert alert-success mt-3" role="alert">
-                        @Model?.JourneyRankings.FirstOrDefault()?.JourneyName has made it <strong>@Model?.JourneyRankings.Sum(x => x.TotalSteps).ToString("N0")</strong> steps into its Journey so far!
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover table-borderless">
-                            <tbody>
-                                @{
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="alert alert-success mt-3" role="alert">
+                    @Model?.JourneyRankings.FirstOrDefault()?.JourneyName has made it <strong>@Model?.JourneyRankings.Sum(x => x.TotalSteps).ToString("N0")</strong> steps into its Journey so far!
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-borderless">
+                        <tbody>
+                            @{
                                     var names = Model?.JourneyRankings.ToArray();
                                     for (int i = 0; i < names.Length; i++)
                                     {
@@ -184,62 +184,62 @@
                                         // First place
                                         if (i == 0)
                                         {
-                                            <tr>
-                                                <td scope="row">
-                                                    <strong>@postion 🏆</strong>
-                                                </td>
-                                                <td>
-                                                    @names[i].Email
-                                                </td>
-                                                <td>
-                                                    @names[i].TotalSteps Steps
-                                                </td>
-                                                <td>
-                                                    @formattedPortion
-                                                </td>
-                                            </tr>
+                                <tr>
+                                    <td scope="row">
+                                        <strong>@postion 🏆</strong>
+                                    </td>
+                                    <td>
+                                        @names[i].Email
+                                    </td>
+                                    <td>
+                                        @names[i].TotalSteps Steps
+                                    </td>
+                                    <td>
+                                        @formattedPortion
+                                    </td>
+                                </tr>
                                         }
                                         else if (i == names.Length - 1)
                                         {
-                                            <tr>
-                                                <td scope="row">
-                                                    <strong>@postion 🏳️</strong>
-                                                </td>
-                                                <td>
-                                                    @names[i].Email
-                                                </td>
-                                                <td>
-                                                    @names[i].TotalSteps Steps
-                                                </td>
-                                                <td>
-                                                    @formattedPortion
-                                                </td>
-                                            </tr>
+                                <tr>
+                                    <td scope="row">
+                                        <strong>@postion 🐌</strong>
+                                    </td>
+                                    <td>
+                                        @names[i].Email
+                                    </td>
+                                    <td>
+                                        @names[i].TotalSteps Steps
+                                    </td>
+                                    <td>
+                                        @formattedPortion
+                                    </td>
+                                </tr>
                                         }
                                         else
                                         {
-                                            <tr>
-                                                <td scope="row">
-                                                    <strong>@postion</strong>
-                                                </td>
-                                                <td>
-                                                    @names[i].Email
-                                                </td>
-                                                <td>
-                                                    @names[i].TotalSteps Steps
-                                                </td>
-                                                <td>
-                                                    @formattedPortion
-                                                </td>
-                                            </tr>
+                                <tr>
+                                    <td scope="row">
+                                        <strong>@postion</strong>
+                                    </td>
+                                    <td>
+                                        @names[i].Email
+                                    </td>
+                                    <td>
+                                        @names[i].TotalSteps Steps
+                                    </td>
+                                    <td>
+                                        @formattedPortion
+                                    </td>
+                                </tr>
                                         }
                                     }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
         }
     }
 </div>

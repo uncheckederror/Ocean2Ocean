@@ -1,0 +1,204 @@
+﻿@model Ocean2Ocean.DataAccess.Journey
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@*<script src="https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />*@
+<script src='https://unpkg.com/@@turf/turf/turf.min.js'></script>
+<script src="~/js/route.js" asp-append-version="true"></script>
+<link rel="stylesheet" href="https://js.arcgis.com/4.15/esri/themes/light/main.css">
+<script src="https://js.arcgis.com/4.15/"></script>
+
+<style>
+    html, body, #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+    }
+</style>
+<div id="viewDiv"></div>
+<script>
+    require([
+        "esri/Map",
+        "esri/layers/GeoJSONLayer",
+        "esri/views/MapView"
+    ], function (Map, GeoJSONLayer, MapView) {
+
+        const geojsonLayer = new GeoJSONLayer({
+            url: "/js/seattle-to-boston.geojson"
+        });
+
+        var map = new Map({
+            basemap: "topo-vector",
+            layers: [geojsonLayer]
+        });
+
+        var view = new MapView({
+            container: "viewDiv",
+            map: map,
+            center: [-118.80500, 34.02700], // longitude, latitude
+            zoom: 13
+        });
+    });
+</script>
+
+
+@*<script>
+
+        // Source: http://www.mredkj.com/javascript/numberFormat.html
+        function addCommas(nStr) {
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
+
+        mapboxgl.accessToken = '@Model?.MapboxAccessToken';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-97, 50],
+            zoom: 4
+        });
+
+        var stepsTaken = @Model?.StepsTaken;
+
+        // Calculate the distance in kilometers between route start/end point.
+        var line = turf.lineString(route);
+        var lengthMiles = turf.length(line, { units: 'miles' });
+        document.getElementById("stats").innerHTML += addCommas(Math.round(lengthMiles)) + " Miles";
+
+        var lengthKilometers = turf.length(line, { units: 'kilometers' });
+        document.getElementById("stats").innerHTML += " &#8226; " + addCommas(Math.round(lengthKilometers)) + " Kilometers";
+
+        // sourced from https://www.chparks.com/411/How-To-Measure-Steps
+        // 2k miles per step
+        var totalStepsUnrounded = lengthMiles * 2000;
+        console.log("totalStepsUnrounded: " + totalStepsUnrounded);
+        var totalSteps = Math.round(totalStepsUnrounded);
+        console.log("totalSteps: " + totalSteps);
+        document.getElementById("stats").innerHTML += " &#8226; " + addCommas(totalSteps) + " Steps";
+        document.getElementById("stepsInRoute").value = totalSteps;
+        document.getElementById("stepsTaken").value = stepsTaken;
+
+        // Calculate the distance traveled.
+        var milesFromSteps = stepsTaken / 2000;
+        console.log("milesFromSteps: " + milesFromSteps);
+        var start = 0;
+        var stop = milesFromSteps;
+        var routeTraveled = turf.lineSliceAlong(line, start, stop, { units: 'miles' });
+        console.log(routeTraveled);
+
+        // Calculate the distance remaining.
+        var milesFromSteps = stepsTaken / 2000;
+        var start = milesFromSteps;
+        var stop = lengthMiles;
+        var routeRemaining = turf.lineSliceAlong(line, start, stop, { units: 'miles' });
+        console.log(routeTraveled);
+
+        // Get the point for the marker Icon
+        var options = { units: 'miles' };
+        var along = turf.along(line, milesFromSteps, options);
+
+        // Set the progress bar
+        var progressbarWidth = Math.round((stepsTaken / totalSteps) * 100);
+        console.log(progressbarWidth);
+        document.getElementById("progressbar").style.width = progressbarWidth + "%";
+        document.getElementById("progresslabel").innerHTML += "~" + progressbarWidth + "% Complete &#8226; " + addCommas(stepsTaken) + " Steps";
+
+        map.on('load', function () {
+
+            map.addSource('routeTraveled', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': routeTraveled.geometry.coordinates
+                    }
+                }
+            });
+
+            map.addLayer({
+                'id': 'routeTraveled',
+                'type': 'line',
+                'source': 'routeTraveled',
+                'layout': {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                'paint': {
+                    'line-color': '#ff0000',
+                    'line-width': 5,
+                    'line-opacity': 0.8
+                }
+            });
+
+            map.addSource('route', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': routeRemaining.geometry.coordinates
+                    }
+                }
+            });
+
+            map.addLayer({
+                'id': 'route',
+                'type': 'line',
+                'source': 'route',
+                'layout': {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                'paint': {
+                    'line-color': '#0075ff',
+                    'line-width': 5,
+                    'line-opacity': 0.8
+                }
+            });
+
+            map.loadImage(
+                './wagon.png',
+                function (error, image) {
+                    if (error) throw error;
+                    map.addImage('wagon', image);
+                    map.addSource('point', {
+                        'type': 'geojson',
+                        'data': {
+                            'type': 'FeatureCollection',
+                            'features': [
+                                {
+                                    'type': 'Feature',
+                                    'geometry': {
+                                        'type': 'Point',
+                                        'coordinates': along.geometry.coordinates
+                                    }
+                                }
+                            ]
+                        }
+                    });
+                    map.addLayer({
+                        'id': 'points',
+                        'type': 'symbol',
+                        'source': 'point',
+                        'layout': {
+                            'icon-image': 'wagon',
+                            'icon-size': 0.2
+                        }
+                    });
+                }
+            );
+        });
+    </script>*@
