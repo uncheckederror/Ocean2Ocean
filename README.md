@@ -13,7 +13,7 @@ The Data Access project is a dotnet standard 2.0 library that uses a micro-ORM c
 
 The Mvc project uses the ASP.NET Core 3.1 framework to execute the business logic of this application and server-side rendering to handle the pages.
 
-Do to how computationally expensive geospatial operations are, in this application we handle all of them in client-side Javascript using the [Mapbox GL JS](https://docs.mapbox.com/mapbox-gl-js/examples/) library to render the interactive map and the [Turf.js](https://turfjs.org/) library to manipulate the geometry of the route and calculate the distance covered.
+Do to how computationally expensive geospatial operations are, in this application we handle all of them in client-side Javascript using the (ArcGIS JS)[https://developers.arcgis.com/javascript/] library to render the interactive map and the [Turf.js](https://turfjs.org/) library to manipulate the geometry of the route and calculate the distance covered.
 
 This allows us to calculate the number of steps in the route and the two segments representing the distance we have traveled and the distance we have left to cover.
 
