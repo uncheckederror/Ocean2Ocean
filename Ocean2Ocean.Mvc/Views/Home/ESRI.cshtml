@@ -3,8 +3,6 @@
     ViewData["Title"] = "Home Page";
 }
 
-@*<script src="https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />*@
 <script src='https://unpkg.com/@@turf/turf/turf.min.js'></script>
 <script src="~/js/route.js" asp-append-version="true"></script>
 <link rel="stylesheet" href="https://js.arcgis.com/4.15/esri/themes/light/main.css">
@@ -14,39 +12,190 @@
     html, body, #viewDiv {
         padding: 0;
         margin: 0;
-        height: 100%;
+        height: 100vh;
         width: 100%;
     }
 </style>
-<div id="viewDiv"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4 d-none d-sm-block">
+            <div class="container">
+                <div class="legend pl-3">
+                    <h1 class="display-4 pt-3">
+                        🏃 Add Your Steps
+                    </h1>
+                    <p id="stats" class="card-subtitle text-center pb-4"></p>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" id="progressbar" aria-valuenow="42" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p id="progresslabel" class="text-center"></p>
+                    <hr />
+                    <form method="get" autocomplete="on">
+                        @{
+                    if (!(string.IsNullOrWhiteSpace(Model.JourneyName)))
+                    {
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Journey Name</label>
+                                <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey" value="@Model?.JourneyName" readonly>
+                                @*<small id="emailHelp" class="form-text text-muted">What does your team call this event?</small>*@
+                            </div>
+                    }
+                    else
+                    {
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Journey Name</label>
+                                <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey">
+                                <small id="emailHelp" class="form-text text-muted">What does your team call this event?</small>
+                            </div>
+                    }
+                        }
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Your Nickname</label>
+                            <input type="text" name="email" class="form-control" id="nickname" aria-describedby="nickname" placeholder="Enter a Nickname" value="@Model?.Step?.Email">
+                            <small id="emailHelp" class="form-text text-muted">We never store personally identifying information.</small>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Your Steps</label>
+                                    <input type="number" name="steps" class="form-control" id="exampleInputPassword1" placeholder="0" value="@Model?.Step?.Steps">
+                                    <small id="emailHelp" class="form-text text-muted">1 Mile is about 2000 steps.</small>
+                                    <input type="number" id="stepsTaken" name="stepsTaken" hidden />
+                                    <input type="number" id="stepsInRoute" name="stepsInRoute" hidden />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="dailyGoal">⭐ Daily Goal</label>
+                                <input type="number" name="steps" class="form-control" id="dailyGoal" value="5000" readonly>
+                                <small id="dailyGoalHelp" class="form-text text-muted">Meet this goal to win a star!</small>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-lg" asp-action="AddSteps" asp-route-journeyName="@Model?.JourneyName">🚀 Submit</button>
+                            @{
+                        if (!(string.IsNullOrWhiteSpace(Model.JourneyName)))
+                        {
+                                <a class="btn btn-success btn-lg" href="/Home/Leaderboard/@Model?.JourneyName">🌠 Leaderboard</a>
+                        }
+                        else
+                        {
+                                <a class="btn btn-success btn-lg disabled" href="/Home/Leaderboard/@Model?.JourneyName">🌠 Leaderboard</a>
+                        }
+                            }
+                            <a class="btn btn-info btn-lg" href="https://github.com/uncheckederror/Ocean2Ocean" target="_blank">👓 Github</a>
+                        </div>
+                    </form>
+                </div>
+                <div class="pl-3">
+                    <div id="pageId" hidden></div>
+                    <hr />
+                    <div class="card">
+                        <div class="card-header">
+                            🎡 Roadside Attractions
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title" id="roadsidetitle">Welcome to</h5>
+                            @*<p class="card-text">Lookout Pass is a mountain pass in the Rocky Mountains of the northwestern United States. In the Coeur d'Alene Mountains of the Bitterroot Range, the pass is on the border between Idaho and Montana, traversed by Interstate 90 (formerly U.S. Route 10)[1] at an elevation of 4,710 feet (1,436 m) above sea level.</p>*@
+                            <a class="btn btn-info" id="roadsidelink" href="" target="_blank noreferrer">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <div id="viewDiv"></div>
+        </div>
+    </div>
+</div>
 <script>
+
     require([
         "esri/Map",
-        "esri/layers/GeoJSONLayer",
-        "esri/views/MapView"
-    ], function (Map, GeoJSONLayer, MapView) {
-
-        const geojsonLayer = new GeoJSONLayer({
-            url: "/js/seattle-to-boston.geojson"
-        });
+        "esri/views/MapView",
+        "esri/Graphic",
+        "esri/layers/GraphicsLayer"
+    ], function (Map, MapView, Graphic, GraphicsLayer) {
 
         var map = new Map({
-            basemap: "topo-vector",
-            layers: [geojsonLayer]
+            basemap: "topo-vector"
         });
 
         var view = new MapView({
             container: "viewDiv",
             map: map,
-            center: [-118.80500, 34.02700], // longitude, latitude
-            zoom: 13
+            center: [-97, 40],
+            zoom: 4
         });
+
+        var graphicsLayer = new GraphicsLayer();
+        map.add(graphicsLayer);
+
+        // Create a point
+        var point = {
+            type: "point",
+            longitude: routeRemaining.geometry.coordinates[0][0],
+            latitude: routeRemaining.geometry.coordinates[0][1]
+        };
+
+        var simpleMarkerSymbol = {
+            type: "simple-marker",
+            color: [226, 119, 40],  // orange
+            outline: {
+                color: [255, 255, 255], // white
+                width: 1
+            }
+        };
+
+        var pointGraphic = new Graphic({
+            geometry: point,
+            symbol: simpleMarkerSymbol
+        });
+
+        graphicsLayer.add(pointGraphic);
+
+        // Create a line geometry for the route traveled.
+        var simpleLineSymbol = {
+            type: "simple-line",
+            color: [255, 0, 0], // #ff0000
+            width: 3
+        };
+
+        var polyline = {
+            type: "polyline",
+            paths: routeTraveled.geometry.coordinates
+        };
+
+        var polylineGraphic = new Graphic({
+            geometry: polyline,
+            symbol: simpleLineSymbol
+        })
+
+        graphicsLayer.add(polylineGraphic);
+
+        // Create a line geometry for the route remaining.
+        var simpleLineSymbolRemaining = {
+            type: "simple-line",
+            color: [0, 117, 255], // #ff0000
+            width: 3
+        };
+
+        var polylineRemaining = {
+            type: "polyline",
+            paths: routeRemaining.geometry.coordinates
+        };
+
+        var polylineGraphicRemaining = new Graphic({
+            geometry: polylineRemaining,
+            symbol: simpleLineSymbolRemaining
+        })
+
+        graphicsLayer.add(polylineGraphicRemaining);
+
     });
 </script>
 
 
-@*<script>
-
+<script>
         // Source: http://www.mredkj.com/javascript/numberFormat.html
         function addCommas(nStr) {
             nStr += '';
@@ -59,14 +208,6 @@
             }
             return x1 + x2;
         }
-
-        mapboxgl.accessToken = '@Model?.MapboxAccessToken';
-        var map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [-97, 50],
-            zoom: 4
-        });
 
         var stepsTaken = @Model?.StepsTaken;
 
@@ -112,93 +253,72 @@
         console.log(progressbarWidth);
         document.getElementById("progressbar").style.width = progressbarWidth + "%";
         document.getElementById("progresslabel").innerHTML += "~" + progressbarWidth + "% Complete &#8226; " + addCommas(stepsTaken) + " Steps";
+</script>
+<script>
+    /*
+geocoordinates.js
 
-        map.on('load', function () {
+MediaWiki API Demos
+Demo of `Geosearch` module: Obtain coordinates for wiki pages nearby
 
-            map.addSource('routeTraveled', {
-                'type': 'geojson',
-                'data': {
-                    'type': 'Feature',
-                    'properties': {},
-                    'geometry': {
-                        'type': 'LineString',
-                        'coordinates': routeTraveled.geometry.coordinates
-                    }
-                }
-            });
+MIT License
+*/
+    var wikiLat = routeRemaining.geometry.coordinates[0][1].toFixed(7);
+    var wikiLong = routeRemaining.geometry.coordinates[0][0].toFixed(7);
 
-            map.addLayer({
-                'id': 'routeTraveled',
-                'type': 'line',
-                'source': 'routeTraveled',
-                'layout': {
-                    'line-join': 'round',
-                    'line-cap': 'round'
-                },
-                'paint': {
-                    'line-color': '#ff0000',
-                    'line-width': 5,
-                    'line-opacity': 0.8
-                }
-            });
+    var url = "https://en.wikipedia.org/w/api.php";
 
-            map.addSource('route', {
-                'type': 'geojson',
-                'data': {
-                    'type': 'Feature',
-                    'properties': {},
-                    'geometry': {
-                        'type': 'LineString',
-                        'coordinates': routeRemaining.geometry.coordinates
-                    }
-                }
-            });
+    var params = {
+        action: "query",
+        format: "json",
+        list: "geosearch",
+        gscoord: wikiLat + "|" + wikiLong,
+        gsradius: 10000,
+        gslimit: 1
+    };
 
-            map.addLayer({
-                'id': 'route',
-                'type': 'line',
-                'source': 'route',
-                'layout': {
-                    'line-join': 'round',
-                    'line-cap': 'round'
-                },
-                'paint': {
-                    'line-color': '#0075ff',
-                    'line-width': 5,
-                    'line-opacity': 0.8
-                }
-            });
+    url = url + "?origin=*";
+    Object.keys(params).forEach(function (key) { url += "&" + key + "=" + params[key]; });
 
-            map.loadImage(
-                './wagon.png',
-                function (error, image) {
-                    if (error) throw error;
-                    map.addImage('wagon', image);
-                    map.addSource('point', {
-                        'type': 'geojson',
-                        'data': {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': along.geometry.coordinates
-                                    }
-                                }
-                            ]
-                        }
-                    });
-                    map.addLayer({
-                        'id': 'points',
-                        'type': 'symbol',
-                        'source': 'point',
-                        'layout': {
-                            'icon-image': 'wagon',
-                            'icon-size': 0.2
-                        }
-                    });
-                }
-            );
-        });
-    </script>*@
+    console.log(url);
+
+    fetch(url)
+        .then(function (response) { return response.json(); })
+        .then(function (response) {
+            console.log(response);
+            console.log(response.query.geosearch[0].pageid)
+            var articleLink = "https://en.wikipedia.org/?curid=" + response.query.geosearch[0].pageid;
+            document.getElementById("roadsidelink").href = articleLink;
+            document.getElementById("roadsidetitle").innerText += " " + response.query.geosearch[0].title + "!";
+        })
+        .catch(function (error) { console.log(error); });
+
+    //https://en.wikipedia.org/wiki/Special:ApiSandbox#action=query&format=json&prop=extracts&pageids=8071949&exsentences=2&exintro=1
+
+    //var PageId = document.getElementById("pageId").innerText;
+    //console.log(newUrl);
+
+    //var newParams = {
+    //    action: "query",
+    //    format: "json",
+    //    prop: "extracts",
+    //    pageids: PageId,
+    //    exsentences: 2,
+    //    exintro: 1
+    //};
+
+    //var newUrl = "https://en.wikipedia.org/w/api.php";
+
+    //newUrl = newUrl + "?origin=*";
+    //Object.keys(newParams).forEach(function (key) { newUrl += "&" + key + "=" + newParams[key]; });
+
+    //console.log(newUrl);
+
+    //fetch(newUrl)
+    //    .then(function (response) { return response.json(); })
+    //    .then(function (response) {
+    //        console.log(response);
+    //    })
+    //    .catch(function (error) { console.log(error); });
+
+</script>

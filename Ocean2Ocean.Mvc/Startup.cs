@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,6 +31,9 @@ namespace Ocean2Ocean
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var provider = new FileExtensionContentTypeProvider();
+            provider.Mappings[".geojson"] = "application/geo+json";
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -41,10 +45,10 @@ namespace Ocean2Ocean
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+
             app.UseStaticFiles(new StaticFileOptions
             {
-                ServeUnknownFileTypes = true,
-                DefaultContentType = "text/json"
+                ContentTypeProvider = provider
             });
 
             app.UseRouting();

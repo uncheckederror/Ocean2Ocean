@@ -45,7 +45,7 @@ namespace Ocean2Ocean.Controllers
             // Return early if this is a demo.
             if (steps > 1)
             {
-                return View("Mapbox", new Journey
+                return View("ESRI", new Journey
                 {
                     // Can't be less than 1 or greater than the maximum number of steps in the route.
                     StepsTaken = steps > 1 ? steps : 1,
@@ -65,7 +65,7 @@ namespace Ocean2Ocean.Controllers
                 {
                     steps = results.Sum(x => x.Steps);
 
-                    return View("Mapbox", new Journey
+                    return View("ESRI", new Journey
                     {
                         // Can't be less than 1 or greater than the maximum number of steps in the route.
                         StepsTaken = steps > 1 ? steps : 1,
@@ -78,7 +78,7 @@ namespace Ocean2Ocean.Controllers
                 else
                 {
                     // The the journey has no entries.
-                    return View("Mapbox", new Journey
+                    return View("ESRI", new Journey
                     {
                         // Can't be less than 1 or greater than the maximum number of steps in the route.
                         StepsTaken = steps > 1 ? steps : 1,
@@ -92,7 +92,7 @@ namespace Ocean2Ocean.Controllers
             else
             {
                 // If no journey is supplied.
-                return View("Mapbox", new Journey
+                return View("ESRI", new Journey
                 {
                     // Can't be less than 1 or greater than the maximum number of steps in the route.
                     StepsTaken = steps > 1 ? steps : 1,
@@ -108,9 +108,21 @@ namespace Ocean2Ocean.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("/ESRI")]
-        public IActionResult ESRIMap()
+        public async Task<IActionResult> ESRIMap()
         {
-            return View("ESRI");
+            // Make a query to the db.
+            var results = await Step.GetByJourneyAsync("KCIT", _azureSQL);
+            var steps = results.Sum(x => x.Steps);
+
+            // The the journey has no entries.
+            return View("ESRI", new Journey
+            {
+                // Can't be less than 1 or greater than the maximum number of steps in the route.
+                StepsTaken = steps > 1 ? steps : 1,
+                JourneyName = results.FirstOrDefault().JourneyName,
+                Date = DateTime.Now,
+                Participants = 0
+            });
         }
 
         /// <summary>
