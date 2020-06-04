@@ -32,22 +32,22 @@
                     <hr />
                     <form method="get" autocomplete="on">
                         @{
-                    if (!(string.IsNullOrWhiteSpace(Model.JourneyName)))
-                    {
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Journey Name</label>
-                                <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey" value="@Model?.JourneyName" readonly>
-                                @*<small id="emailHelp" class="form-text text-muted">What does your team call this event?</small>*@
-                            </div>
-                    }
-                    else
-                    {
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Journey Name</label>
-                                <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey">
-                                <small id="emailHelp" class="form-text text-muted">What does your team call this event?</small>
-                            </div>
-                    }
+                            if (!(string.IsNullOrWhiteSpace(Model.JourneyName)))
+                            {
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Journey Name</label>
+                                    <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey" value="@Model?.JourneyName" readonly>
+                                    @*<small id="emailHelp" class="form-text text-muted">What does your team call this event?</small>*@
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Journey Name</label>
+                                    <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey">
+                                    <small id="emailHelp" class="form-text text-muted">What does your team call this event?</small>
+                                </div>
+                            }
                         }
                         <div class="form-group">
                             <label for="exampleInputEmail1">Your Nickname</label>
@@ -73,14 +73,14 @@
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary btn-lg" asp-action="AddSteps" asp-route-journeyName="@Model?.JourneyName">🚀 Submit</button>
                             @{
-                        if (!(string.IsNullOrWhiteSpace(Model.JourneyName)))
-                        {
-                                <a class="btn btn-success btn-lg" href="/Home/Leaderboard/@Model?.JourneyName">🌠 Leaderboard</a>
-                        }
-                        else
-                        {
-                                <a class="btn btn-success btn-lg disabled" href="/Home/Leaderboard/@Model?.JourneyName">🌠 Leaderboard</a>
-                        }
+                                if (!(string.IsNullOrWhiteSpace(Model.JourneyName)))
+                                {
+                                    <a class="btn btn-success btn-lg" href="/Home/Leaderboard/@Model?.JourneyName">🌠 Leaderboard</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-success btn-lg disabled" href="/Home/Leaderboard/@Model?.JourneyName">🌠 Leaderboard</a>
+                                }
                             }
                             <a class="btn btn-info btn-lg" href="https://github.com/uncheckederror/Ocean2Ocean" target="_blank">👓 Github</a>
                         </div>

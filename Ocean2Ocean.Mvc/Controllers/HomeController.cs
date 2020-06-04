@@ -56,8 +56,9 @@ namespace Ocean2Ocean.Controllers
             }
 
             // Lookup a specific journey.
-            if (!string.IsNullOrWhiteSpace(journeyName))
+            if (!string.IsNullOrWhiteSpace(journeyName) && (journeyName.Length < 50))
             {
+                journeyName = journeyName.Trim();
                 // Make a query to the db.
                 var results = await Step.GetByJourneyAsync(journeyName, _azureSQL);
 
@@ -104,28 +105,6 @@ namespace Ocean2Ocean.Controllers
         }
 
         /// <summary>
-        /// Experimental ESRI reimplementation of the map.
-        /// </summary>
-        /// <returns></returns>
-        [Route("/ESRI")]
-        public async Task<IActionResult> ESRIMap()
-        {
-            // Make a query to the db.
-            var results = await Step.GetByJourneyAsync("KCIT", _azureSQL);
-            var steps = results.Sum(x => x.Steps);
-
-            // The the journey has no entries.
-            return View("ESRI", new Journey
-            {
-                // Can't be less than 1 or greater than the maximum number of steps in the route.
-                StepsTaken = steps > 1 ? steps : 1,
-                JourneyName = results.FirstOrDefault().JourneyName,
-                Date = DateTime.Now,
-                Participants = 0
-            });
-        }
-
-        /// <summary>
         /// Add steps to a Journey.
         /// </summary>
         /// <param name="step"></param>
@@ -134,8 +113,11 @@ namespace Ocean2Ocean.Controllers
         [Route("/Home/AddSteps/")]
         public async Task<IActionResult> AddSteps([Bind("Email,JourneyName,Steps,StepsTaken,StepsInRoute")] Step step)
         {
-            if (step != null && !string.IsNullOrWhiteSpace(step.JourneyName) && !string.IsNullOrWhiteSpace(step.Email) && step.Steps > 1)
+            if (step != null && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50) && !string.IsNullOrWhiteSpace(step.Email) && (step.Email.Length < 50) && step.Steps > 1)
             {
+                step.Email = step.Email.Trim();
+                step.JourneyName = step.JourneyName.Trim();
+
                 // Block step values that are too large.
                 if (step.StepsInRoute - (step.StepsTaken + step.Steps) < 0)
                 {
@@ -161,13 +143,18 @@ namespace Ocean2Ocean.Controllers
                     return View("AddSteps", results);
                 }
             }
-            else if (step != null && step.Steps == 0 && !string.IsNullOrWhiteSpace(step.JourneyName) && !string.IsNullOrWhiteSpace(step.Email))
+            else if (step != null && step.Steps == 0 && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50) && !string.IsNullOrWhiteSpace(step.Email) && (step.Email.Length < 50))
             {
+                step.Email = step.Email.Trim();
+                step.JourneyName = step.JourneyName.Trim();
+
                 var results = await Step.GetByEmailAsync(step.Email, _azureSQL);
                 return View("AddSteps", results);
             }
-            else if (step?.Steps == 0 && !string.IsNullOrWhiteSpace(step.JourneyName))
+            else if (step?.Steps == 0 && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50))
             {
+                step.JourneyName = step.JourneyName.Trim();
+
                 var results = await Step.GetRankingsAsync(step.JourneyName, _azureSQL);
                 var daily = await Step.GetDailyRankingsAsync(step.JourneyName, _azureSQL);
 
@@ -192,8 +179,10 @@ namespace Ocean2Ocean.Controllers
         [Route("/Home/Leaderboard/{journeyName}/")]
         public async Task<IActionResult> Leaderboard(string journeyName)
         {
-            if (!string.IsNullOrWhiteSpace(journeyName))
+            if (!string.IsNullOrWhiteSpace(journeyName) && (journeyName.Length < 50))
             {
+                journeyName = journeyName.Trim();
+
                 var results = await Step.GetRankingsAsync(journeyName, _azureSQL);
                 var daily = await Step.GetDailyRankingsAsync(journeyName, _azureSQL);
 
@@ -231,11 +220,13 @@ namespace Ocean2Ocean.Controllers
         [Route("/Home/RemoveSteps/{journeyName}/")]
         public async Task<IActionResult> RemoveSteps(int entryId, string journeyName)
         {
-            if (!(entryId > 1))
+            if (!(entryId > 1) || string.IsNullOrWhiteSpace(journeyName) || (journeyName.Length > 50))
             {
                 // Let them know this was bad input maybe?
                 return RedirectToAction("Index");
             }
+
+            journeyName = journeyName.Trim();
 
             var deleteMe = await Step.GetByIdAsync(entryId, _azureSQL);
 
@@ -250,19 +241,22 @@ namespace Ocean2Ocean.Controllers
 
             var checkDelete = await deleteMe.DeleteAsync(_azureSQL);
 
-            if (checkDelete)
+
+            var results = await Step.GetByEmailAsync(deleteMe.Email, _azureSQL);
+
+            if (results != null && results.Any() && checkDelete)
             {
-                var results = await Step.GetByEmailAsync(deleteMe.Email, _azureSQL);
                 return View("AddSteps", results);
             }
             else
             {
-                // No entries for this email remain.
+                // No entries for this email remain or it didn't work.
                 return RedirectToAction("Index", new
                 {
                     journeyName = journeyName
                 });
             }
+
         }
 
         public IActionResult Privacy()
