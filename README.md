@@ -22,7 +22,7 @@ The production version of this application is hosted on an Azure App Service ins
 # Setup Instructions
 * Clone this repositiory.
 * Open the .sln Solution file in Visual Studio 2019.
-* Add the required Azure SQL and Mapbox credentials using [dotnet user-secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows). ( Contact the repo owner over encrypted messaging for the credentials or provide your own. )
+* Add the required Azure SQL using [dotnet user-secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows). ( Contact the repo owner over encrypted messaging for the credentials or provide your own. )
 * Build the application and run the tests to verify that everything works.
 * Run the application in IIS Express to host it locally.
 
