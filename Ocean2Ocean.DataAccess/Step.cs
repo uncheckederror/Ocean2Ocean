@@ -45,11 +45,20 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             // Make the query more general.
-            // Make the query more general.
             email = $"%{email}%";
 
             return await connection
                 .QueryAsync<Step>("SELECT [EntryId], [Email], [JourneyName], [Steps], [Created] FROM [dbo].[Entries] WHERE [Email] LIKE @email ORDER BY [Created] DESC",
+                new { email })
+                .ConfigureAwait(false);
+        }
+
+        public static async Task<IEnumerable<Step>> GetByExactEmailAsync(string email, string connectionString)
+        {
+            using var connection = new SqlConnection(connectionString);
+
+            return await connection
+                .QueryAsync<Step>("SELECT [EntryId], [Email], [JourneyName], [Steps], [Created] FROM [dbo].[Entries] WHERE [Email] = @email ORDER BY [Created] DESC",
                 new { email })
                 .ConfigureAwait(false);
         }

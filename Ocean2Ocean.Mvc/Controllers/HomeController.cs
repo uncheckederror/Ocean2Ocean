@@ -131,6 +131,14 @@ namespace Ocean2Ocean.Controllers
                 if (checkDuplicate)
                 {
                     var results = await Step.GetByEmailAsync(step.Email, _azureSQL);
+
+                    if (results.Any())
+                    {
+                        return View("AddSteps", results);
+                    }
+
+                    results = await Step.GetByExactEmailAsync(step.Email, _azureSQL);
+
                     return View("AddSteps", results);
                 }
 
@@ -140,6 +148,14 @@ namespace Ocean2Ocean.Controllers
                 if (checkSubmitted)
                 {
                     var results = await Step.GetByEmailAsync(step.Email, _azureSQL);
+
+                    if (results.Any())
+                    {
+                        return View("AddSteps", results);
+                    }
+
+                    results = await Step.GetByExactEmailAsync(step.Email, _azureSQL);
+
                     return View("AddSteps", results);
                 }
             }
@@ -149,6 +165,14 @@ namespace Ocean2Ocean.Controllers
                 step.JourneyName = step.JourneyName.Trim();
 
                 var results = await Step.GetByEmailAsync(step.Email, _azureSQL);
+
+                if (results.Any())
+                {
+                    return View("AddSteps", results);
+                }
+
+                results = await Step.GetByExactEmailAsync(step.Email, _azureSQL);
+
                 return View("AddSteps", results);
             }
             else if (step?.Steps == 0 && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50))
@@ -241,8 +265,12 @@ namespace Ocean2Ocean.Controllers
 
             var checkDelete = await deleteMe.DeleteAsync(_azureSQL);
 
-
             var results = await Step.GetByEmailAsync(deleteMe.Email, _azureSQL);
+
+            if (!results.Any())
+            {
+                results = await Step.GetByExactEmailAsync(deleteMe.Email, _azureSQL);
+            }
 
             if (results != null && results.Any() && checkDelete)
             {
