@@ -65,24 +65,24 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <label for="dailyGoal">⭐ Daily Goal</label>
+                                <label for="dailyGoal">⭐ Daily Group Step Goal</label>
                                 <input type="number" name="steps" class="form-control" id="dailyGoal" value="5000" readonly>
                                 <small id="dailyGoalHelp" class="form-text text-muted">Meet this goal to win a star!</small>
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary btn-lg" asp-action="AddSteps" asp-route-journeyName="@Model?.JourneyName">🚀 Submit</button>
+                            <button type="submit" class="btn btn-primary" asp-action="AddSteps" asp-route-journeyName="@Model?.JourneyName">🚀 Submit</button>
                             @{
                                 if (!(string.IsNullOrWhiteSpace(Model.JourneyName)))
                                 {
-                                    <a class="btn btn-success btn-lg" href="/Home/Leaderboard/@Model?.JourneyName">🌠 Leaderboard</a>
+                                    <a class="btn btn-success" href="/Home/Leaderboard/@Model?.JourneyName">🌠 Leaderboard</a>
                                 }
                                 else
                                 {
-                                    <a class="btn btn-success btn-lg disabled" href="/Home/Leaderboard/@Model?.JourneyName">🌠 Leaderboard</a>
+                                    <a class="btn btn-success disabled" href="/Home/Leaderboard/@Model?.JourneyName">🌠 Leaderboard</a>
                                 }
                             }
-                            <a class="btn btn-info btn-lg" href="https://github.com/uncheckederror/Ocean2Ocean" target="_blank">👓 Github</a>
+                            <a class="btn btn-info" href="https://github.com/uncheckederror/Ocean2Ocean" target="_blank">👓 Github</a>
                         </div>
                     </form>
                 </div>

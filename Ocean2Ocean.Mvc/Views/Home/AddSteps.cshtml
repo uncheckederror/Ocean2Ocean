@@ -35,91 +35,66 @@
         int dailyGoal = 5000;
         if (Model != null && Model.Any())
         {
-            <div class="row">
-                <div class="col">
-                    <h1 class="display-4 pt-3">
-                        Steps Submitted for @Model?.FirstOrDefault()?.Email
-                    </h1>
-                </div>
+        <div class="row">
+            <div class="col">
+                <h1 class="display-4 pt-3">
+                    Steps Submitted for @Model?.FirstOrDefault()?.Email
+                </h1>
             </div>
-            <div class="row">
-                <div class="col">
-                    <div class="alert alert-success mt-3" role="alert">
-                        You've contributed <strong>@Model?.Sum(x => x.Steps).ToString("N0")</strong> Steps to @Model?.FirstOrDefault()?.JourneyName's Journey so far! And earned ⭐ x @Model?.Count(x => x.Steps >= dailyGoal).
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover table-borderless">
-                            @*<thead>
-                                    <tr>
-                                        <th>
-                                            Steps
-                                        </th>
-                                        <th>
-                                            Date Submitted
-                                        </th>
-                                        <th>
-                                            Journey
-                                        </th>
-                                        <th>
-                                            Actions
-                                        </th>
-                                    </tr>
-                                </thead>*@
-                            <tbody>
-                                @{
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="alert alert-success mt-3" role="alert">
+                    You've contributed <strong>@Model?.Sum(x => x.Steps).ToString("N0")</strong> Steps to @Model?.FirstOrDefault()?.JourneyName's Journey so far!.
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-borderless">
+                        <tbody>
+                            @{
                                     int stars = 0;
                                     foreach (var entry in Model)
                                     {
-                                        <tr>
-                                            <td>
-                                                @{
-                                                    string formattedSteps = string.Empty;
-                                                    if (entry?.Steps >= dailyGoal)
-                                                    {
-                                                        stars++;
-                                                        formattedSteps = $"⭐ {entry?.Steps.ToString("N0")} Steps";
-                                                    }
-                                                    else
-                                                    {
-                                                        formattedSteps = $"{entry?.Steps.ToString("N0")} Steps";
-                                                    }
-                                                }
-                                                @formattedSteps
-                                            </td>
-                                            <td>
-                                                @entry?.Created
-                                            </td>
-                                            <td>
-                                                <form asp-action="RemoveSteps" asp-route-journeyName="@entry?.JourneyName" asp-route-entryId="@entry?.EntryId">
-                                                    <button type="submit" class="btn btn-danger">
-                                                        ❌ Delete
-                                                    </button>
-                                                </form>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-primary" href="/@entry.JourneyName">
-                                                    🗺️ View @entry?.JourneyName
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-success" href="/Home/Leaderboard/@entry?.JourneyName">🌠 Leaderboard</a>
-                                            </td>
-                                        </tr>
+                                <tr>
+                                    <td>
+                                        @{
+                                            string formattedSteps = $"{entry?.Steps.ToString("N0")} Steps";
+                                        }
+                                        @formattedSteps
+                                    </td>
+                                    <td>
+                                        @entry?.Created
+                                    </td>
+                                    <td>
+                                        <form asp-action="RemoveSteps" asp-route-journeyName="@entry?.JourneyName" asp-route-entryId="@entry?.EntryId">
+                                            <button type="submit" class="btn btn-danger">
+                                                ❌ Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary" href="/@entry.JourneyName">
+                                            🗺️ View @entry?.JourneyName
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-success" href="/Home/Leaderboard/@entry?.JourneyName">🌠 Leaderboard</a>
+                                    </td>
+                                </tr>
                                     }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
         }
         else
         {
-            <div class="pt-3">
-                <div class="alert alert-warning" role="alert">
-                    No results found.
-                </div>
+        <div class="pt-3">
+            <div class="alert alert-warning" role="alert">
+                No results found.
             </div>
+        </div>
         }
     }
 </div>

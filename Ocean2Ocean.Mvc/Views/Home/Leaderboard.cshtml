@@ -28,7 +28,7 @@
             <div class="row">
                 <div class="col">
                     <div class="alert alert-success mt-3" role="alert">
-                        @Model?.DailyRankings.FirstOrDefault()?.JourneyName has added <strong>@Model?.DailyRankings.Sum(x => x.Steps).ToString("N0")</strong> steps to its Journey today! The ⭐ Daily Goal is @dailyGoal.ToString("N0") steps.
+                        @Model?.DailyRankings.FirstOrDefault()?.JourneyName has added <strong>@Model?.DailyRankings.Sum(x => x.Steps).ToString("N0")</strong> steps to its Journey today! The ⭐ Daily Group Goal is @dailyGoal.ToString("N0") steps.
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover table-borderless">
@@ -141,6 +141,65 @@
                                         }
                                     }
                                 }
+                                @{
+                                    var total = Model.DailyRankings.Sum(x => x.Steps);
+                                    if (total > dailyGoal)
+                                    {
+                                        <tr class="table-success">
+                                            <td scope="row">
+                                                <strong>Total</strong>
+                                            </td>
+                                            <td>
+
+                                                @Model.DailyRankings.FirstOrDefault().JourneyName
+                                            </td>
+                                            <td>
+                                                @{
+                                                    string formattedTotal = $"⭐ {total.ToString("N0")} Steps";
+                                                }
+                                                @formattedTotal
+                                            </td>
+                                            <td>
+                                                @DateTime.Now.ToShortDateString()
+                                            </td>
+                                            <td>
+                                                @{
+                                                    decimal completed = Decimal.Divide(total, dailyGoal);
+                                                    string formattedCompleted = (completed * 100M).ToString("N2") + " %";
+                                                }
+                                                @formattedCompleted
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr class="table-warning">
+                                            <td scope="row">
+                                                <strong>Total</strong>
+                                            </td>
+                                            <td>
+
+                                                @Model.DailyRankings.FirstOrDefault().JourneyName
+                                            </td>
+                                            <td>
+                                                @{
+                                                    string formattedTotal = $"{total.ToString("N0")} Steps";
+                                                }
+                                                @formattedTotal
+                                            </td>
+                                            <td>
+                                                @DateTime.Now.ToShortDateString()
+                                            </td>
+                                            <td>
+                                                @{
+                                                    decimal completed = Decimal.Divide(total, dailyGoal);
+                                                    string formattedCompleted = (completed * 100M).ToString("N2") + " %";
+                                                }
+                                                @formattedCompleted
+                                            </td>
+                                        </tr>
+                                    }
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -152,7 +211,7 @@
             </div>
         }
     }
-    @{
+    @*@{
         if (Model.JourneyRankings != null && Model.JourneyRankings.Any())
         {
             <div class="row">
@@ -238,7 +297,7 @@
                 </div>
             </div>
         }
-    }
+    }*@
     <a class="btn btn-primary" href="/@Model?.JourneyRankings?.FirstOrDefault()?.JourneyName">
         🗺️ Return to the Map
     </a>
