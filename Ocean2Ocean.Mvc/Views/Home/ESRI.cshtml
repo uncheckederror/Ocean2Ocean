@@ -30,6 +30,14 @@
                     </div>
                     <p id="progresslabel" class="text-center"></p>
                     <hr />
+                    @{
+                        if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                @Model.ErrorMessage
+                            </div>
+                        }
+                    }
                     <form method="get" autocomplete="on">
                         @{
                             if (!(string.IsNullOrWhiteSpace(Model.JourneyName)))
@@ -44,31 +52,31 @@
                             {
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Journey Name</label>
-                                    <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey">
+                                    <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey (SE Walk Across America)" required>
                                     <small id="emailHelp" class="form-text text-muted">What does your team call this event?</small>
                                 </div>
                             }
                         }
                         <div class="form-group">
                             <label for="exampleInputEmail1">Your Nickname</label>
-                            <input type="text" name="email" class="form-control" id="nickname" aria-describedby="nickname" placeholder="Enter a Nickname" value="@Model?.Step?.Email">
+                            <input type="text" name="email" class="form-control" id="nickname" aria-describedby="nickname" placeholder="Enter a Nickname (or leave blank)" value="@Model?.Step?.Email">
                             <small id="emailHelp" class="form-text text-muted">We never store personally identifying information.</small>
                         </div>
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Your Steps</label>
-                                    <input type="number" name="steps" class="form-control" id="exampleInputPassword1" placeholder="0" value="@Model?.Step?.Steps">
+                                    <input type="number" name="steps" class="form-control" id="exampleInputPassword1" placeholder="0" value="@Model?.Step?.Steps" required>
                                     <small id="emailHelp" class="form-text text-muted">1 Mile is about 2000 steps.</small>
                                     <input type="number" id="stepsTaken" name="stepsTaken" hidden />
                                     <input type="number" id="stepsInRoute" name="stepsInRoute" hidden />
                                 </div>
                             </div>
-                            <div class="col">
+                            @*<div class="col">
                                 <label for="dailyGoal">⭐ Daily Group Step Goal</label>
                                 <input type="number" name="steps" class="form-control" id="dailyGoal" value="5000" readonly>
                                 <small id="dailyGoalHelp" class="form-text text-muted">Meet this goal to win a star!</small>
-                            </div>
+                            </div>*@
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary" asp-action="AddSteps" asp-route-journeyName="@Model?.JourneyName">🚀 Submit</button>

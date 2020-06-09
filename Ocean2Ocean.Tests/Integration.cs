@@ -97,7 +97,7 @@ namespace Ocean2Ocean.Tests
 
             var journey = results.FirstOrDefault();
 
-            var leaders = await Step.GetRankingsAsync(journey.JourneyName, _azureSql);
+            var leaders = await Leaderboard.GetRankingsAsync(journey.JourneyName, _azureSql);
             Assert.NotNull(leaders);
             Assert.True(leaders.Any());
         }
@@ -111,7 +111,7 @@ namespace Ocean2Ocean.Tests
 
             var journey = results.FirstOrDefault();
 
-            var leaders = await Step.GetDailyRankingsAsync(journey.JourneyName, _azureSql);
+            var leaders = await Leaderboard.GetDailyRankingsAsync(journey.JourneyName, _azureSql);
             Assert.NotNull(leaders);
             Assert.True(leaders.Any());
         }

@@ -51,7 +51,8 @@ namespace Ocean2Ocean.Controllers
                     StepsTaken = steps > 1 ? steps : 1,
                     Date = currentDate,
                     Participants = 10,
-                    MapboxAccessToken = _mapboxAccessToken
+                    MapboxAccessToken = _mapboxAccessToken,
+                    ErrorMessage = "This is a demo."
                 });
             }
 
@@ -86,7 +87,8 @@ namespace Ocean2Ocean.Controllers
                         JourneyName = results.FirstOrDefault().JourneyName,
                         Date = currentDate,
                         Participants = 0,
-                        MapboxAccessToken = _mapboxAccessToken
+                        MapboxAccessToken = _mapboxAccessToken,
+                        ErrorMessage = "This Journey has no Entries."
                     });
                 }
             }
@@ -99,7 +101,8 @@ namespace Ocean2Ocean.Controllers
                     StepsTaken = steps > 1 ? steps : 1,
                     Date = currentDate,
                     Participants = 0,
-                    MapboxAccessToken = _mapboxAccessToken
+                    MapboxAccessToken = _mapboxAccessToken,
+                    ErrorMessage = "No Journey was supplied."
                 });
             }
         }
@@ -159,6 +162,37 @@ namespace Ocean2Ocean.Controllers
                     return View("AddSteps", results);
                 }
             }
+            // Submit steps anonymously.
+            else if (step != null && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50) && string.IsNullOrWhiteSpace(step.Email) && step.Steps > 1)
+            {
+                step.Email = $"{step.JourneyName} Team";
+                step.JourneyName = step.JourneyName.Trim();
+
+                // Block step values that are too large.
+                if (step.StepsInRoute - (step.StepsTaken + step.Steps) < 0)
+                {
+                    // Let them know this was bad input maybe?
+                    return RedirectToAction("Index");
+                }
+
+                // Save this entry to the db.
+                var checkSubmitted = await step.PostAsync(_azureSQL);
+
+                if (checkSubmitted)
+                {
+                    var results = await Step.GetByEmailAsync(step.Email, _azureSQL);
+
+                    if (results.Any())
+                    {
+                        return View("AddSteps", results);
+                    }
+
+                    results = await Step.GetByExactEmailAsync(step.Email, _azureSQL);
+
+                    return View("AddSteps", results);
+                }
+            }
+            // Show the page for the user.
             else if (step != null && step.Steps == 0 && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50) && !string.IsNullOrWhiteSpace(step.Email) && (step.Email.Length < 50))
             {
                 step.Email = step.Email.Trim();
@@ -175,16 +209,17 @@ namespace Ocean2Ocean.Controllers
 
                 return View("AddSteps", results);
             }
+            // Show the group leader board.
             else if (step?.Steps == 0 && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50))
             {
                 step.JourneyName = step.JourneyName.Trim();
 
-                var results = await Step.GetRankingsAsync(step.JourneyName, _azureSQL);
-                var daily = await Step.GetDailyRankingsAsync(step.JourneyName, _azureSQL);
+                var results = await Leaderboard.GetRankingsAsync(step.JourneyName, _azureSQL);
+                var daily = await Leaderboard.GetDailyRankingsAsync(step.JourneyName, _azureSQL);
 
                 if (results.Any())
                 {
-                    return View("Leaderboard", new Leaderboard
+                    return View("Leaderboard", new LeaderboardDetail
                     {
                         JourneyRankings = results,
                         DailyRankings = daily
@@ -201,18 +236,18 @@ namespace Ocean2Ocean.Controllers
         /// <param name="journeyName"></param>
         /// <returns></returns>
         [Route("/Home/Leaderboard/{journeyName}/")]
-        public async Task<IActionResult> Leaderboard(string journeyName)
+        public async Task<IActionResult> JourneyLeaderboardAsync(string journeyName)
         {
             if (!string.IsNullOrWhiteSpace(journeyName) && (journeyName.Length < 50))
             {
                 journeyName = journeyName.Trim();
 
-                var results = await Step.GetRankingsAsync(journeyName, _azureSQL);
-                var daily = await Step.GetDailyRankingsAsync(journeyName, _azureSQL);
+                var results = await Leaderboard.GetRankingsAsync(journeyName, _azureSQL);
+                var daily = await Leaderboard.GetDailyRankingsAsync(journeyName, _azureSQL);
 
                 if (results.Any())
                 {
-                    return View("Leaderboard", new Leaderboard
+                    return View("Leaderboard", new LeaderboardDetail
                     {
                         JourneyRankings = results,
                         DailyRankings = daily

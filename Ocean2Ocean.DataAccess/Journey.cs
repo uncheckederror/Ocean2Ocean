@@ -16,6 +16,7 @@ namespace Ocean2Ocean.DataAccess
         public DateTime Date { get; set; }
         public Step Step { get; set; }
         public string MapboxAccessToken { get; set; }
+        public string ErrorMessage { get; set; }
 
         public static async Task<IEnumerable<Journey>> GetAllAsync(string connectionString)
         {
