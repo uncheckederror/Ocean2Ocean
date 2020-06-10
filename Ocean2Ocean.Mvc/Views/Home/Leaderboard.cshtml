@@ -129,9 +129,6 @@
                                                 @formattedTotal
                                             </td>
                                             <td>
-                                                @DateTime.Now.ToShortDateString()
-                                            </td>
-                                            <td>
                                                 @{
                                                     decimal completed = Decimal.Divide(total, dailyGoal);
                                                     string formattedCompleted = (completed * 100M).ToString("N2") + " %";
