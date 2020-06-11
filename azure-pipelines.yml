@@ -9,11 +9,33 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  buildConfiguration: 'Release'
+  ConnectionStrings.AzureSQL: $(AzureSQL)
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+steps:
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: 'dotnet build $(buildConfiguration)'
+
+- task: FileTransform@2
+  inputs:
+    folderPath: '$(System.DefaultWorkingDirectory)/Ocean2Ocean.Tests/bin/Release/netcoreapp3.1/'
+    jsonTargetFiles: 'appsettings.json'
+    xmlTransformationRules: '' # disabled
+
+- task: FileTransform@2
+  inputs:
+    folderPath: '$(System.DefaultWorkingDirectory)/Ocean2Ocean.Mvc/bin/Release/netcoreapp3.1/'
+    jsonTargetFiles: 'appsettings.json'
+    xmlTransformationRules: '' # disabled
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: test
+    projects: '**/*Tests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(System.DefaultWorkingDirectory)/Ocean2Ocean.Mvc/bin/Release/netcoreapp3.1/'
+    publishLocation: 'pipeline'
