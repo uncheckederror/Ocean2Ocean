@@ -31,7 +31,6 @@ namespace Ocean2Ocean.Tests
 
         [Theory]
         [InlineData("/")]
-        [InlineData("/Test")]
         public async Task GetStaticPagesAsync(string url)
         {
             // Arrange
@@ -42,7 +41,7 @@ namespace Ocean2Ocean.Tests
             var stringResponse = await response.Content.ReadAsStringAsync();
 
             // Assert
-            Assert.Contains("Seattle", stringResponse);
+            Assert.Contains("Add Your Steps", stringResponse);
         }
     }
 }
