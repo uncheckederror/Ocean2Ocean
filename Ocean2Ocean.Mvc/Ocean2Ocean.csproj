@@ -5,8 +5,10 @@
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
     <UserSecretsId>4cbe49cf-2224-4186-b153-1574495d6b5c</UserSecretsId>
     <LangVersion>latest</LangVersion>
+    <ApplicationInsightsResourceId>/subscriptions/118b6c90-2a87-4599-8d30-c6aaf0bbed11/resourcegroups/Ocean2Ocean/providers/Microsoft.Insights/components/Ocean2Ocean</ApplicationInsightsResourceId>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.13.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.4">

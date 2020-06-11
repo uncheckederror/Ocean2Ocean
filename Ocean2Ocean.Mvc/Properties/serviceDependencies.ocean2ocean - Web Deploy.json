@@ -4,10 +4,7 @@
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroup')]/providers/Microsoft.Sql/servers/ocean2ocean/databases/ocean",
       "type": "mssql.azure",
       "connectionId": "AzureSQL",
-      "secretStore": "LocalSecretsFile"
-    },
-    "appInsights1": {
-      "type": "appInsights.sdk"
+      "secretStore": "AzureAppSettings"
     }
   }
 }

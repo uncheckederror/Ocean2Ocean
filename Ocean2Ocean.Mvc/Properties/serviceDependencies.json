@@ -3,6 +3,9 @@
     "mssql2": {
       "type": "mssql",
       "connectionId": "AzureSQL"
+    },
+    "appInsights1": {
+      "type": "appInsights"
     }
   }
 }
