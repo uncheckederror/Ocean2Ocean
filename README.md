@@ -1,7 +1,7 @@
 # Ocean2Ocean
 Enter your daily step count and track your team's progress as you walk together from Ocean to Ocean.
 
-[Try it out here!](https://ocean2ocean20200530093132.azurewebsites.net/KCIT)
+[Try it out here!](https://ocean2ocean.azurewebsites.net/KCIT)
 
 # How it's built
 This product is composed of three projects:
