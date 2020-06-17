@@ -7,7 +7,7 @@
 <script>
     @{
         var graphData = Model?.Take(14).ToArray();
-        var commaString = string.Empty;
+        var commaString = $"0, ";
         foreach (var ingest in graphData)
         {
             commaString += $"{ingest.Steps}, ";
@@ -16,7 +16,7 @@
       }
 
     @{
-                commaString = string.Empty;
+        commaString = $"\"{graphData.FirstOrDefault().Created.AddDays(-1).ToShortDateString()}\", ";
         foreach (var ingest in graphData)
         {
             commaString += $"\"{ingest.Created.ToShortDateString()}\", ";
