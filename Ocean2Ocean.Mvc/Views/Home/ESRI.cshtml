@@ -33,27 +33,28 @@
                     @{
                         if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
                         {
-                            <div class="alert alert-danger" role="alert">
-                                @Model.ErrorMessage
-                            </div>
+                        <div class="alert alert-danger" role="alert">
+                            @Model.ErrorMessage
+                        </div>
+                        <a class="btn btn-success btn-block" href="/Home/Journeys">🔍 Find Your Journey</a>
                         }
                     }
                     <form method="get" autocomplete="on">
                         @{
                             if (!(string.IsNullOrWhiteSpace(Model.JourneyName)))
                             {
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Journey Name</label>
-                                    <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey" value="@Model?.JourneyName" readonly>
-                                </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Journey Name</label>
+                                <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey" value="@Model?.JourneyName" readonly>
+                            </div>
                             }
                             else
                             {
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Journey Name</label>
-                                    <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey (SE Walk Across America)" required>
-                                    <small id="emailHelp" class="form-text text-muted">What does your team call this event?</small>
-                                </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Journey Name</label>
+                                <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey (SE Walk Across America)" required>
+                                <small id="emailHelp" class="form-text text-muted">What does your team call this event?</small>
+                            </div>
                             }
                         }
                         <div class="form-group">
@@ -77,11 +78,11 @@
                             @{
                                 if (!(string.IsNullOrWhiteSpace(Model.JourneyName)))
                                 {
-                                    <a class="btn btn-success" href="/Home/Leaderboard/@Model?.JourneyName">🌠 Leaderboard</a>
+                                <a class="btn btn-success" href="/Home/Leaderboard/@Model?.JourneyName">🌠 Leaderboard</a>
                                 }
                                 else
                                 {
-                                    <a class="btn btn-success disabled" href="/Home/Leaderboard/@Model?.JourneyName">🌠 Leaderboard</a>
+                                <a class="btn btn-success disabled" href="/Home/Leaderboard/@Model?.JourneyName">🌠 Leaderboard</a>
                                 }
                             }
                             <a class="btn btn-info" href="https://github.com/uncheckederror/Ocean2Ocean" target="_blank">👓 Github</a>
