@@ -244,13 +244,15 @@ namespace Ocean2Ocean.Controllers
 
                 var results = await Leaderboard.GetRankingsAsync(journeyName, _azureSQL);
                 var daily = await Leaderboard.GetDailyRankingsAsync(journeyName, _azureSQL);
+                var byDay = await Leaderboard.GetTotalStepsByDayAsync(journeyName, _azureSQL);
 
                 if (results.Any())
                 {
                     return View("Leaderboard", new LeaderboardDetail
                     {
                         JourneyRankings = results,
-                        DailyRankings = daily
+                        DailyRankings = daily,
+                        SumByDay = byDay
                     });
                 }
             }

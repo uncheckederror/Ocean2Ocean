@@ -18,6 +18,11 @@ namespace Ocean2Ocean.DataAccess
         public string MapboxAccessToken { get; set; }
         public string ErrorMessage { get; set; }
 
+        /// <summary>
+        /// Get a list of all the Journeys.
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         public static async Task<IEnumerable<Journey>> GetAllAsync(string connectionString)
         {
             using var connection = new SqlConnection(connectionString);

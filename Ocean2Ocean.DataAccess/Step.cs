@@ -21,6 +21,11 @@ namespace Ocean2Ocean.DataAccess
         public int StepsTaken { get; set; }
         public int StepsInRoute { get; set; }
 
+        /// <summary>
+        /// Get every entry in the database.
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         public static async Task<IEnumerable<Step>> GetAllAsync(string connectionString)
         {
             using var connection = new SqlConnection(connectionString);
@@ -30,6 +35,12 @@ namespace Ocean2Ocean.DataAccess
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Get a specific entry by its Id.
+        /// </summary>
+        /// <param name="entryId"></param>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         public static async Task<Step> GetByIdAsync(int entryId, string connectionString)
         {
             using var connection = new SqlConnection(connectionString);
@@ -40,6 +51,12 @@ namespace Ocean2Ocean.DataAccess
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Get a list of entries related to a specific email with a LIKE query.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         public static async Task<IEnumerable<Step>> GetByEmailAsync(string email, string connectionString)
         {
             using var connection = new SqlConnection(connectionString);
@@ -53,6 +70,12 @@ namespace Ocean2Ocean.DataAccess
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Get a list of entries related to an email.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         public static async Task<IEnumerable<Step>> GetByExactEmailAsync(string email, string connectionString)
         {
             using var connection = new SqlConnection(connectionString);
@@ -63,6 +86,12 @@ namespace Ocean2Ocean.DataAccess
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Get a list of entries related to a specific Journey.
+        /// </summary>
+        /// <param name="journeyName"></param>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         public static async Task<IEnumerable<Step>> GetByJourneyAsync(string journeyName, string connectionString)
         {
             using var connection = new SqlConnection(connectionString);
@@ -76,6 +105,11 @@ namespace Ocean2Ocean.DataAccess
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Check for duplicate entries.
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         public async Task<bool> CheckForDuplicateAsync(string connectionString)
         {
             using var connection = new SqlConnection(connectionString);
@@ -97,6 +131,11 @@ namespace Ocean2Ocean.DataAccess
             }
         }
 
+        /// <summary>
+        /// Add an entry to the database.
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         public async Task<bool> PostAsync(string connectionString)
         {
             using var connection = new SqlConnection(connectionString);
@@ -116,6 +155,11 @@ namespace Ocean2Ocean.DataAccess
             }
         }
 
+        /// <summary>
+        /// Update a specific entry.
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         public async Task<bool> PutAsync(string connectionString)
         {
             using var connection = new SqlConnection(connectionString);
@@ -135,6 +179,11 @@ namespace Ocean2Ocean.DataAccess
             }
         }
 
+        /// <summary>
+        /// Delete a specific entry.
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         public async Task<bool> DeleteAsync(string connectionString)
         {
             using var connection = new SqlConnection(connectionString);

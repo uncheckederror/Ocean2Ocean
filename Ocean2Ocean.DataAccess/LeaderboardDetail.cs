@@ -12,6 +12,6 @@ namespace Ocean2Ocean.DataAccess
     {
         public IEnumerable<Leaderboard> DailyRankings { get; set; }
         public IEnumerable<Leaderboard> JourneyRankings { get; set; }
-
+        public IEnumerable<Leaderboard> SumByDay { get; set; }
     }
 }
