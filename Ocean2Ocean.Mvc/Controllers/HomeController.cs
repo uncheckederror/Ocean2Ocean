@@ -34,7 +34,6 @@ namespace Ocean2Ocean.Controllers
         /// <param name="journeyName"></param>
         /// <returns></returns>
         [Route("/{journeyName}")]
-        [Route("/")]
         public async Task<IActionResult> IndexAsync(DateTime? Date, int steps, string journeyName)
         {
             // Using today's date get the sum of all steps up to this point.
@@ -108,12 +107,18 @@ namespace Ocean2Ocean.Controllers
         /// <returns></returns>
         [Route("/Home/AddSteps/{journeyName}/")]
         [Route("/Home/AddSteps/")]
-        public async Task<IActionResult> AddSteps([Bind("Nickname,JourneyName,Steps,StepsTaken,StepsInRoute")] Step step)
+        public async Task<IActionResult> AddSteps([Bind("Nickname,JourneyName,TeamName,Steps,StepsTaken,StepsInRoute")] Step step)
         {
             if (step != null && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50) && !string.IsNullOrWhiteSpace(step.Nickname) && (step.Nickname.Length < 50) && step.Steps > 1)
             {
                 step.Nickname = step.Nickname.Trim();
                 step.JourneyName = step.JourneyName.Trim();
+
+                // Set the team name if one is not supplied.
+                if (string.IsNullOrWhiteSpace(step.TeamName))
+                {
+                    step.TeamName = $"{step.JourneyName} Team";
+                }
 
                 // Block step values that are too large.
                 if (step.StepsInRoute - (step.StepsTaken + step.Steps) < 0)
@@ -259,6 +264,7 @@ namespace Ocean2Ocean.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("/Home/Journeys/")]
+        [Route("/")]
         public async Task<IActionResult> JourneysAsync()
         {
             var results = await Journey.GetAllAsync(_azureSQL);
