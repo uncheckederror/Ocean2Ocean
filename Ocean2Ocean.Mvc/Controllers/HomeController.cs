@@ -167,6 +167,12 @@ namespace Ocean2Ocean.Controllers
                 step.Nickname = $"{step.JourneyName} Team";
                 step.JourneyName = step.JourneyName.Trim();
 
+                // Set the team name if one is not supplied.
+                if (string.IsNullOrWhiteSpace(step.TeamName))
+                {
+                    step.TeamName = $"{step.JourneyName} Team";
+                }
+
                 // Block step values that are too large.
                 if (step.StepsInRoute - (step.StepsTaken + step.Steps) < 0)
                 {
