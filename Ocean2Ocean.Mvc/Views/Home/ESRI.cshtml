@@ -1,6 +1,6 @@
 ﻿@model Ocean2Ocean.DataAccess.Journey
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Journey";
 }
 
 <script src='https://unpkg.com/@@turf/turf/turf.min.js'></script>
@@ -59,7 +59,7 @@
                         }
                         <div class="form-group">
                             <label for="exampleInputEmail1">Your Nickname</label>
-                            <input type="text" name="email" class="form-control" id="nickname" aria-describedby="nickname" placeholder="Enter a Nickname (or leave blank)" value="@Model?.Step?.Email">
+                            <input type="text" name="email" class="form-control" id="nickname" aria-describedby="nickname" placeholder="Enter a Nickname (or leave blank)" value="@Model?.Step?.Nickname">
                             <small id="emailHelp" class="form-text text-muted">We never store personally identifying information.</small>
                         </div>
                         <div class="row">

@@ -61,10 +61,10 @@ namespace Ocean2Ocean.Tests
             Assert.True(results.Any());
 
             var specificEntry = results.FirstOrDefault();
-            var checkSpecificEntry = await Step.GetByIdAsync(specificEntry.EntryId, _azureSql);
+            var checkSpecificEntry = await Step.GetByIdAsync(specificEntry.StepId, _azureSql);
             Assert.NotNull(checkSpecificEntry);
-            Assert.Equal(checkSpecificEntry.EntryId, specificEntry.EntryId);
-            Assert.Equal(checkSpecificEntry.Email, specificEntry.Email);
+            Assert.Equal(checkSpecificEntry.StepId, specificEntry.StepId);
+            Assert.Equal(checkSpecificEntry.Nickname, specificEntry.Nickname);
             Assert.Equal(checkSpecificEntry.Created, specificEntry.Created);
             Assert.Equal(checkSpecificEntry.JourneyName, specificEntry.JourneyName);
             Assert.Equal(checkSpecificEntry.Steps, specificEntry.Steps);
@@ -73,7 +73,7 @@ namespace Ocean2Ocean.Tests
         [Fact]
         public async Task GetByEmail()
         {
-            var results = await Step.GetByEmailAsync("batman", _azureSql);
+            var results = await Step.GetByNicknameAsync("batman", _azureSql);
             Assert.NotNull(results);
             Assert.True(results.Any());
             _output.WriteLine(results.Sum(x => x.Steps).ToString() + " Steps in Total");
@@ -135,8 +135,9 @@ namespace Ocean2Ocean.Tests
         {
             var entry = new Step
             {
-                Email = "batman@theBestCounty.gov",
+                Nickname = "batman",
                 JourneyName = "Test",
+                TeamName = "Test Team",
                 Steps = 100,
                 Created = DateTime.Now
             };
@@ -167,8 +168,9 @@ namespace Ocean2Ocean.Tests
         {
             var entry = new Step
             {
-                Email = "batman@theBestCounty.gov",
+                Nickname = "batman",
                 JourneyName = "Test",
+                TeamName = "Test Team",
                 Steps = 100,
                 Created = DateTime.Now
             };
@@ -187,8 +189,9 @@ namespace Ocean2Ocean.Tests
         {
             var entry = new Step
             {
-                Email = "batman@theBestCounty.gov",
+                Nickname = "batman@theBestCounty.gov",
                 JourneyName = "Test",
+                TeamName = "Test Team",
                 Steps = 100,
                 Created = DateTime.Now
             };
@@ -197,7 +200,7 @@ namespace Ocean2Ocean.Tests
 
             Assert.True(checkSubmitted);
 
-            var results = await Step.GetByEmailAsync("batman@theBestCounty.gov", _azureSql);
+            var results = await Step.GetByNicknameAsync("batman@theBestCounty.gov", _azureSql);
             var deleteMe = results.FirstOrDefault();
 
             var checkDelete = await deleteMe.DeleteAsync(_azureSql);

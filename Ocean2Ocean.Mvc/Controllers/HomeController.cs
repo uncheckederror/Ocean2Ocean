@@ -17,14 +17,12 @@ namespace Ocean2Ocean.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
-        private readonly string _mapboxAccessToken;
         private readonly string _azureSQL;
 
         public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
-            _mapboxAccessToken = _configuration.GetConnectionString("Mapbox");
             _azureSQL = _configuration.GetConnectionString("AzureSQL");
         }
 
@@ -51,7 +49,6 @@ namespace Ocean2Ocean.Controllers
                     StepsTaken = steps > 1 ? steps : 1,
                     Date = currentDate,
                     Participants = 10,
-                    MapboxAccessToken = _mapboxAccessToken,
                     ErrorMessage = "This is a demo."
                 });
             }
@@ -73,8 +70,7 @@ namespace Ocean2Ocean.Controllers
                         StepsTaken = steps > 1 ? steps : 1,
                         JourneyName = results.FirstOrDefault().JourneyName,
                         Date = currentDate,
-                        Participants = 10,
-                        MapboxAccessToken = _mapboxAccessToken
+                        Participants = 10
                     });
                 }
                 else
@@ -87,7 +83,6 @@ namespace Ocean2Ocean.Controllers
                         JourneyName = results.FirstOrDefault().JourneyName,
                         Date = currentDate,
                         Participants = 0,
-                        MapboxAccessToken = _mapboxAccessToken,
                         ErrorMessage = "This Journey has no Entries."
                     });
                 }
@@ -101,7 +96,6 @@ namespace Ocean2Ocean.Controllers
                     StepsTaken = steps > 1 ? steps : 1,
                     Date = currentDate,
                     Participants = 0,
-                    MapboxAccessToken = _mapboxAccessToken,
                     ErrorMessage = "No Journey was supplied."
                 });
             }
@@ -114,11 +108,11 @@ namespace Ocean2Ocean.Controllers
         /// <returns></returns>
         [Route("/Home/AddSteps/{journeyName}/")]
         [Route("/Home/AddSteps/")]
-        public async Task<IActionResult> AddSteps([Bind("Email,JourneyName,Steps,StepsTaken,StepsInRoute")] Step step)
+        public async Task<IActionResult> AddSteps([Bind("Nickname,JourneyName,Steps,StepsTaken,StepsInRoute")] Step step)
         {
-            if (step != null && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50) && !string.IsNullOrWhiteSpace(step.Email) && (step.Email.Length < 50) && step.Steps > 1)
+            if (step != null && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50) && !string.IsNullOrWhiteSpace(step.Nickname) && (step.Nickname.Length < 50) && step.Steps > 1)
             {
-                step.Email = step.Email.Trim();
+                step.Nickname = step.Nickname.Trim();
                 step.JourneyName = step.JourneyName.Trim();
 
                 // Block step values that are too large.
@@ -133,14 +127,14 @@ namespace Ocean2Ocean.Controllers
 
                 if (checkDuplicate)
                 {
-                    var results = await Step.GetByEmailAsync(step.Email, _azureSQL);
+                    var results = await Step.GetByNicknameAsync(step.Nickname, _azureSQL);
 
                     if (results.Any())
                     {
                         return View("AddSteps", results);
                     }
 
-                    results = await Step.GetByExactEmailAsync(step.Email, _azureSQL);
+                    results = await Step.GetByExactNicknameAsync(step.Nickname, _azureSQL);
 
                     return View("AddSteps", results);
                 }
@@ -150,22 +144,22 @@ namespace Ocean2Ocean.Controllers
 
                 if (checkSubmitted)
                 {
-                    var results = await Step.GetByEmailAsync(step.Email, _azureSQL);
+                    var results = await Step.GetByNicknameAsync(step.Nickname, _azureSQL);
 
                     if (results.Any())
                     {
                         return View("AddSteps", results);
                     }
 
-                    results = await Step.GetByExactEmailAsync(step.Email, _azureSQL);
+                    results = await Step.GetByExactNicknameAsync(step.Nickname, _azureSQL);
 
                     return View("AddSteps", results);
                 }
             }
             // Submit steps anonymously.
-            else if (step != null && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50) && string.IsNullOrWhiteSpace(step.Email) && step.Steps > 1)
+            else if (step != null && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50) && string.IsNullOrWhiteSpace(step.Nickname) && step.Steps > 1)
             {
-                step.Email = $"{step.JourneyName} Team";
+                step.Nickname = $"{step.JourneyName} Team";
                 step.JourneyName = step.JourneyName.Trim();
 
                 // Block step values that are too large.
@@ -180,32 +174,32 @@ namespace Ocean2Ocean.Controllers
 
                 if (checkSubmitted)
                 {
-                    var results = await Step.GetByEmailAsync(step.Email, _azureSQL);
+                    var results = await Step.GetByNicknameAsync(step.Nickname, _azureSQL);
 
                     if (results.Any())
                     {
                         return View("AddSteps", results);
                     }
 
-                    results = await Step.GetByExactEmailAsync(step.Email, _azureSQL);
+                    results = await Step.GetByExactNicknameAsync(step.Nickname, _azureSQL);
 
                     return View("AddSteps", results);
                 }
             }
             // Show the page for the user.
-            else if (step != null && step.Steps == 0 && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50) && !string.IsNullOrWhiteSpace(step.Email) && (step.Email.Length < 50))
+            else if (step != null && step.Steps == 0 && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50) && !string.IsNullOrWhiteSpace(step.Nickname) && (step.Nickname.Length < 50))
             {
-                step.Email = step.Email.Trim();
+                step.Nickname = step.Nickname.Trim();
                 step.JourneyName = step.JourneyName.Trim();
 
-                var results = await Step.GetByEmailAsync(step.Email, _azureSQL);
+                var results = await Step.GetByNicknameAsync(step.Nickname, _azureSQL);
 
                 if (results.Any())
                 {
                     return View("AddSteps", results);
                 }
 
-                results = await Step.GetByExactEmailAsync(step.Email, _azureSQL);
+                results = await Step.GetByExactNicknameAsync(step.Nickname, _azureSQL);
 
                 return View("AddSteps", results);
             }
@@ -279,9 +273,9 @@ namespace Ocean2Ocean.Controllers
         /// <param name="journeyName"></param>
         /// <returns></returns>
         [Route("/Home/RemoveSteps/{journeyName}/")]
-        public async Task<IActionResult> RemoveSteps(int entryId, string journeyName)
+        public async Task<IActionResult> RemoveSteps(int stepId, string journeyName)
         {
-            if (!(entryId > 1) || string.IsNullOrWhiteSpace(journeyName) || (journeyName.Length > 50))
+            if (!(stepId > 1) || string.IsNullOrWhiteSpace(journeyName) || (journeyName.Length > 50))
             {
                 // Let them know this was bad input maybe?
                 return RedirectToAction("Index");
@@ -289,7 +283,7 @@ namespace Ocean2Ocean.Controllers
 
             journeyName = journeyName.Trim();
 
-            var deleteMe = await Step.GetByIdAsync(entryId, _azureSQL);
+            var deleteMe = await Step.GetByIdAsync(stepId, _azureSQL);
 
             if (deleteMe is null)
             {
@@ -302,11 +296,11 @@ namespace Ocean2Ocean.Controllers
 
             var checkDelete = await deleteMe.DeleteAsync(_azureSQL);
 
-            var results = await Step.GetByEmailAsync(deleteMe.Email, _azureSQL);
+            var results = await Step.GetByNicknameAsync(deleteMe.Nickname, _azureSQL);
 
             if (!results.Any())
             {
-                results = await Step.GetByExactEmailAsync(deleteMe.Email, _azureSQL);
+                results = await Step.GetByExactNicknameAsync(deleteMe.Nickname, _azureSQL);
             }
 
             if (results != null && results.Any() && checkDelete)

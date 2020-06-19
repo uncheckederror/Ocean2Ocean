@@ -15,7 +15,6 @@ namespace Ocean2Ocean.DataAccess
         public int Participants { get; set; }
         public DateTime Date { get; set; }
         public Step Step { get; set; }
-        public string MapboxAccessToken { get; set; }
         public string ErrorMessage { get; set; }
 
         /// <summary>
@@ -28,7 +27,7 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             return await connection
-                .QueryAsync<Journey>("SELECT [JourneyName], SUM(Steps) As StepsTaken FROM [dbo].[Entries] GROUP BY [JourneyName]")
+                .QueryAsync<Journey>("SELECT [JourneyName], SUM(Steps) As StepsTaken FROM [dbo].[Steps] GROUP BY [JourneyName]")
                 .ConfigureAwait(false);
         }
     }

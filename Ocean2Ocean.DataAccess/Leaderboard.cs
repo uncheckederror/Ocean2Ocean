@@ -10,7 +10,7 @@ namespace Ocean2Ocean.DataAccess
 {
     public class Leaderboard
     {
-        public string Email { get; set; }
+        public string Nickname { get; set; }
         public string JourneyName { get; set; }
         public int TotalSteps { get; set; }
         private int SumYear { get; set; }
@@ -29,7 +29,7 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             return await connection
-                .QueryAsync<Leaderboard>("SELECT [Email], [JourneyName], SUM(Steps) As TotalSteps FROM [dbo].[Entries] WHERE [JourneyName] = @journeyName GROUP BY [Email], [JourneyName] ORDER BY TotalSteps DESC",
+                .QueryAsync<Leaderboard>("SELECT [Nickname], [JourneyName], SUM(Steps) As TotalSteps FROM [dbo].[Steps] WHERE [JourneyName] = @journeyName GROUP BY [Nickname], [JourneyName] ORDER BY TotalSteps DESC",
                 new { journeyName })
                 .ConfigureAwait(false);
         }
@@ -48,7 +48,7 @@ namespace Ocean2Ocean.DataAccess
             var today = yesterday.AddDays(+1);
 
             return await connection
-                .QueryAsync<Leaderboard>("SELECT [Email], [JourneyName], SUM(Steps) As TotalSteps FROM [dbo].[Entries] WHERE [JourneyName] = @journeyName AND [Created] >= @yesterday AND [Created] <= @today GROUP BY [Email], [JourneyName] ORDER BY TotalSteps DESC",
+                .QueryAsync<Leaderboard>("SELECT [Nickname], [JourneyName], SUM(Steps) As TotalSteps FROM [dbo].[Steps] WHERE [JourneyName] = @journeyName AND [Created] >= @yesterday AND [Created] <= @today GROUP BY [Nickname], [JourneyName] ORDER BY TotalSteps DESC",
                 new { journeyName, yesterday, today })
                 .ConfigureAwait(false);
         }
@@ -67,7 +67,7 @@ namespace Ocean2Ocean.DataAccess
             var today = yesterday.AddDays(+1);
 
             var results = await connection
-                .QueryAsync<Leaderboard>("SELECT [JourneyName], Year(Created) As SumYear, Month(Created) As SumMonth, Day(Created) As SumDay, SUM(Steps) As TotalSteps FROM[dbo].[Entries] WHERE[JourneyName] = @journeyName GROUP BY[JourneyName], Year(Created), Month(Created), Day(Created) ORDER BY SumDay DESC",
+                .QueryAsync<Leaderboard>("SELECT [JourneyName], Year(Created) As SumYear, Month(Created) As SumMonth, Day(Created) As SumDay, SUM(Steps) As TotalSteps FROM[dbo].[Steps] WHERE [JourneyName] = @journeyName GROUP BY [JourneyName], Year(Created), Month(Created), Day(Created) ORDER BY SumDay DESC",
                 new { journeyName })
                 .ConfigureAwait(false);
 
