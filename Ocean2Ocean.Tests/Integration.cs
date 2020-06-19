@@ -207,5 +207,68 @@ namespace Ocean2Ocean.Tests
 
             Assert.True(checkDelete);
         }
+
+        [Fact]
+        public async Task CreateANewJourney()
+        {
+            var journey = new Journey
+            {
+                JourneyName = "Test",
+                GeometryFileName = "/route.geojson",
+                Bio = $"This is a test Journey created on {DateTime.Now}",
+                Active = true,
+                Created = DateTime.Now
+            };
+
+            var result = await journey.PostAsync(_azureSql);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task UpdateAnExistingJourney()
+        {
+            var results = await Journey.GetAllTempAsync(_azureSql);
+            Assert.True(results.Any());
+            var selected = results.FirstOrDefault();
+
+            var checkid = await Journey.GetByIdAsync(selected.JourneyId, _azureSql);
+            Assert.Equal(selected.JourneyId, checkid.JourneyId);
+
+            var newBio = $"This is a test Journey created on {DateTime.Now}";
+            checkid.Bio = newBio;
+            var checkUpdate = await checkid.PutAsync(_azureSql);
+            Assert.True(checkUpdate);
+        }
+
+        [Fact]
+        public async Task GetAllJourneys()
+        {
+            var results = await Journey.GetAllTempAsync(_azureSql);
+            Assert.True(results.Any());
+        }
+
+        [Fact]
+        public async Task GetJourneyById()
+        {
+            var results = await Journey.GetAllTempAsync(_azureSql);
+            Assert.True(results.Any());
+            var selected = results.FirstOrDefault();
+
+            var checkid = await Journey.GetByIdAsync(selected.JourneyId, _azureSql);
+            Assert.Equal(selected.JourneyId, checkid.JourneyId);
+        }
+
+        [Fact]
+        public async Task GetJourneyByName()
+        {
+            var results = await Journey.GetAllTempAsync(_azureSql);
+            Assert.True(results.Any());
+            var selected = results.FirstOrDefault();
+
+            var checkid = await Journey.GetByJourneyNameAsync(selected.JourneyName, _azureSql);
+            var selectedChecked = checkid.FirstOrDefault();
+            Assert.Equal(selected.JourneyName, selectedChecked.JourneyName);
+        }
     }
 }

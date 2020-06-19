@@ -41,7 +41,7 @@ namespace Ocean2Ocean.Tests
             var stringResponse = await response.Content.ReadAsStringAsync();
 
             // Assert
-            Assert.Contains("Add Your Steps", stringResponse);
+            Assert.Contains("Ocean", stringResponse);
         }
     }
 }
