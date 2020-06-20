@@ -29,7 +29,7 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             return await connection
-                .QueryAsync<Journey>("SELECT [JourneyId], [JourneyName], [GeometryFileName], [Bio], [Active], [Created], [ImagePath] FROM [dbo].[Journeys]")
+                .QueryAsync<Journey>("SELECT [JourneyId], [JourneyName], [GeometryFileName], [Bio], [Active], [Created], [ImagePath] FROM [dbo].[Journeys] ORDER BY [Created] DESC")
                 .ConfigureAwait(false);
         }
 
@@ -72,7 +72,7 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             var result = await connection
-                .ExecuteAsync("INSERT INTO [dbo].[Journeys] ([JourneyName], [GeometryFileName], [Bio], [Active], [Created], [ImagePath]) VALUES ( @JourneyName, @GeometryFileName, @Bio, @Active, @Created )",
+                .ExecuteAsync("INSERT INTO [dbo].[Journeys] ([JourneyName], [GeometryFileName], [Bio], [Active], [Created], [ImagePath]) VALUES ( @JourneyName, @GeometryFileName, @Bio, @Active, @Created, @ImagePath )",
                 new { JourneyName, GeometryFileName, Bio, Active, Created = DateTime.Now, ImagePath })
                 .ConfigureAwait(false);
 

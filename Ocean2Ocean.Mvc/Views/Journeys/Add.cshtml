@@ -1,0 +1,57 @@
+﻿@model Ocean2Ocean.DataAccess.JourneysSearchResult
+@{
+    ViewData["Title"] = "Journeys";
+}
+
+<div class="container">
+    <h1 class="display-4 pt-3 pb-3">
+        🚣 Start A New Journey
+    </h1>
+    <form class="needs-validation" novalidate="" method="post">
+        <div class="row">
+            <div class="col pb-3">
+                <label for="firstName">What will we call your Journey?</label>
+                <input type="text" class="form-control" id="JourneyName" name="JourneyName" placeholder="Walk Across America" value="" required>
+                <div class="invalid-feedback">
+                    Valid journey name is required.
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pb-3">
+                <label for="lastName">Why Do We Walk?</label>
+                <input type="text" class="form-control" id="Bio" name="Bio" placeholder="A team building exercise hosted by KCIT." value="" required>
+                <div class="invalid-feedback">
+                    Valid bio is required.
+                </div>
+            </div>
+        </div>
+        <details>
+            <summary>Advanced Settings (Optional)</summary>
+            <br />
+            <div class="row">
+                <div class="col pb-3">
+                    <label for="lastName">Path to Route</label>
+                    <input type="text" class="form-control" id="GeometryFileName" name="GeometryFileName" placeholder="" value="/js/route.js" required>
+                    <div class="invalid-feedback">
+                        Valid route file is required.
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col pb-3">
+                    <label for="lastName">Path to Image</label>
+                    <input type="text" class="form-control" id="ImagePath" name="ImagePath" placeholder="" value="/images/DSC06102small.jpg" required>
+                    <div class="invalid-feedback">
+                        Valid image file is required.
+                    </div>
+                </div>
+            </div>
+        </details>
+        <div class="row">
+            <div class="col pt-3">
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Take A Step</button>
+            </div>
+        </div>
+    </form>
+</div>

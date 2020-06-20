@@ -21,9 +21,17 @@ namespace Ocean2Ocean.Controllers
 
         public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
         {
-            _logger = logger;
-            _configuration = configuration;
+            _logger = logger; _configuration = configuration;
             _azureSQL = _configuration.GetConnectionString("AzureSQL");
+
+        }
+
+        [Route("/")]
+        public async Task<IActionResult> IndexAsync()
+        {
+            var results = await Journey.GetAllAsync(_azureSQL);
+
+            return View("Index", results);
         }
 
         /// <summary>
@@ -34,7 +42,7 @@ namespace Ocean2Ocean.Controllers
         /// <param name="journeyName"></param>
         /// <returns></returns>
         [Route("/{journeyName}")]
-        public async Task<IActionResult> IndexAsync(DateTime? Date, int steps, string journeyName)
+        public async Task<IActionResult> MapAsync(DateTime? Date, int steps, string journeyName)
         {
             // Using today's date get the sum of all steps up to this point.
             var currentDate = Date ?? DateTime.Now;
@@ -79,7 +87,7 @@ namespace Ocean2Ocean.Controllers
                     {
                         // Can't be less than 1 or greater than the maximum number of steps in the route.
                         StepsTaken = steps > 1 ? steps : 1,
-                        JourneyName = results.FirstOrDefault().JourneyName,
+                        JourneyName = journeyName,
                         Date = currentDate,
                         Participants = 0,
                         ErrorMessage = "This Journey has no Entries."
@@ -97,55 +105,6 @@ namespace Ocean2Ocean.Controllers
                     Participants = 0,
                     ErrorMessage = "No Journey was supplied."
                 });
-            }
-        }
-
-        [Route("/Journeys/")]
-        public async Task<IActionResult> SearchJournys(string journeyName)
-        {
-            if (string.IsNullOrWhiteSpace(journeyName))
-            {
-                var results = await Journey.GetAllAsync(_azureSQL);
-
-                return View("SearchJourneys", new JourneysSearchResult
-                {
-                    Query = journeyName,
-                    Journeys = results
-                });
-            }
-            else
-            {
-                var results = await Journey.GetByJourneyNameAsync(journeyName, _azureSQL);
-
-                if (!results.Any())
-                {
-                    results = await Journey.SearchByJourneyNameAsync(journeyName, _azureSQL);
-                }
-                else if (results.Count() == 1)
-                {
-                    return Redirect($"/{results.FirstOrDefault().JourneyName}");
-                }
-
-                if (results.Count() > 1)
-                {
-                    return View("SearchJourneys", new JourneysSearchResult
-                    {
-                        Query = journeyName,
-                        Journeys = results
-                    });
-                }
-                else if (results.Count() == 1)
-                {
-                    return Redirect($"/{results.FirstOrDefault().JourneyName}");
-                }
-                else
-                {
-                    return View("SearchJourneys", new JourneysSearchResult
-                    {
-                        Query = journeyName,
-                        Journeys = results
-                    });
-                }
             }
         }
 
@@ -315,19 +274,6 @@ namespace Ocean2Ocean.Controllers
         }
 
         /// <summary>
-        /// See all of the Journeys in the Db.
-        /// </summary>
-        /// <returns></returns>
-        [Route("/Home/Journeys/")]
-        [Route("/")]
-        public async Task<IActionResult> JourneysAsync()
-        {
-            var results = await Journey.GetAllAsync(_azureSQL);
-
-            return View("Index", results);
-        }
-
-        /// <summary>
         /// Delete a steps entry from a journey.
         /// </summary>
         /// <param name="entryId"></param>
@@ -377,11 +323,6 @@ namespace Ocean2Ocean.Controllers
                 });
             }
 
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
