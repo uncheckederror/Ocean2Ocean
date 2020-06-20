@@ -20,29 +20,16 @@ namespace Ocean2Ocean.DataAccess
         public string GeometryFileName { get; set; }
         public string Bio { get; set; }
         public bool Active { get; set; }
+        public string ImagePath { get; set; }
         public DateTime Created { get; set; }
 
 
-        /// <summary>
-        /// Get a list of all the Journeys.
-        /// </summary>
-        /// <param name="connectionString"></param>
-        /// <returns></returns>
         public static async Task<IEnumerable<Journey>> GetAllAsync(string connectionString)
         {
             using var connection = new SqlConnection(connectionString);
 
             return await connection
-                .QueryAsync<Journey>("SELECT [JourneyName], SUM(Steps) As StepsTaken FROM [dbo].[Steps] GROUP BY [JourneyName]")
-                .ConfigureAwait(false);
-        }
-
-        public static async Task<IEnumerable<Journey>> GetAllTempAsync(string connectionString)
-        {
-            using var connection = new SqlConnection(connectionString);
-
-            return await connection
-                .QueryAsync<Journey>("SELECT [JourneyId], [JourneyName], [GeometryFileName], [Bio], [Active], [Created] FROM [dbo].[Journeys]")
+                .QueryAsync<Journey>("SELECT [JourneyId], [JourneyName], [GeometryFileName], [Bio], [Active], [Created], [ImagePath] FROM [dbo].[Journeys]")
                 .ConfigureAwait(false);
         }
 
@@ -51,7 +38,7 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             return await connection
-                .QueryFirstOrDefaultAsync<Journey>("SELECT [JourneyId], [JourneyName], [GeometryFileName], [Bio], [Active], [Created] FROM [dbo].[Journeys] WHERE [JourneyId] = @journeyId", new { journeyId })
+                .QueryFirstOrDefaultAsync<Journey>("SELECT [JourneyId], [JourneyName], [GeometryFileName], [Bio], [Active], [Created], [ImagePath] FROM [dbo].[Journeys] WHERE [JourneyId] = @journeyId", new { journeyId })
                 .ConfigureAwait(false);
         }
 
@@ -60,7 +47,7 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             return await connection
-                .QueryAsync<Journey>("SELECT [JourneyId], [JourneyName], [GeometryFileName], [Bio], [Active], [Created] FROM [dbo].[Journeys] WHERE [JourneyName] = @JourneyName", new { journeyName })
+                .QueryAsync<Journey>("SELECT [JourneyId], [JourneyName], [GeometryFileName], [Bio], [Active], [Created], [ImagePath] FROM [dbo].[Journeys] WHERE [JourneyName] = @JourneyName", new { journeyName })
                 .ConfigureAwait(false);
         }
 
@@ -71,7 +58,7 @@ namespace Ocean2Ocean.DataAccess
             journeyName = $"%{journeyName}%";
 
             return await connection
-                .QueryAsync<Journey>("SELECT [JourneyId], [JourneyName], [GeometryFileName], [Bio], [Active], [Created] FROM [dbo].[Journeys] WHERE [JourneyName] LIKE @JourneyName", new { journeyName })
+                .QueryAsync<Journey>("SELECT [JourneyId], [JourneyName], [GeometryFileName], [Bio], [Active], [Created], [ImagePath] FROM [dbo].[Journeys] WHERE [JourneyName] LIKE @JourneyName", new { journeyName })
                 .ConfigureAwait(false);
         }
 
@@ -85,8 +72,8 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             var result = await connection
-                .ExecuteAsync("INSERT INTO [dbo].[Journeys] ([JourneyName], [GeometryFileName], [Bio], [Active], [Created]) VALUES ( @JourneyName, @GeometryFileName, @Bio, @Active, @Created )",
-                new { JourneyName, GeometryFileName, Bio, Active, Created = DateTime.Now })
+                .ExecuteAsync("INSERT INTO [dbo].[Journeys] ([JourneyName], [GeometryFileName], [Bio], [Active], [Created], [ImagePath]) VALUES ( @JourneyName, @GeometryFileName, @Bio, @Active, @Created )",
+                new { JourneyName, GeometryFileName, Bio, Active, Created = DateTime.Now, ImagePath })
                 .ConfigureAwait(false);
 
             if (result == 1)
@@ -109,8 +96,8 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             var result = await connection
-                .ExecuteAsync("UPDATE [dbo].[Journeys] SET [JourneyName] = @JourneyName, [GeometryFileName] = @GeometryFileName, [Bio] = @Bio, [Active] = @Active, [Created] = @Created WHERE [JourneyId] = @JourneyId ",
-                new { JourneyId, JourneyName, GeometryFileName, Bio, Active, Created = DateTime.Now })
+                .ExecuteAsync("UPDATE [dbo].[Journeys] SET [JourneyName] = @JourneyName, [GeometryFileName] = @GeometryFileName, [Bio] = @Bio, [Active] = @Active, [Created] = @Created, [ImagePath] = @ImagePath WHERE [JourneyId] = @JourneyId ",
+                new { JourneyId, JourneyName, GeometryFileName, Bio, Active, Created = DateTime.Now, ImagePath })
                 .ConfigureAwait(false);
 
             if (result == 1)

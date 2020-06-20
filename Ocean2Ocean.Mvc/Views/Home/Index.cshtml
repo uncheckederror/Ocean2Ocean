@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Ocean2Ocean.DataAccess.Journey>
+@{
+    ViewData["Title"] = "Journeys";
+}
+
+<div class="container">
+    @{
+        if (Model != null && Model.Any())
+        {
+        <div class="row">
+            <div class="col">
+                <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+                    <h1 class="display-3">
+                        🌊 Ocean To Ocean
+                    </h1>
+                    <p class="lead">
+                        Add your steps to a Journey to help you team walk across the Country.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card-deck mb-3 text-center">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">Find Your Journey</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>@Model?.Count() Journeys Active Now</li>
+                            </ul>
+                            <a class="btn btn-lg btn-block btn-primary" href="/Journeys/">View Journeys</a>
+                        </div>
+                    </div>
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">Create a Journey</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>Make your own!</li>
+                            </ul>
+                            <button type="button" class="btn btn-lg btn-block btn-outline-primary">Get started</button>
+                        </div>
+                    </div>
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">About Us</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>Created by King County Information Technology's Software Engineering Group</li>
+                            </ul>
+                            <a type="button" class="btn btn-lg btn-block btn-primary" href="https://github.com/uncheckederror/Ocean2Ocean" target="_blank noreferrer">View on Github</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    }
+</div>

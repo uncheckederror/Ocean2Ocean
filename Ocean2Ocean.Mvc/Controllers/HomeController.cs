@@ -105,7 +105,7 @@ namespace Ocean2Ocean.Controllers
         {
             if (string.IsNullOrWhiteSpace(journeyName))
             {
-                var results = await Journey.GetAllTempAsync(_azureSQL);
+                var results = await Journey.GetAllAsync(_azureSQL);
 
                 return View("SearchJourneys", new JourneysSearchResult
                 {
@@ -324,7 +324,7 @@ namespace Ocean2Ocean.Controllers
         {
             var results = await Journey.GetAllAsync(_azureSQL);
 
-            return View("Journeys", results);
+            return View("Index", results);
         }
 
         /// <summary>

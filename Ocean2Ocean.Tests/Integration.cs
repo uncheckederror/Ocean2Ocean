@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 
 using Ocean2Ocean.DataAccess;
@@ -38,19 +39,6 @@ namespace Ocean2Ocean.Tests
             Assert.NotNull(results);
             Assert.True(results.Any());
             _output.WriteLine(results.Sum(x => x.Steps).ToString() + " Steps in Total");
-        }
-
-        [Fact]
-        public async Task GetJourneys()
-        {
-            var results = await Journey.GetAllAsync(_azureSql);
-            Assert.NotNull(results);
-            Assert.True(results.Any());
-            foreach (var result in results)
-            {
-                _output.WriteLine(result.JourneyName);
-                _output.WriteLine(result.StepsTaken.ToString());
-            }
         }
 
         [Fact]
@@ -228,7 +216,7 @@ namespace Ocean2Ocean.Tests
         [Fact]
         public async Task UpdateAnExistingJourney()
         {
-            var results = await Journey.GetAllTempAsync(_azureSql);
+            var results = await Journey.GetAllAsync(_azureSql);
             Assert.True(results.Any());
             var selected = results.FirstOrDefault();
 
@@ -244,14 +232,14 @@ namespace Ocean2Ocean.Tests
         [Fact]
         public async Task GetAllJourneys()
         {
-            var results = await Journey.GetAllTempAsync(_azureSql);
+            var results = await Journey.GetAllAsync(_azureSql);
             Assert.True(results.Any());
         }
 
         [Fact]
         public async Task GetJourneyById()
         {
-            var results = await Journey.GetAllTempAsync(_azureSql);
+            var results = await Journey.GetAllAsync(_azureSql);
             Assert.True(results.Any());
             var selected = results.FirstOrDefault();
 
@@ -262,7 +250,7 @@ namespace Ocean2Ocean.Tests
         [Fact]
         public async Task GetJourneyByName()
         {
-            var results = await Journey.GetAllTempAsync(_azureSql);
+            var results = await Journey.GetAllAsync(_azureSql);
             Assert.True(results.Any());
             var selected = results.FirstOrDefault();
 
@@ -274,7 +262,7 @@ namespace Ocean2Ocean.Tests
         [Fact]
         public async Task SearchByJourneyByName()
         {
-            var results = await Journey.GetAllTempAsync(_azureSql);
+            var results = await Journey.GetAllAsync(_azureSql);
             Assert.True(results.Any());
             var selected = results.FirstOrDefault();
 
