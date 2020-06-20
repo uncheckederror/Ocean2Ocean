@@ -64,6 +64,17 @@ namespace Ocean2Ocean.DataAccess
                 .ConfigureAwait(false);
         }
 
+        public static async Task<IEnumerable<Journey>> SearchByJourneyNameAsync(string journeyName, string connectionString)
+        {
+            using var connection = new SqlConnection(connectionString);
+
+            journeyName = $"%{journeyName}%";
+
+            return await connection
+                .QueryAsync<Journey>("SELECT [JourneyId], [JourneyName], [GeometryFileName], [Bio], [Active], [Created] FROM [dbo].[Journeys] WHERE [JourneyName] LIKE @JourneyName", new { journeyName })
+                .ConfigureAwait(false);
+        }
+
         /// <summary>
         /// Add an entry to the database.
         /// </summary>

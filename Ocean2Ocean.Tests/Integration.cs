@@ -270,5 +270,17 @@ namespace Ocean2Ocean.Tests
             var selectedChecked = checkid.FirstOrDefault();
             Assert.Equal(selected.JourneyName, selectedChecked.JourneyName);
         }
+
+        [Fact]
+        public async Task SearchByJourneyByName()
+        {
+            var results = await Journey.GetAllTempAsync(_azureSql);
+            Assert.True(results.Any());
+            var selected = results.FirstOrDefault();
+
+            var checkid = await Journey.SearchByJourneyNameAsync(selected.JourneyName, _azureSql);
+            var selectedChecked = checkid.FirstOrDefault();
+            Assert.Equal(selected.JourneyName, selectedChecked.JourneyName);
+        }
     }
 }

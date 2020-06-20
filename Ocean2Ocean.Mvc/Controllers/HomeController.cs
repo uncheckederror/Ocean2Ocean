@@ -100,6 +100,55 @@ namespace Ocean2Ocean.Controllers
             }
         }
 
+        [Route("/Journeys/")]
+        public async Task<IActionResult> SearchJournys(string journeyName)
+        {
+            if (string.IsNullOrWhiteSpace(journeyName))
+            {
+                var results = await Journey.GetAllTempAsync(_azureSQL);
+
+                return View("SearchJourneys", new JourneysSearchResult
+                {
+                    Query = journeyName,
+                    Journeys = results
+                });
+            }
+            else
+            {
+                var results = await Journey.GetByJourneyNameAsync(journeyName, _azureSQL);
+
+                if (!results.Any())
+                {
+                    results = await Journey.SearchByJourneyNameAsync(journeyName, _azureSQL);
+                }
+                else if (results.Count() == 1)
+                {
+                    return Redirect($"/{results.FirstOrDefault().JourneyName}");
+                }
+
+                if (results.Count() > 1)
+                {
+                    return View("SearchJourneys", new JourneysSearchResult
+                    {
+                        Query = journeyName,
+                        Journeys = results
+                    });
+                }
+                else if (results.Count() == 1)
+                {
+                    return Redirect($"/{results.FirstOrDefault().JourneyName}");
+                }
+                else
+                {
+                    return View("SearchJourneys", new JourneysSearchResult
+                    {
+                        Query = journeyName,
+                        Journeys = results
+                    });
+                }
+            }
+        }
+
         /// <summary>
         /// Add steps to a Journey.
         /// </summary>
