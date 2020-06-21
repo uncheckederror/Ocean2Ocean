@@ -3,62 +3,55 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Ocean2Ocean.DataAccess
 {
-    public class Journey
+    public class Team
     {
-        public int JourneyId { get; set; }
-        public string JourneyName { get; set; }
-        public int StepsTaken { get; set; }
-        public int Participants { get; set; }
-        public DateTime Date { get; set; }
-        public Step Step { get; set; }
-        public string ErrorMessage { get; set; }
-        public string GeometryFileName { get; set; }
+        public int TeamId { get; set; }
+        public string TeamName { get; set; }
+        public string TeamWebsite { get; set; }
         public string Bio { get; set; }
         public bool Active { get; set; }
-        public string ImagePath { get; set; }
         public DateTime Created { get; set; }
 
 
-        public static async Task<IEnumerable<Journey>> GetAllAsync(string connectionString)
+        public static async Task<IEnumerable<Team>> GetAllAsync(string connectionString)
         {
             using var connection = new SqlConnection(connectionString);
 
             return await connection
-                .QueryAsync<Journey>("SELECT [JourneyId], [JourneyName], [GeometryFileName], [Bio], [Active], [Created], [ImagePath] FROM [dbo].[Journeys] ORDER BY [Created] DESC")
+                .QueryAsync<Team>("SELECT [TeamId], [TeamName], [TeamWebsite], [Bio], [Active], [Created] FROM [dbo].[Teams] ORDER BY [Created] DESC")
                 .ConfigureAwait(false);
         }
 
-        public static async Task<Journey> GetByIdAsync(int journeyId, string connectionString)
+        public static async Task<Team> GetByIdAsync(int teamId, string connectionString)
         {
             using var connection = new SqlConnection(connectionString);
 
             return await connection
-                .QueryFirstOrDefaultAsync<Journey>("SELECT [JourneyId], [JourneyName], [GeometryFileName], [Bio], [Active], [Created], [ImagePath] FROM [dbo].[Journeys] WHERE [JourneyId] = @journeyId", new { journeyId })
+                .QueryFirstOrDefaultAsync<Team>("SELECT [TeamId], [TeamName], [TeamWebsite], [Bio], [Active], [Created] FROM [dbo].[Teams] WHERE [TeamId] = @teamId", new { teamId })
                 .ConfigureAwait(false);
         }
 
-        public static async Task<IEnumerable<Journey>> GetByJourneyNameAsync(string journeyName, string connectionString)
+        public static async Task<IEnumerable<Team>> GetByTeamNameAsync(string teamName, string connectionString)
         {
             using var connection = new SqlConnection(connectionString);
 
             return await connection
-                .QueryAsync<Journey>("SELECT [JourneyId], [JourneyName], [GeometryFileName], [Bio], [Active], [Created], [ImagePath] FROM [dbo].[Journeys] WHERE [JourneyName] = @JourneyName", new { journeyName })
+                .QueryAsync<Team>("SELECT [TeamId], [TeamName], [TeamWebsite], [Bio], [Active], [Created] FROM [dbo].[Teams] WHERE [TeamName] = @teamName", new { teamName })
                 .ConfigureAwait(false);
         }
 
-        public static async Task<IEnumerable<Journey>> SearchByJourneyNameAsync(string journeyName, string connectionString)
+        public static async Task<IEnumerable<Team>> SearchByTeamNameAsync(string teamName, string connectionString)
         {
             using var connection = new SqlConnection(connectionString);
 
-            journeyName = $"%{journeyName}%";
+            teamName = $"%{teamName}%";
 
             return await connection
-                .QueryAsync<Journey>("SELECT [JourneyId], [JourneyName], [GeometryFileName], [Bio], [Active], [Created], [ImagePath] FROM [dbo].[Journeys] WHERE [JourneyName] LIKE @JourneyName", new { journeyName })
+                .QueryAsync<Team>("SELECT [TeamId], [TeamName], [TeamWebsite], [Bio], [Active], [Created] FROM [dbo].[Teams] WHERE [TeamName] LIKE @teamName", new { teamName })
                 .ConfigureAwait(false);
         }
 
@@ -72,8 +65,8 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             var result = await connection
-                .ExecuteAsync("INSERT INTO [dbo].[Journeys] ([JourneyName], [GeometryFileName], [Bio], [Active], [Created], [ImagePath]) VALUES ( @JourneyName, @GeometryFileName, @Bio, @Active, @Created, @ImagePath )",
-                new { JourneyName, GeometryFileName, Bio, Active, Created = DateTime.Now, ImagePath })
+                .ExecuteAsync("INSERT INTO [dbo].[Teams] ([TeamName], [TeamWebsite], [Bio], [Active], [Created]) VALUES (@TeamName, @TeamWebsite, @Bio, @Active, @Created)",
+                new { TeamName, TeamWebsite, Bio, Active, Created = DateTime.Now })
                 .ConfigureAwait(false);
 
             if (result == 1)
@@ -96,8 +89,8 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             var result = await connection
-                .ExecuteAsync("UPDATE [dbo].[Journeys] SET [JourneyName] = @JourneyName, [GeometryFileName] = @GeometryFileName, [Bio] = @Bio, [Active] = @Active, [Created] = @Created, [ImagePath] = @ImagePath WHERE [JourneyId] = @JourneyId ",
-                new { JourneyId, JourneyName, GeometryFileName, Bio, Active, Created = DateTime.Now, ImagePath })
+                .ExecuteAsync("UPDATE [dbo].[Teams] SET [TeamName] = @TeamName, [TeamWebsite] = @TeamWebsite, [Bio] = @Bio, [Active] = @Active, [Created] = @Created WHERE [TeamId] = @TeamId",
+                new { TeamName, TeamWebsite, Bio, Active, Created = DateTime.Now })
                 .ConfigureAwait(false);
 
             if (result == 1)
@@ -120,8 +113,8 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             var result = await connection
-                .ExecuteAsync("DELETE FROM [dbo].[Journeys] WHERE [JourneyId] = @JourneyId ",
-                new { JourneyId })
+                .ExecuteAsync("DELETE FROM [dbo].[Teams] WHERE [TeamId] = @TeamId ",
+                new { TeamId })
                 .ConfigureAwait(false);
 
             if (result == 1)

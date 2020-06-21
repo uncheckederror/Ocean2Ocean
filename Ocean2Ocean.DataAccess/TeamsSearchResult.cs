@@ -2,9 +2,9 @@
 
 namespace Ocean2Ocean.DataAccess
 {
-    public class JourneysSearchResult
+    public class TeamsSearchResult
     {
         public string Query { get; set; }
-        public IEnumerable<Journey> Journeys { get; set; }
+        public IEnumerable<Team> Teams { get; set; }
     }
 }

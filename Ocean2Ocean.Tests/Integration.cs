@@ -197,20 +197,30 @@ namespace Ocean2Ocean.Tests
         }
 
         [Fact]
-        public async Task CreateANewJourney()
+        public async Task CreateAndDeleteAJourney()
         {
             var journey = new Journey
             {
-                JourneyName = "Test",
+                JourneyName = "AddDeleteTest",
                 GeometryFileName = "/route.geojson",
                 Bio = $"This is a test Journey created on {DateTime.Now}",
                 Active = true,
-                Created = DateTime.Now
+                Created = DateTime.Now,
+                ImagePath = "/images/DSC06102small.jpg"
             };
 
             var result = await journey.PostAsync(_azureSql);
 
             Assert.True(result);
+
+            var getFromDb = await Journey.GetByJourneyNameAsync(journey.JourneyName, _azureSql);
+
+            Assert.True(getFromDb.Any());
+
+            var created = getFromDb.FirstOrDefault();
+            var checkDelete = await created.DeleteAsync(_azureSql);
+
+            Assert.True(checkDelete);
         }
 
         [Fact]
@@ -269,6 +279,31 @@ namespace Ocean2Ocean.Tests
             var checkid = await Journey.SearchByJourneyNameAsync(selected.JourneyName, _azureSql);
             var selectedChecked = checkid.FirstOrDefault();
             Assert.Equal(selected.JourneyName, selectedChecked.JourneyName);
+        }
+
+        [Fact]
+        public async Task CreateAndDeleteTeam()
+        {
+            var team = new Team
+            {
+                TeamName = "TestCreateTeam",
+                TeamWebsite = "https://thomasryan.xyz/",
+                Bio = "This is a team created to test the process of team creation and deletion.",
+                Active = true,
+                Created = DateTime.Now
+            };
+
+            var checkSubmit = await team.PostAsync(_azureSql);
+
+            Assert.True(checkSubmit);
+
+            var fromDb = await Team.GetByTeamNameAsync(team.TeamName, _azureSql);
+            var thisTeam = fromDb.FirstOrDefault();
+
+            Assert.Equal(team.TeamName, thisTeam.TeamName);
+
+            var checkDelete = await thisTeam.DeleteAsync(_azureSql);
+            Assert.True(checkDelete);
         }
     }
 }
