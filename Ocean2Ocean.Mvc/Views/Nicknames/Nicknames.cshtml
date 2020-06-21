@@ -1,0 +1,63 @@
+﻿@model Ocean2Ocean.DataAccess.NicknameSearchResult
+@{
+    ViewData["Title"] = "Nicknames";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h4 class="display-4 pb-3 pt-3">
+                🔍 Find Your Nickname
+            </h4>
+            <form method="get">
+                <div class="input-group pb-4">
+                    <input type="text" class="form-control" name="name" value="@Model?.Query" placeholder="What do you call yourself?" aria-label="Name" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-secondary" type="submit" id="button-addon2">Search</button>
+                        <a class="btn btn-info" href="/Nicknames">Reset</a>
+                        <a class="btn btn-danger" href="/Nicknames/Add">
+                            New
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    @{
+        if (Model != null && Model.Nicknames != null && Model.Nicknames.Any())
+        {
+            <div class="row">
+                @{
+                    foreach (var name in Model?.Nicknames)
+                    {
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-4">
+                            <div class="card">
+                                @*<img class="card-img-top" src="@journey?.ImagePath" />*@
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        @name.Name
+                                    </h5>
+                                    <p class="card-text">
+                                        @name.Bio
+                                    </p>
+                                    @*<a class="btn btn-primary btn-block" href="/@team.TeamName" target="_blank noreferrer">
+                                            🗺️ View
+                                        </a>*@
+                                </div>
+                                <div class="card-footer text-muted">
+                                    Created on @name.Created.ToShortDateString()
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning" role="alert">
+                No results found for that query.
+            </div>
+        }
+    }
+</div>

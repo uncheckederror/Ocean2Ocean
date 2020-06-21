@@ -1,0 +1,57 @@
+﻿@model Ocean2Ocean.DataAccess.NicknameSearchResult
+@{
+    ViewData["Title"] = "Nicknames";
+}
+
+<div class="container">
+    <h1 class="display-4 pt-3 pb-3">
+        🚣 Create an Alter-ego
+    </h1>
+    <form class="needs-validation" novalidate="" method="post">
+        <div class="row">
+            <div class="col pb-3">
+                <label for="firstName">What will we call you?</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Speedy Spork" value="" required>
+                <div class="invalid-feedback">
+                    Valid name is required.
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pb-3">
+                <label for="lastName">Who are you?</label>
+                <input type="text" class="form-control" id="Bio" name="Bio" placeholder="The fastest utensil on the planet." value="" required>
+                <div class="invalid-feedback">
+                    Valid bio is required.
+                </div>
+            </div>
+        </div>
+        @*<details>
+                <summary>Advanced Settings (Optional)</summary>
+                <br />
+                <div class="row">
+                    <div class="col pb-3">
+                        <label for="lastName">Path to Route</label>
+                        <input type="text" class="form-control" id="GeometryFileName" name="GeometryFileName" placeholder="" value="/js/route.js" required>
+                        <div class="invalid-feedback">
+                            Valid route file is required.
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col pb-3">
+                        <label for="lastName">Path to Image</label>
+                        <input type="text" class="form-control" id="ImagePath" name="ImagePath" placeholder="" value="/images/DSC06102small.jpg" required>
+                        <div class="invalid-feedback">
+                            Valid image file is required.
+                        </div>
+                    </div>
+                </div>
+            </details>*@
+        <div class="row">
+            <div class="col pt-3">
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Identify Yourself</button>
+            </div>
+        </div>
+    </form>
+</div>

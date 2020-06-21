@@ -305,5 +305,29 @@ namespace Ocean2Ocean.Tests
             var checkDelete = await thisTeam.DeleteAsync(_azureSql);
             Assert.True(checkDelete);
         }
+
+        [Fact]
+        public async Task CreateAndDeleteNickname()
+        {
+            var nickname = new Nickname
+            {
+                Name = "TestNickname",
+                Bio = "This is a team created to test the process of team creation and deletion.",
+                Active = true,
+                Created = DateTime.Now
+            };
+
+            var checkSubmit = await nickname.PostAsync(_azureSql);
+
+            Assert.True(checkSubmit);
+
+            var fromDb = await Nickname.GetByNicknameAsync(nickname.Name, _azureSql);
+            var thisTeam = fromDb.FirstOrDefault();
+
+            Assert.Equal(nickname.Name, thisTeam.Name);
+
+            var checkDelete = await thisTeam.DeleteAsync(_azureSql);
+            Assert.True(checkDelete);
+        }
     }
 }
