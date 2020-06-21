@@ -90,6 +90,8 @@ namespace Ocean2Ocean.Controllers
                 && !string.IsNullOrWhiteSpace(newTeam.Bio) && newTeam.Bio.Length <= 300
                 && !string.IsNullOrWhiteSpace(newTeam.TeamWebsite) && newTeam.TeamWebsite.Length <= 300)
             {
+                newTeam.Active = true;
+
                 var checkCreate = await newTeam.PostAsync(_azureSQL);
 
                 if (checkCreate)

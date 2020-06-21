@@ -85,6 +85,8 @@ namespace Ocean2Ocean.Controllers
                 && !string.IsNullOrWhiteSpace(newJourney.GeometryFileName) && newJourney.GeometryFileName.Length <= 300
                 && !string.IsNullOrWhiteSpace(newJourney.ImagePath) && newJourney.ImagePath.Length <= 100)
             {
+                newJourney.Active = true;
+
                 var checkCreate = await newJourney.PostAsync(_azureSQL);
 
                 if (checkCreate)
