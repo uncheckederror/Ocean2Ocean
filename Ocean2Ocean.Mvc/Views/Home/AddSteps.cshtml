@@ -21,7 +21,7 @@
         {
             commaString += $"\"{ingest.Created.ToShortDateString()}\", ";
         }
-        @Html.Raw($"var dateArr = [{commaString}\"{graphData.FirstOrDefault().Created.AddDays(-1).ToShortDateString()}\"];");
+        @Html.Raw($"var dateArr = [{commaString}\"{graphData.LastOrDefault().Created.AddDays(-1).ToShortDateString()}\"];");
     }
 </script>
 <div class="container">

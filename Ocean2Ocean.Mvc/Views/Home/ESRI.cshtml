@@ -68,7 +68,7 @@
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Team Name</label>
                                     <div class="input-group">
-                                        <input type="text" name="teamName" class="form-control" id="teamName" aria-describedby="teamName" placeholder="Enter a Name for your Team" value="@Model?.Team?.TeamName" readonly>
+                                        <input type="text" name="teamName" class="form-control" id="teamName" aria-describedby="teamName" placeholder="Enter a Name for your Team (or leave blank)" value="@Model?.Team?.TeamName" readonly>
                                         <div class="input-group-append">
                                             <a class="btn btn-outline-secondary" href="/Teams/@Model?.Team?.TeamName/">View</a>
                                         </div>
@@ -79,7 +79,7 @@
                             {
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Team Name</label>
-                                    <input type="text" name="teamName" class="form-control" id="teamName" aria-describedby="teamName" placeholder="Enter a Name for your Team">
+                                    <input type="text" name="teamName" class="form-control" id="teamName" aria-describedby="teamName" placeholder="Enter a Name for your Team (or leave blank)">
                                     <small id="emailHelp" class="form-text text-muted">What does your team call itself?</small>
                                 </div>
                             }
