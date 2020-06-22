@@ -95,7 +95,6 @@ namespace Ocean2Ocean.Controllers
         /// </summary>
         /// <param name="step"></param>
         /// <returns></returns>
-        [Route("/Home/AddSteps/{journeyName}/")]
         [Route("/Home/AddSteps/")]
         public async Task<IActionResult> AddSteps([Bind("Nickname,JourneyName,TeamName,Steps,StepsTaken,StepsInRoute")] Step step)
         {
@@ -132,6 +131,29 @@ namespace Ocean2Ocean.Controllers
                     results = await Step.GetByExactNicknameAsync(step.Nickname, _azureSQL);
 
                     return View("AddSteps", results);
+                }
+
+                var teams = await Team.GetByTeamNameAsync(step.TeamName, _azureSQL);
+                var team = teams.FirstOrDefault();
+
+                if (team is null)
+                {
+                    var newTeam = new Team
+                    {
+                        TeamName = step.TeamName,
+                        Bio = "Give me a cool bio.",
+                        Active = true,
+                        Created = DateTime.Now,
+                        TeamWebsite = "https://thomasryan.xyz/",
+                    };
+
+                    var checkCreateTeam = await newTeam.PostAsync(_azureSQL);
+
+                    if (!checkCreateTeam)
+                    {
+                        // Revert to the default if creating a new Team fails.
+                        step.TeamName = $"{step.JourneyName} Team";
+                    }
                 }
 
                 // Save this entry to the db.

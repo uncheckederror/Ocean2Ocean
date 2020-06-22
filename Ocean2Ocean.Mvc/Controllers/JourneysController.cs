@@ -47,10 +47,10 @@ namespace Ocean2Ocean.Controllers
                 {
                     results = await Journey.SearchByJourneyNameAsync(journeyName, _azureSQL);
                 }
-                else if (results.Count() == 1)
-                {
-                    return Redirect($"/{results.FirstOrDefault().JourneyName}");
-                }
+                //else if (results.Count() == 1)
+                //{
+                //    return Redirect($"/{results.FirstOrDefault().JourneyName}");
+                //}
 
                 if (results.Count() > 1)
                 {
@@ -60,10 +60,10 @@ namespace Ocean2Ocean.Controllers
                         Journeys = results
                     });
                 }
-                else if (results.Count() == 1)
-                {
-                    return Redirect($"/{results.FirstOrDefault().JourneyName}");
-                }
+                //else if (results.Count() == 1)
+                //{
+                //    return Redirect($"/{results.FirstOrDefault().JourneyName}");
+                //}
                 else
                 {
                     return View("Journeys", new JourneysSearchResult
@@ -73,6 +73,19 @@ namespace Ocean2Ocean.Controllers
                     });
                 }
             }
+        }
+
+        [Route("/Journeys/{journeyName}")]
+        public async Task<IActionResult> ViewTeam(string journeyName)
+        {
+            var results = await Journey.GetByJourneyNameAsync(journeyName, _azureSQL);
+
+            // Maybe look up all the entries that reference this team?
+            return View("Journeys", new JourneysSearchResult
+            {
+                Query = journeyName,
+                Journeys = results
+            });
         }
 
         [HttpGet]

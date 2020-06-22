@@ -45,7 +45,12 @@
                             {
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Journey Name</label>
-                                    <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey" value="@Model?.Journey?.JourneyName" readonly>
+                                    <div class="input-group">
+                                        <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey" value="@Model?.Journey?.JourneyName" readonly>
+                                        <div class="input-group-append">
+                                            <a class="btn btn-outline-secondary" href="/Journeys/@Model?.Journey?.JourneyName/">View</a>
+                                        </div>
+                                    </div>
                                 </div>
                             }
                             else
@@ -62,7 +67,12 @@
                             {
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Team Name</label>
-                                    <input type="text" name="teamName" class="form-control" id="teamName" aria-describedby="teamName" placeholder="Enter a Name for your Team" value="@Model?.Team?.TeamName" readonly>
+                                    <div class="input-group">
+                                        <input type="text" name="teamName" class="form-control" id="teamName" aria-describedby="teamName" placeholder="Enter a Name for your Team" value="@Model?.Team?.TeamName" readonly>
+                                        <div class="input-group-append">
+                                            <a class="btn btn-outline-secondary" href="/Teams/@Model?.Team?.TeamName/">View</a>
+                                        </div>
+                                    </div>
                                 </div>
                             }
                             else
@@ -79,7 +89,12 @@
                             {
                                 <div class="form-group">
                                     <label for="nickname">Your Nickname</label>
-                                    <input type="text" name="nickname" class="form-control" id="nickname" aria-describedby="nickname" placeholder="Enter a Nickname (or leave blank)" value="@Model?.Nickname?.Name" readonly>
+                                    <div class="input-group">
+                                        <input type="text" name="nickname" class="form-control" id="nickname" aria-describedby="nickname" placeholder="Enter a Nickname (or leave blank)" value="@Model?.Nickname?.Name" readonly>
+                                        <div class="input-group-append">
+                                            <a class="btn btn-outline-secondary" href="/Nicknames/@Model?.Nickname?.Name/">View</a>
+                                        </div>
+                                    </div>
                                 </div>
                             }
                             else
@@ -132,6 +147,11 @@
                             @*<p class="card-text">Lookout Pass is a mountain pass in the Rocky Mountains of the northwestern United States. In the Coeur d'Alene Mountains of the Bitterroot Range, the pass is on the border between Idaho and Montana, traversed by Interstate 90 (formerly U.S. Route 10)[1] at an elevation of 4,710 feet (1,436 m) above sea level.</p>*@
                             <a class="btn btn-info" id="roadsidelink" href="" target="_blank noreferrer">Learn More</a>
                         </div>
+                    </div>
+                    <div class="pt-3">
+                        <a href="/" class="text-decoration-none btn btn-outline-info">
+                            🌊 Ocean To Ocean
+                        </a>
                     </div>
                 </div>
             </div>
