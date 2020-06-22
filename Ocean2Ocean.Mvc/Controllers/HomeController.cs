@@ -42,70 +42,52 @@ namespace Ocean2Ocean.Controllers
         /// <param name="journeyName"></param>
         /// <returns></returns>
         [Route("/{journeyName}")]
-        public async Task<IActionResult> MapAsync(DateTime? Date, int steps, string journeyName)
+        [Route("/{journeyName}/{teamName}")]
+        [Route("/{journeyName}/{teamName}/{name}")]
+        public async Task<IActionResult> MapAsync(string journeyName, string teamName, string name)
         {
-            // Using today's date get the sum of all steps up to this point.
-            var currentDate = Date ?? DateTime.Now;
+            var response = new Map();
 
-            // Return early if this is a demo.
-            if (steps > 1)
-            {
-                return View("ESRI", new Journey
-                {
-                    // Can't be less than 1 or greater than the maximum number of steps in the route.
-                    StepsTaken = steps > 1 ? steps : 1,
-                    Date = currentDate,
-                    Participants = 10,
-                    ErrorMessage = "This is a demo."
-                });
-            }
-
-            // Lookup a specific journey.
-            if (!string.IsNullOrWhiteSpace(journeyName) && (journeyName.Length < 50))
+            if (!string.IsNullOrWhiteSpace(journeyName)
+                && (journeyName.Length < 100))
             {
                 journeyName = journeyName.Trim();
-                // Make a query to the db.
-                var results = await Step.GetByJourneyAsync(journeyName, _azureSQL);
 
-                if (results.Any())
-                {
-                    steps = results.Sum(x => x.Steps);
+                var journeys = await Journey.GetByJourneyNameAsync(journeyName, _azureSQL);
+                response.Journey = journeys.FirstOrDefault();
 
-                    return View("ESRI", new Journey
-                    {
-                        // Can't be less than 1 or greater than the maximum number of steps in the route.
-                        StepsTaken = steps > 1 ? steps : 1,
-                        JourneyName = results.FirstOrDefault().JourneyName,
-                        Date = currentDate,
-                        Participants = 10
-                    });
-                }
-                else
+                var entries = await Step.GetByJourneyAsync(response.Journey?.JourneyName, _azureSQL);
+
+                foreach (var entry in entries)
                 {
-                    // The the journey has no entries.
-                    return View("ESRI", new Journey
-                    {
-                        // Can't be less than 1 or greater than the maximum number of steps in the route.
-                        StepsTaken = steps > 1 ? steps : 1,
-                        JourneyName = journeyName,
-                        Date = currentDate,
-                        Participants = 0,
-                        ErrorMessage = "This Journey has no Entries."
-                    });
+                    response.StepsTaken += entry.Steps;
                 }
             }
-            else
+
+            if (!(string.IsNullOrWhiteSpace(teamName))
+                && (teamName.Length < 100))
             {
-                // If no journey is supplied.
-                return View("ESRI", new Journey
-                {
-                    // Can't be less than 1 or greater than the maximum number of steps in the route.
-                    StepsTaken = steps > 1 ? steps : 1,
-                    Date = currentDate,
-                    Participants = 0,
-                    ErrorMessage = "No Journey was supplied."
-                });
+                teamName = teamName.Trim();
+
+                var teams = await Team.GetByTeamNameAsync(teamName, _azureSQL);
+                response.Team = teams.FirstOrDefault();
             }
+
+            if (!(string.IsNullOrWhiteSpace(name))
+                && (name.Length < 100))
+            {
+                name = name.Trim();
+
+                var nicknames = await Nickname.GetByNicknameAsync(name, _azureSQL);
+                response.Nickname = nicknames.FirstOrDefault();
+            }
+
+            if (response?.Journey is null || string.IsNullOrWhiteSpace(response?.Journey?.JourneyName))
+            {
+                return Redirect("/");
+            }
+
+            return View("ESRI", response);
         }
 
         /// <summary>
@@ -185,7 +167,7 @@ namespace Ocean2Ocean.Controllers
                 if (step.StepsInRoute - (step.StepsTaken + step.Steps) < 0)
                 {
                     // Let them know this was bad input maybe?
-                    return RedirectToAction("Index");
+                    return Redirect($"/{step.JourneyName}/{step.TeamName}/");
                 }
 
                 // Save this entry to the db.
@@ -221,23 +203,6 @@ namespace Ocean2Ocean.Controllers
                 results = await Step.GetByExactNicknameAsync(step.Nickname, _azureSQL);
 
                 return View("AddSteps", results);
-            }
-            // Show the group leader board.
-            else if (step?.Steps == 0 && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50))
-            {
-                step.JourneyName = step.JourneyName.Trim();
-
-                var results = await Leaderboard.GetRankingsAsync(step.JourneyName, _azureSQL);
-                var daily = await Leaderboard.GetDailyRankingsAsync(step.JourneyName, _azureSQL);
-
-                if (results.Any())
-                {
-                    return View("Leaderboard", new LeaderboardDetail
-                    {
-                        JourneyRankings = results,
-                        DailyRankings = daily
-                    });
-                }
             }
 
             return Redirect($"/{step?.JourneyName}");

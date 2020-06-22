@@ -87,9 +87,21 @@ namespace Ocean2Ocean.Controllers
             {
                 newJourney.Active = true;
 
-                var checkCreate = await newJourney.PostAsync(_azureSQL);
+                var checkCreateJourney = await newJourney.PostAsync(_azureSQL);
 
-                if (checkCreate)
+                // Create a default team to go with this journey, because every journey need a team to enable anonymous submissions.
+                var defaultTeam = new Team
+                {
+                    TeamName = $"{newJourney.JourneyName} Team",
+                    TeamWebsite = "https://thomasryan.xyz/",
+                    Bio = $"Every Journey has a Team. This is the default team for {newJourney.JourneyName}.",
+                    Active = true,
+                    Created = DateTime.Now
+                };
+
+                var checkCreateDefaultTeam = await defaultTeam.PostAsync(_azureSQL);
+
+                if (checkCreateJourney && checkCreateDefaultTeam)
                 {
                     return Redirect($"/{newJourney.JourneyName}");
                 }

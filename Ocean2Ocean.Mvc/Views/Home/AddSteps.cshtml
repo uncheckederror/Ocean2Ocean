@@ -7,22 +7,21 @@
 <script>
     @{
         var graphData = Model?.Take(14).ToArray();
-        var commaString = $"0, ";
+        var commaString = string.Empty;
         foreach (var ingest in graphData)
         {
             commaString += $"{ingest.Steps}, ";
         }
-        @Html.Raw($"var numbersRetrivedArr = [{commaString.Substring(0, commaString.Length - 2)}];");
+        @Html.Raw($"var numbersRetrivedArr = [{commaString}0];");
       }
 
     @{
-        commaString = $"\"{graphData.FirstOrDefault().Created.AddDays(-1).ToShortDateString()}\", ";
+        commaString = string.Empty;
         foreach (var ingest in graphData)
         {
             commaString += $"\"{ingest.Created.ToShortDateString()}\", ";
         }
-        @Html.Raw($"var dateArr = [{commaString.Substring(0, commaString.Length - 2)}];");
-
+        @Html.Raw($"var dateArr = [{commaString}\"{graphData.FirstOrDefault().Created.AddDays(-1).ToShortDateString()}\"];");
     }
 </script>
 <div class="container">
@@ -44,6 +43,32 @@
                     <canvas id="myChart" width="400" height="200" class="pb-4"></canvas>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Steps
+                                    </th>
+                                    <th>
+                                        Created
+                                    </th>
+                                    <th>
+                                        Journey
+                                    </th>
+                                    <th>
+                                        Team
+                                    </th>
+                                    <th>
+
+                                    </th>
+                                    <th>
+
+                                    </th>
+                                    <th>
+
+                                    </th>
+
+                                </tr>
+                            </thead>
                             <tbody>
                                 @{
                                     foreach (var entry in Model)
@@ -59,19 +84,25 @@
                                                 @entry?.Created
                                             </td>
                                             <td>
+                                                @entry?.JourneyName
+                                            </td>
+                                            <td>
+                                                @entry?.TeamName
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-primary" href="/@entry.JourneyName/@entry.TeamName/@entry.Nickname">
+                                                    🗺️ View
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-success" href="/Home/Leaderboard/@entry?.JourneyName">🌠 Leaderboard</a>
+                                            </td>
+                                            <td>
                                                 <form asp-action="RemoveSteps" asp-route-journeyName="@entry?.JourneyName" asp-route-stepId="@entry?.StepId">
                                                     <button type="submit" class="btn btn-danger">
                                                         ❌ Delete
                                                     </button>
                                                 </form>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-primary" href="/@entry.JourneyName">
-                                                    🗺️ View @entry?.JourneyName
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-success" href="/Home/Leaderboard/@entry?.JourneyName">🌠 Leaderboard</a>
                                             </td>
                                         </tr>
                                     }
