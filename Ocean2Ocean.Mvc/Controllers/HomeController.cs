@@ -72,6 +72,12 @@ namespace Ocean2Ocean.Controllers
                 var teams = await Team.GetByTeamNameAsync(teamName, _azureSQL);
                 response.Team = teams.FirstOrDefault();
             }
+            else
+            {
+                var teams = await Team.GetAllAsync(_azureSQL);
+
+                response.Teams = teams.OrderBy(x => x.TeamName);
+            }
 
             if (!(string.IsNullOrWhiteSpace(name))
                 && (name.Length < 100))
@@ -80,6 +86,12 @@ namespace Ocean2Ocean.Controllers
 
                 var nicknames = await Nickname.GetByNicknameAsync(name, _azureSQL);
                 response.Nickname = nicknames.FirstOrDefault();
+            }
+            else
+            {
+                var nicknames = await Nickname.GetAllAsync(_azureSQL);
+
+                response.Nicknames = nicknames.OrderBy(x => x.Name);
             }
 
             if (response?.Journey is null || string.IsNullOrWhiteSpace(response?.Journey?.JourneyName))

@@ -8,7 +8,7 @@
         @Model?.Nickname?.Name
     </h1>
     <form class="needs-validation" novalidate="" method="post" action="/Nicknames/Update">
-        <input type="number" name="NicknameId" value="@Model?.Nickname.NicknameId" hidden />
+        <input type="number" name="NicknameId" value="@Model?.Nickname?.NicknameId" hidden />
         <div class="row">
             <div class="col pb-3">
                 <label for="firstName">What will we call you?</label>

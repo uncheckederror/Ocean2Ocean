@@ -79,7 +79,27 @@
                             {
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Team Name</label>
-                                    <input type="text" name="teamName" class="form-control" id="teamName" aria-describedby="teamName" placeholder="Enter a Name for your Team (or leave blank)">
+                                    <div class="input-group">
+                                        <select class="custom-select" id="inputGroupSelect04">
+                                            @{
+                                                foreach (var team in Model?.Teams)
+                                                {
+                                                    if (team.TeamName == $"{Model?.Journey?.JourneyName} Team")
+                                                    {
+                                                        <option selected value="@team?.TeamName">@team?.TeamName</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@team?.TeamName">@team?.TeamName</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                        <div class="input-group-append">
+                                            <a class="btn btn-outline-secondary" href="/Teams/Add/">New</a>
+                                            <a class="btn btn-outline-secondary" href="/Teams/">View</a>
+                                        </div>
+                                    </div>
                                     <small id="emailHelp" class="form-text text-muted">What does your team call itself?</small>
                                 </div>
                             }
@@ -90,6 +110,8 @@
                                 <div class="form-group">
                                     <label for="nickname">Your Nickname</label>
                                     <div class="input-group">
+                                        <div class="input-group">
+                                        </div>
                                         <input type="text" name="nickname" class="form-control" id="nickname" aria-describedby="nickname" placeholder="Enter a Nickname (or leave blank)" value="@Model?.Nickname?.Name" readonly>
                                         <div class="input-group-append">
                                             <a class="btn btn-outline-secondary" href="/Nicknames/@Model?.Nickname?.Name/">View</a>
@@ -101,7 +123,27 @@
                             {
                                 <div class="form-group">
                                     <label for="nickname">Your Nickname</label>
-                                    <input type="text" name="nickname" class="form-control" id="nickname" aria-describedby="nickname" placeholder="Enter a Nickname (or leave blank)">
+                                    <div class="input-group">
+                                        <select class="custom-select" id="inputGroupSelect05">
+                                            @{
+                                                foreach (var name in Model?.Nicknames)
+                                                {
+                                                    if (name.Name == $"{Model?.Journey?.JourneyName} Team")
+                                                    {
+                                                        <option selected value="@name?.Name">@name?.Name</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@name?.Name">@name?.Name</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                        <div class="input-group-append">
+                                            <a class="btn btn-outline-secondary" href="/Nicknames/Add/">New</a>
+                                            <a class="btn btn-outline-secondary" href="/Nicknames/">View</a>
+                                        </div>
+                                    </div>
                                     <small id="emailHelp" class="form-text text-muted">We never store personally identifying information.</small>
                                 </div>
                             }

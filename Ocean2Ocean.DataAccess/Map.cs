@@ -12,7 +12,10 @@ namespace Ocean2Ocean.DataAccess
     {
         public Journey Journey { get; set; }
         public Team Team { get; set; }
+        public IEnumerable<Team> Teams { get; set; }
         public Nickname Nickname { get; set; }
+        public IEnumerable<Nickname> Nicknames { get; set; }
+
         public int StepsTaken { get; set; }
         public string ErrorMessage { get; set; }
     }
