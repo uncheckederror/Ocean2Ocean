@@ -12,6 +12,7 @@ namespace Ocean2Ocean.DataAccess
     {
         public string Nickname { get; set; }
         public string JourneyName { get; set; }
+        public string TeamName { get; set; }
         public int TotalSteps { get; set; }
         private int SumYear { get; set; }
         private int SumMonth { get; set; }
@@ -29,7 +30,23 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             return await connection
-                .QueryAsync<Leaderboard>("SELECT [Nickname], [JourneyName], SUM(Steps) As TotalSteps FROM [dbo].[Steps] WHERE [JourneyName] = @journeyName GROUP BY [Nickname], [JourneyName] ORDER BY TotalSteps DESC",
+                .QueryAsync<Leaderboard>("SELECT [Nickname], [JourneyName], [TeamName], SUM(Steps) As TotalSteps FROM [dbo].[Steps] WHERE [JourneyName] = 'KCIT' GROUP BY [Nickname], [JourneyName], [TeamName] ORDER BY TotalSteps DESC",
+                new { journeyName })
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get a list of teams ordered by the steps they've contributed to the Journey.
+        /// </summary>
+        /// <param name="journeyName"></param>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
+        public static async Task<IEnumerable<Leaderboard>> GetTeamRankingsAsync(string journeyName, string connectionString)
+        {
+            using var connection = new SqlConnection(connectionString);
+
+            return await connection
+                .QueryAsync<Leaderboard>("SELECT [JourneyName], [TeamName], SUM(Steps) As TotalSteps FROM [dbo].[Steps] WHERE [JourneyName] = @journeyName GROUP BY [JourneyName], [TeamName] ORDER BY TotalSteps DESC",
                 new { journeyName })
                 .ConfigureAwait(false);
         }
@@ -48,7 +65,26 @@ namespace Ocean2Ocean.DataAccess
             var today = yesterday.AddDays(+1);
 
             return await connection
-                .QueryAsync<Leaderboard>("SELECT [Nickname], [JourneyName], SUM(Steps) As TotalSteps FROM [dbo].[Steps] WHERE [JourneyName] = @journeyName AND [Created] >= @yesterday AND [Created] <= @today GROUP BY [Nickname], [JourneyName] ORDER BY TotalSteps DESC",
+                .QueryAsync<Leaderboard>("SELECT [Nickname], [JourneyName], [TeamName], SUM(Steps) As TotalSteps FROM [dbo].[Steps] WHERE [JourneyName] = @journeyName AND [Created] >= @yesterday AND [Created] <= @today GROUP BY [Nickname], [JourneyName], [TeamName] ORDER BY TotalSteps DESC",
+                new { journeyName, yesterday, today })
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get a list of teams ordered by the steps they've contributed today.
+        /// </summary>
+        /// <param name="journeyName"></param>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
+        public static async Task<IEnumerable<Leaderboard>> GetDailyTeamRankingsAsync(string journeyName, string connectionString)
+        {
+            using var connection = new SqlConnection(connectionString);
+
+            var yesterday = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var today = yesterday.AddDays(+1);
+
+            return await connection
+                .QueryAsync<Leaderboard>("SELECT [JourneyName], [TeamName], SUM(Steps) As TotalSteps FROM [dbo].[Steps] WHERE [JourneyName] = @journeyName AND [Created] >= @yesterday AND [Created] <= @today GROUP BY [JourneyName], [TeamName] ORDER BY TotalSteps DESC",
                 new { journeyName, yesterday, today })
                 .ConfigureAwait(false);
         }

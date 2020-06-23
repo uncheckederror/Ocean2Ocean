@@ -87,7 +87,6 @@ namespace Ocean2Ocean.Controllers
             return View("Map", response);
         }
 
-
         /// <summary>
         /// Show the leaderboard for a specific journey.
         /// </summary>
@@ -100,16 +99,20 @@ namespace Ocean2Ocean.Controllers
             {
                 journeyName = journeyName.Trim();
 
-                var results = await Leaderboard.GetRankingsAsync(journeyName, _azureSQL);
+                var complete = await Leaderboard.GetRankingsAsync(journeyName, _azureSQL);
+                var teams = await Leaderboard.GetTeamRankingsAsync(journeyName, _azureSQL);
                 var daily = await Leaderboard.GetDailyRankingsAsync(journeyName, _azureSQL);
+                var dailyByTeam = await Leaderboard.GetDailyTeamRankingsAsync(journeyName, _azureSQL);
                 var byDay = await Leaderboard.GetTotalStepsByDayAsync(journeyName, _azureSQL);
 
-                if (results.Any())
+                if (complete.Any())
                 {
                     return View("Leaderboard", new LeaderboardDetail
                     {
-                        JourneyRankings = results,
+                        JourneyRankings = complete,
+                        TeamRankings = teams,
                         DailyRankings = daily,
+                        DailyTeamRankings = dailyByTeam,
                         SumByDay = byDay
                     });
                 }
