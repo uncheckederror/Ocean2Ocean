@@ -91,6 +91,20 @@ namespace Ocean2Ocean.Tests
         }
 
         [Fact]
+        public async Task GetTeamRankingsByJourneyName()
+        {
+            var results = await Step.GetByJourneyAsync("test", _azureSql);
+            Assert.NotNull(results);
+            Assert.True(results.Any());
+
+            var journey = results.FirstOrDefault();
+
+            var leaders = await Leaderboard.GetTeamRankingsAsync(journey.JourneyName, _azureSql);
+            Assert.NotNull(leaders);
+            Assert.True(leaders.Any());
+        }
+
+        [Fact]
         public async Task GetDailyRankingsByJourneyName()
         {
             var results = await Step.GetByJourneyAsync("test", _azureSql);
@@ -100,6 +114,20 @@ namespace Ocean2Ocean.Tests
             var journey = results.FirstOrDefault();
 
             var leaders = await Leaderboard.GetDailyRankingsAsync(journey.JourneyName, _azureSql);
+            Assert.NotNull(leaders);
+            Assert.True(leaders.Any());
+        }
+
+        [Fact]
+        public async Task GetDailyTeamRankingsByJourneyName()
+        {
+            var results = await Step.GetByJourneyAsync("test", _azureSql);
+            Assert.NotNull(results);
+            Assert.True(results.Any());
+
+            var journey = results.FirstOrDefault();
+
+            var leaders = await Leaderboard.GetDailyTeamRankingsAsync(journey.JourneyName, _azureSql);
             Assert.NotNull(leaders);
             Assert.True(leaders.Any());
         }
@@ -119,6 +147,14 @@ namespace Ocean2Ocean.Tests
         }
 
         [Fact]
+        public async Task GetAllNicknames()
+        {
+            var results = await Nickname.GetAllAsync(_azureSql);
+            Assert.NotNull(results);
+            Assert.True(results.Any());
+        }
+
+        [Fact]
         public async Task AddAnEntry()
         {
             var entry = new Step
@@ -133,6 +169,13 @@ namespace Ocean2Ocean.Tests
             var checkSubmitted = await entry.PostAsync(_azureSql);
 
             Assert.True(checkSubmitted);
+
+            var fromDb = await Step.GetByNicknameAsync(entry.Nickname, _azureSql);
+            var entryFromDb = fromDb.FirstOrDefault();
+            Assert.NotNull(entryFromDb);
+
+            var checkDelete = await entryFromDb.DeleteAsync(_azureSql);
+            Assert.True(checkDelete);
         }
 
         [Fact]

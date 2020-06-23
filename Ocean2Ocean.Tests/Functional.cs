@@ -29,19 +29,19 @@ namespace Ocean2Ocean.Tests
             _client = factory.CreateClient();
         }
 
-        [Theory]
-        [InlineData("/")]
-        public async Task GetStaticPagesAsync(string url)
-        {
-            // Arrange
-            var response = await _client.GetAsync(url);
+        //[Theory]
+        //[InlineData("/")]
+        //public async Task GetStaticPagesAsync(string url)
+        //{
+        //    // Arrange
+        //    var response = await _client.GetAsync(url);
 
-            // Act
-            response.EnsureSuccessStatusCode();
-            var stringResponse = await response.Content.ReadAsStringAsync();
+        //    // Act
+        //    response.EnsureSuccessStatusCode();
+        //    var stringResponse = await response.Content.ReadAsStringAsync();
 
-            // Assert
-            Assert.Contains("Ocean", stringResponse);
-        }
+        //    // Assert
+        //    Assert.Contains("Ocean", stringResponse);
+        //}
     }
 }
