@@ -35,17 +35,17 @@
                                 @*<img class="card-img-top" src="@journey?.ImagePath" />*@
                                 <div class="card-body">
                                     <h5 class="card-title">
-                                        @name.Name
+                                        @name?.Name
                                     </h5>
                                     <p class="card-text">
-                                        @name.Bio
+                                        @name?.Bio
                                     </p>
-                                    <a class="btn btn-outline-primary btn-block" href="/Nicknames/@name.Name" target="_blank noreferrer">
+                                    <a class="btn btn-outline-primary btn-block" href="/Nicknames/@name?.Name">
                                         Edit
                                     </a>
                                 </div>
                                 <div class="card-footer text-muted">
-                                    Created on @name.Created.ToShortDateString()
+                                    Created on @name?.Created.ToShortDateString()
                                 </div>
                             </div>
                         </div>

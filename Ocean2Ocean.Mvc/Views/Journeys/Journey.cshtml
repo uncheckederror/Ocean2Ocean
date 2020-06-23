@@ -8,7 +8,8 @@
         @Model?.Journey?.JourneyName
     </h1>
 
-    <form class="needs-validation" novalidate="" method="put">
+    <form class="needs-validation" novalidate="" method="put" action="/Journeys/Update">
+        <input type="number" id="JourneyId" name="JourneyId" value="@Model?.Journey.JourneyId" hidden />
         <div class="row">
             <div class="col pb-3">
                 <label for="firstName">What will we call your Journey?</label>

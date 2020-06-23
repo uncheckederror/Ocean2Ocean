@@ -116,10 +116,27 @@ namespace Ocean2Ocean.Controllers
             }
         }
 
-        [Route("/Teams/{teamName}/Update")]
-        public async Task<IActionResult> UpdateTeamAsync(int teamId)
+        [Route("/Teams/Update")]
+        public async Task<IActionResult> UpdateTeamAsync([Bind("TeamId,TeamName,Bio,TeamWebsite")] Team newTeam)
         {
-            return View();
+            if (newTeam != null && !string.IsNullOrWhiteSpace(newTeam.TeamName) && newTeam.TeamName.Length <= 100
+                && !string.IsNullOrWhiteSpace(newTeam.Bio) && newTeam.Bio.Length <= 300
+                && !string.IsNullOrWhiteSpace(newTeam.TeamWebsite) && newTeam.TeamWebsite.Length <= 300)
+            {
+                var team = await Team.GetByIdAsync(newTeam.TeamId, _azureSQL);
+
+                team.TeamWebsite = newTeam.TeamWebsite;
+                team.Bio = newTeam.Bio;
+
+                var checkCreate = await team.PutAsync(_azureSQL);
+
+                if (checkCreate)
+                {
+                    return Redirect($"/Teams/{team.TeamName}");
+                }
+            }
+
+            return Redirect($"/Teams/{newTeam.TeamName}");
         }
 
         [Route("/Teams/{teamName}/Delete")]

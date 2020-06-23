@@ -35,18 +35,18 @@
                                 @*<img class="card-img-top" src="@journey?.ImagePath" />*@
                                 <div class="card-body">
                                     <h5 class="card-title">
-                                        @team.TeamName
+                                        @team?.TeamName
                                     </h5>
-                                    <a href="@team.TeamWebsite">@team.TeamWebsite</a>
+                                    <a href="@team?.TeamWebsite">@team?.TeamWebsite</a>
                                     <p class="card-text">
-                                        @team.Bio
+                                        @team?.Bio
                                     </p>
-                                    <a class="btn btn-outline-primary btn-block" href="/Teams/@team.TeamName" target="_blank noreferrer">
+                                    <a class="btn btn-outline-primary btn-block" href="/Teams/@team?.TeamName">
                                         Edit
                                     </a>
                                 </div>
                                 <div class="card-footer text-muted">
-                                    Created on @team.Created.ToShortDateString()
+                                    Created on @team?.Created.ToShortDateString()
                                 </div>
                             </div>
                         </div>

@@ -165,10 +165,31 @@ namespace Ocean2Ocean.Controllers
             }
         }
 
-        [Route("/Journeys/{journeyId}/Update")]
-        public async Task<IActionResult> UpdateJourneyAsync(int journeyId)
+        [Route("/Journeys/Update")]
+        public async Task<IActionResult> UpdateJourneyAsync([Bind("JourneyId,JourneyName,Bio,GeometryFileName,ImagePath")] Journey? newJourney)
         {
-            return View();
+            if (newJourney != null && !string.IsNullOrWhiteSpace(newJourney.JourneyName) && newJourney.JourneyName.Length <= 100
+                && !string.IsNullOrWhiteSpace(newJourney.Bio) && newJourney.Bio.Length <= 300
+                && !string.IsNullOrWhiteSpace(newJourney.GeometryFileName) && newJourney.GeometryFileName.Length <= 300
+                && !string.IsNullOrWhiteSpace(newJourney.ImagePath) && newJourney.ImagePath.Length <= 100)
+            {
+                newJourney.Active = true;
+
+                var journey = await Journey.GetByIdAsync(newJourney.JourneyId, _azureSQL);
+
+                journey.ImagePath = newJourney.ImagePath;
+                journey.GeometryFileName = newJourney.GeometryFileName;
+                journey.Bio = newJourney.Bio;
+
+                var checkUpdateJourney = await journey.PutAsync(_azureSQL);
+
+                if (checkUpdateJourney)
+                {
+                    return Redirect($"/Journeys/{journey.JourneyName}");
+                }
+            }
+
+            return Redirect($"/Journeys/{newJourney.JourneyName}");
         }
 
         [Route("/Journeys/{journeyId}/Delete")]

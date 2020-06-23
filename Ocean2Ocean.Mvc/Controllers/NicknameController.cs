@@ -128,14 +128,36 @@ namespace Ocean2Ocean.Controllers
             }
         }
 
-        [Route("/Nicknames/{name}/Update")]
-        public async Task<IActionResult> UpdateNameAsync(int teamId)
+        [Route("/Nicknames/Update")]
+        public async Task<IActionResult> UpdateNameAsync([Bind("NicknameId,Name,Bio")] Nickname newNickname)
         {
-            return View();
+            if (newNickname != null
+                && !string.IsNullOrWhiteSpace(newNickname.Name)
+                && newNickname.Name.Length <= 100
+                && !string.IsNullOrWhiteSpace(newNickname.Bio)
+                && newNickname.Bio.Length <= 300)
+            {
+                newNickname.Active = true;
+
+                var nickname = await Nickname.GetByIdAsync(newNickname.NicknameId, _azureSQL);
+
+                nickname.Bio = newNickname.Bio.Trim();
+                // Without implementing cascading changes in the Steps table for all entries with this Nickname there's no value in allow the user to change their nickname. They are better off just making another.
+                //nickname.Name = newNickname.Name.Trim();
+
+                var checkCreate = await nickname.PutAsync(_azureSQL);
+
+                if (checkCreate)
+                {
+                    return Redirect($"/Nicknames/{nickname.Name}");
+                }
+            }
+
+            return Redirect($"/Nicknames/{newNickname.Name}");
         }
 
-        [Route("/Nicknames/{name}/Delete")]
-        public async Task<IActionResult> DeleteNameAsync(int teamId)
+        [Route("/Nicknames/Delete")]
+        public async Task<IActionResult> DeleteNameAsync(int nicknameId)
         {
             return View();
         }

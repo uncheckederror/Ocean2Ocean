@@ -35,20 +35,20 @@
                                 <img class="card-img-top" src="@journey?.ImagePath" />
                                 <div class="card-body">
                                     <h5 class="card-title">
-                                        @journey.JourneyName
+                                        @journey?.JourneyName
                                     </h5>
                                     <p class="card-text">
-                                        @journey.Bio
+                                        @journey?.Bio
                                     </p>
-                                    <a class="btn btn-outline-primary btn-block" href="/Journeys/@journey.JourneyName">
+                                    <a class="btn btn-outline-primary btn-block" href="/Journeys/@journey?.JourneyName">
                                         Edit
                                     </a>
-                                    <a class="btn btn-primary btn-block" href="/@journey.JourneyName">
+                                    <a class="btn btn-primary btn-block" href="/@journey?.JourneyName">
                                         🗺️ View
                                     </a>
                                 </div>
                                 <div class="card-footer text-muted">
-                                    Created on @journey.Created.ToShortDateString()
+                                    Created on @journey?.Created.ToShortDateString()
                                 </div>
                             </div>
                         </div>

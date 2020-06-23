@@ -7,7 +7,8 @@
     <h1 class="display-4 pt-3 pb-3">
         @Model?.Team?.TeamName
     </h1>
-    <form class="needs-validation" novalidate="" method="put">
+    <form class="needs-validation" novalidate="" method="put" action="/Teams/Update">
+        <input type="number" id="TeamId" name="TeamId" value="@Model?.Team.TeamId" hidden />
         <div class="row">
             <div class="col pb-3">
                 <label for="firstName">What will we call your Team?</label>

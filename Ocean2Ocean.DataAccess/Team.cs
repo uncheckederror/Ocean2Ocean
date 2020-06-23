@@ -90,7 +90,7 @@ namespace Ocean2Ocean.DataAccess
 
             var result = await connection
                 .ExecuteAsync("UPDATE [dbo].[Teams] SET [TeamName] = @TeamName, [TeamWebsite] = @TeamWebsite, [Bio] = @Bio, [Active] = @Active, [Created] = @Created WHERE [TeamId] = @TeamId",
-                new { TeamName, TeamWebsite, Bio, Active, Created = DateTime.Now })
+                new { TeamName, TeamWebsite, Bio, Active, Created = DateTime.Now, TeamId })
                 .ConfigureAwait(false);
 
             if (result == 1)
