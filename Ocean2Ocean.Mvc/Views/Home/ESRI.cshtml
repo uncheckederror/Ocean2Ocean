@@ -33,119 +33,119 @@
                     @{
                         if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
                         {
-                            <div class="alert alert-danger" role="alert">
-                                @Model.ErrorMessage
-                            </div>
-                            <a class="btn btn-success btn-block" href="/Home/Journeys">🔍 Find Your Journey</a>
+                        <div class="alert alert-danger" role="alert">
+                            @Model.ErrorMessage
+                        </div>
+                        <a class="btn btn-success btn-block" href="/Home/Journeys">🔍 Find Your Journey</a>
                         }
                     }
                     <form method="get" autocomplete="on">
                         @{
                             if (!(string.IsNullOrWhiteSpace(Model.Journey.JourneyName)))
                             {
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Journey Name</label>
-                                    <div class="input-group">
-                                        <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey" value="@Model?.Journey?.JourneyName" readonly>
-                                        <div class="input-group-append">
-                                            <a class="btn btn-outline-secondary" href="/Journeys/@Model?.Journey?.JourneyName/">View</a>
-                                        </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Journey Name</label>
+                                <div class="input-group">
+                                    <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey" value="@Model?.Journey?.JourneyName" readonly>
+                                    <div class="input-group-append">
+                                        <a class="btn btn-outline-secondary" href="/Journeys/@Model?.Journey?.JourneyName/">View</a>
                                     </div>
                                 </div>
+                            </div>
                             }
                             else
                             {
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Journey Name</label>
-                                    <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey (SE Walk Across America)" required>
-                                    <small id="emailHelp" class="form-text text-muted">What does your team call this event?</small>
-                                </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Journey Name</label>
+                                <input type="text" name="journeyName" class="form-control" id="journeyName" aria-describedby="journeyName" placeholder="Enter a Name for this Journey (SE Walk Across America)" required>
+                                <small id="emailHelp" class="form-text text-muted">What does your team call this event?</small>
+                            </div>
                             }
                         }
                         @{
                             if (!(string.IsNullOrWhiteSpace(Model?.Team?.TeamName)))
                             {
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Team Name</label>
-                                    <div class="input-group">
-                                        <input type="text" name="teamName" class="form-control" id="teamName" aria-describedby="teamName" placeholder="Enter a Name for your Team (or leave blank)" value="@Model?.Team?.TeamName" readonly>
-                                        <div class="input-group-append">
-                                            <a class="btn btn-outline-secondary" href="/Teams/@Model?.Team?.TeamName/">View</a>
-                                        </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Team Name</label>
+                                <div class="input-group">
+                                    <input type="text" name="teamName" class="form-control" id="teamName" aria-describedby="teamName" placeholder="Enter a Name for your Team (or leave blank)" value="@Model?.Team?.TeamName" readonly>
+                                    <div class="input-group-append">
+                                        <a class="btn btn-outline-secondary" href="/Teams/@Model?.Team?.TeamName/">View</a>
                                     </div>
                                 </div>
+                            </div>
                             }
                             else
                             {
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Team Name</label>
-                                    <div class="input-group">
-                                        <select class="custom-select" id="inputGroupSelect04">
-                                            @{
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Team Name</label>
+                                <div class="input-group">
+                                    <select class="custom-select" id="inputGroupSelect04" name="TeamName">
+                                        @{
                                                 foreach (var team in Model?.Teams)
                                                 {
                                                     if (team.TeamName == $"{Model?.Journey?.JourneyName} Team")
                                                     {
-                                                        <option selected value="@team?.TeamName">@team?.TeamName</option>
+                                            <option selected value="@team?.TeamName">@team?.TeamName</option>
                                                     }
                                                     else
                                                     {
-                                                        <option value="@team?.TeamName">@team?.TeamName</option>
+                                            <option value="@team?.TeamName">@team?.TeamName</option>
                                                     }
                                                 }
-                                            }
-                                        </select>
-                                        <div class="input-group-append">
-                                            <a class="btn btn-outline-secondary" href="/Teams/Add/">New</a>
-                                            <a class="btn btn-outline-secondary" href="/Teams/">View</a>
-                                        </div>
+                                        }
+                                    </select>
+                                    <div class="input-group-append">
+                                        <a class="btn btn-outline-secondary" href="/Teams/Add/">New</a>
+                                        <a class="btn btn-outline-secondary" href="/Teams/">View</a>
                                     </div>
-                                    <small id="emailHelp" class="form-text text-muted">What does your team call itself?</small>
                                 </div>
+                                <small id="emailHelp" class="form-text text-muted">What does your team call itself?</small>
+                            </div>
                             }
                         }
                         @{
                             if (!(string.IsNullOrWhiteSpace(Model?.Nickname?.Name)))
                             {
-                                <div class="form-group">
-                                    <label for="nickname">Your Nickname</label>
+                            <div class="form-group">
+                                <label for="nickname">Your Nickname</label>
+                                <div class="input-group">
                                     <div class="input-group">
-                                        <div class="input-group">
-                                        </div>
-                                        <input type="text" name="nickname" class="form-control" id="nickname" aria-describedby="nickname" placeholder="Enter a Nickname (or leave blank)" value="@Model?.Nickname?.Name" readonly>
-                                        <div class="input-group-append">
-                                            <a class="btn btn-outline-secondary" href="/Nicknames/@Model?.Nickname?.Name/">View</a>
-                                        </div>
+                                    </div>
+                                    <input type="text" name="nickname" class="form-control" id="nickname" aria-describedby="nickname" placeholder="Enter a Nickname (or leave blank)" value="@Model?.Nickname?.Name" readonly>
+                                    <div class="input-group-append">
+                                        <a class="btn btn-outline-secondary" href="/Nicknames/@Model?.Nickname?.Name/">View</a>
                                     </div>
                                 </div>
+                            </div>
                             }
                             else
                             {
-                                <div class="form-group">
-                                    <label for="nickname">Your Nickname</label>
-                                    <div class="input-group">
-                                        <select class="custom-select" id="inputGroupSelect05">
-                                            @{
+                            <div class="form-group">
+                                <label for="nickname">Your Nickname</label>
+                                <div class="input-group">
+                                    <select class="custom-select" id="inputGroupSelect05" name="Nickname">
+                                        @{
                                                 foreach (var name in Model?.Nicknames)
                                                 {
                                                     if (name.Name == $"{Model?.Journey?.JourneyName} Team")
                                                     {
-                                                        <option selected value="@name?.Name">@name?.Name</option>
+                                            <option selected value="@name?.Name">@name?.Name</option>
                                                     }
                                                     else
                                                     {
-                                                        <option value="@name?.Name">@name?.Name</option>
+                                            <option value="@name?.Name">@name?.Name</option>
                                                     }
                                                 }
-                                            }
-                                        </select>
-                                        <div class="input-group-append">
-                                            <a class="btn btn-outline-secondary" href="/Nicknames/Add/">New</a>
-                                            <a class="btn btn-outline-secondary" href="/Nicknames/">View</a>
-                                        </div>
+                                        }
+                                    </select>
+                                    <div class="input-group-append">
+                                        <a class="btn btn-outline-secondary" href="/Nicknames/Add/">New</a>
+                                        <a class="btn btn-outline-secondary" href="/Nicknames/">View</a>
                                     </div>
-                                    <small id="emailHelp" class="form-text text-muted">We never store personally identifying information.</small>
                                 </div>
+                                <small id="emailHelp" class="form-text text-muted">We never store personally identifying information.</small>
+                            </div>
                             }
                         }
                         <div class="row">
@@ -167,11 +167,11 @@
                             @{
                                 if (!(string.IsNullOrWhiteSpace(Model.Journey.JourneyName)))
                                 {
-                                    <a class="btn btn-success btn-block" href="/Home/Leaderboard/@Model?.Journey?.JourneyName">🌠 Leaderboard</a>
+                                <a class="btn btn-success btn-block" href="/Home/Leaderboard/@Model?.Journey?.JourneyName">🌠 Leaderboard</a>
                                 }
                                 else
                                 {
-                                    <a class="btn btn-success disabled btn-block" href="/Home/Leaderboard/@Model?.Journey?.JourneyName">🌠 Leaderboard</a>
+                                <a class="btn btn-success disabled btn-block" href="/Home/Leaderboard/@Model?.Journey?.JourneyName">🌠 Leaderboard</a>
                                 }
                             }
                         </div>
