@@ -1,0 +1,178 @@
+﻿@model Ocean2Ocean.DataAccess.NicknameResult
+@{
+    ViewData["Title"] = "Nickname";
+}
+
+<div class="container">
+    <h1 class="display-4 pt-3 pb-3">
+        @Model?.Nickname?.Name
+    </h1>
+    <form class="needs-validation" novalidate="" method="post">
+        <div class="row">
+            <div class="col pb-3">
+                <label for="firstName">What will we call you?</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Speedy Spork" value="@Model?.Nickname?.Name" required>
+                <div class="invalid-feedback">
+                    Valid name is required.
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pb-3">
+                <label for="lastName">Who are you?</label>
+                <input type="text" class="form-control" id="Bio" name="Bio" placeholder="The fastest utensil on the planet." value="@Model?.Nickname?.Bio" required>
+                <div class="invalid-feedback">
+                    Valid bio is required.
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-3">
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Identify Yourself</button>
+            </div>
+        </div>
+    </form>
+    @{
+        <h3 class="display-4 pt-3 pb-3">
+            Participating Journeys
+        </h3>
+        if (Model != null && Model.Journeys != null && Model.Journeys.Any())
+        {
+            <div class="row">
+                @{
+                    foreach (var journey in Model?.Journeys)
+                    {
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-4">
+                            <div class="card">
+                                <img class="card-img-top" src="@journey?.ImagePath" />
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        @journey.JourneyName
+                                    </h5>
+                                    <p class="card-text">
+                                        @journey.Bio
+                                    </p>
+                                    <a class="btn btn-outline-primary btn-block" href="/Journeys/@journey.JourneyName">
+                                        Edit
+                                    </a>
+                                    <a class="btn btn-primary btn-block" href="/@journey.JourneyName">
+                                        🗺️ View
+                                    </a>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    Created on @journey.Created.ToShortDateString()
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning" role="alert">
+                No results found for that query.
+            </div>
+        }
+    }
+    @{
+        <h3 class="display-4 pt-3 pb-3">
+            Participating Teams
+        </h3>
+        if (Model != null && Model.Teams != null && Model.Teams.Any())
+        {
+            <div class="row">
+                @{
+                    foreach (var team in Model?.Teams)
+                    {
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-4">
+                            <div class="card">
+                                @*<img class="card-img-top" src="@journey?.ImagePath" />*@
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        @team.TeamName
+                                    </h5>
+                                    <a href="@team.TeamWebsite">@team.TeamWebsite</a>
+                                    <p class="card-text">
+                                        @team.Bio
+                                    </p>
+                                    <a class="btn btn-outline-primary btn-block" href="/Teams/@team.TeamName">
+                                        Edit
+                                    </a>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    Created on @team.Created.ToShortDateString()
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning" role="alert">
+                No results found for that query.
+            </div>
+        }
+    }
+    <h3 class="display-4 pb-3">
+        All Steps
+    </h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-borderless">
+            <thead>
+                <tr>
+                    <th>
+                        Journey
+                    </th>
+                    <th>
+                        Team
+                    </th>
+                    <th>
+                        Nickname
+                    </th>
+                    <th>
+                        Created
+                    </th>
+                    <th>
+                        Steps
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var step in Model?.Steps)
+                    {
+                        <tr>
+                            <td>
+                                <a class="btn btn-outline-dark" href="/@step?.JourneyName/">@step?.JourneyName</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-outline-dark" href="/Teams/@step?.TeamName/">@step?.TeamName</a>
+                            </td>
+                            <td>
+                                @step?.Nickname
+                            </td>
+                            <td>
+                                @step?.Created
+                            </td>
+                            <td>
+                                @step?.Steps
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="pt-3">
+                <a href="/" class="text-decoration-none btn btn-outline-info">
+                    🌊 Ocean To Ocean
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

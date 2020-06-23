@@ -42,10 +42,6 @@ namespace Ocean2Ocean.Controllers
                 {
                     results = await Nickname.SearchByNicknameAsync(name, _azureSQL);
                 }
-                //else if (results.Count() == 1)
-                //{
-                //    return Redirect($"/{results.FirstOrDefault().JourneyName}");
-                //}
 
                 if (results.Count() > 1)
                 {
@@ -55,10 +51,6 @@ namespace Ocean2Ocean.Controllers
                         Nicknames = results
                     });
                 }
-                //else if (results.Count() == 1)
-                //{
-                //    return Redirect($"/{results.FirstOrDefault().JourneyName}");
-                //}
                 else
                 {
                     return View("Nicknames", new NicknameSearchResult
@@ -73,13 +65,41 @@ namespace Ocean2Ocean.Controllers
         [Route("/Nicknames/{name}")]
         public async Task<IActionResult> ViewName(string name)
         {
-            var results = await Nickname.GetByNicknameAsync(name, _azureSQL);
+            var nicknames = await Nickname.GetByNicknameAsync(name, _azureSQL);
+            var nickname = nicknames.FirstOrDefault();
 
-            // Maybe look up all the entries that reference this team?
-            return View("Nicknames", new NicknameSearchResult
+            var entries = await Step.GetByExactNicknameAsync(nickname?.Name, _azureSQL);
+
+            var uniqueJourneyNames = entries.Select(x => x.JourneyName).Distinct();
+
+            var journeys = new List<Journey>();
+            foreach (var journey in uniqueJourneyNames)
             {
-                Query = name,
-                Nicknames = results
+                var results = await Journey.GetByJourneyNameAsync(journey, _azureSQL);
+                if (!(results is null))
+                {
+                    journeys.Add(results.FirstOrDefault());
+                }
+            }
+
+            var uniqueTeamNames = entries.Select(x => x.TeamName).Distinct();
+
+            var teams = new List<Team>();
+            foreach (var team in uniqueTeamNames)
+            {
+                var results = await Team.GetByTeamNameAsync(team, _azureSQL);
+                if (!(results is null))
+                {
+                    teams.Add(results.FirstOrDefault());
+                }
+            }
+
+            return View("Nickname", new NicknameResult
+            {
+                Nickname = nickname,
+                Journeys = journeys,
+                Teams = teams,
+                Steps = entries
             });
         }
 

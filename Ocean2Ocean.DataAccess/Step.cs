@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -102,6 +102,25 @@ namespace Ocean2Ocean.DataAccess
             return await connection
                 .QueryAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [Created] FROM [dbo].[Steps] WHERE [JourneyName] LIKE @journeyName ORDER BY [Created] DESC",
                 new { journeyName })
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get a list of Steps related to a specific Team.
+        /// </summary>
+        /// <param name="journeyName"></param>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
+        public static async Task<IEnumerable<Step>> GetByTeamAsync(string teamName, string connectionString)
+        {
+            using var connection = new SqlConnection(connectionString);
+
+            // Make the query more general.
+            teamName = $"%{teamName}%";
+
+            return await connection
+                .QueryAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [Created] FROM [dbo].[Steps] WHERE [TeamName] LIKE @teamName ORDER BY [Created] DESC",
+                new { teamName })
                 .ConfigureAwait(false);
         }
 

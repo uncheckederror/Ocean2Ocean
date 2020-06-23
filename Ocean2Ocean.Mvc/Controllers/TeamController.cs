@@ -42,10 +42,6 @@ namespace Ocean2Ocean.Controllers
                 {
                     results = await Team.SearchByTeamNameAsync(teamName, _azureSQL);
                 }
-                //else if (results.Count() == 1)
-                //{
-                //    return Redirect($"/{results.FirstOrDefault().JourneyName}");
-                //}
 
                 if (results.Count() > 1)
                 {
@@ -55,10 +51,6 @@ namespace Ocean2Ocean.Controllers
                         Teams = results
                     });
                 }
-                //else if (results.Count() == 1)
-                //{
-                //    return Redirect($"/{results.FirstOrDefault().JourneyName}");
-                //}
                 else
                 {
                     return View("Teams", new TeamsSearchResult
@@ -73,13 +65,28 @@ namespace Ocean2Ocean.Controllers
         [Route("/Teams/{teamName}")]
         public async Task<IActionResult> ViewTeam(string teamName)
         {
-            var results = await Team.GetByTeamNameAsync(teamName, _azureSQL);
+            var teams = await Team.GetByTeamNameAsync(teamName, _azureSQL);
+            var team = teams.FirstOrDefault();
 
-            // Maybe look up all the entries that reference this team?
-            return View("Teams", new TeamsSearchResult
+            var entries = await Step.GetByTeamAsync(team?.TeamName, _azureSQL);
+
+            var uniqueNames = entries.Select(x => x.Nickname).Distinct();
+
+            var nicknames = new List<Nickname>();
+            foreach (var name in uniqueNames)
             {
-                Query = teamName,
-                Teams = results
+                var results = await Nickname.GetByNicknameAsync(name, _azureSQL);
+                if (!(results is null))
+                {
+                    nicknames.Add(results.FirstOrDefault());
+                }
+            }
+
+            return View("Team", new TeamResult
+            {
+                Team = team,
+                Nicknames = nicknames,
+                Steps = entries
             });
         }
 

@@ -76,20 +76,46 @@ namespace Ocean2Ocean.Controllers
         }
 
         [Route("/Journeys/{journeyName}")]
-        public async Task<IActionResult> ViewTeam(string journeyName)
+        public async Task<IActionResult> ViewJourney(string journeyName)
         {
-            var results = await Journey.GetByJourneyNameAsync(journeyName, _azureSQL);
+            var journeys = await Journey.GetByJourneyNameAsync(journeyName, _azureSQL);
+            var journey = journeys.FirstOrDefault();
+            var entries = await Step.GetByJourneyAsync(journey?.JourneyName, _azureSQL);
+
+            var uniqueTeamNames = entries.Select(x => x.TeamName).Distinct();
+
+            var teams = new List<Team>();
+            foreach (var team in uniqueTeamNames)
+            {
+                var results = await Team.GetByTeamNameAsync(team, _azureSQL);
+                if (!(results is null))
+                {
+                    teams.Add(results.FirstOrDefault());
+                }
+            }
+
+            var uniqueNames = entries.Select(x => x.Nickname).Distinct();
+
+            var nicknames = new List<Nickname>();
+            foreach (var name in uniqueNames)
+            {
+                var results = await Nickname.GetByNicknameAsync(name, _azureSQL);
+                if (!(results is null))
+                {
+                    nicknames.Add(results.FirstOrDefault());
+                }
+            }
 
             // Maybe look up all the entries that reference this team?
-            return View("Journeys", new JourneysSearchResult
+            return View("Journey", new JourneyResult
             {
-                Query = journeyName,
-                Journeys = results
+                Journey = journey,
+                Teams = teams,
+                Nicknames = nicknames,
+                Steps = entries
             });
         }
 
-        [HttpGet]
-        [HttpPost]
         [Route("/Journeys/Add")]
         public async Task<IActionResult> AddJourneyAsync([Bind("JourneyName,Bio,GeometryFileName,ImagePath")] Journey? newJourney)
         {
@@ -114,7 +140,17 @@ namespace Ocean2Ocean.Controllers
 
                 var checkCreateDefaultTeam = await defaultTeam.PostAsync(_azureSQL);
 
-                if (checkCreateJourney && checkCreateDefaultTeam)
+                var defaultNickname = new Nickname
+                {
+                    Name = $"{newJourney.JourneyName} Team",
+                    Bio = $"This is nickname for those that prefer to remain anonymous.",
+                    Active = true,
+                    Created = DateTime.Now
+                };
+
+                var checkCreateDefaultNickname = await defaultNickname.PostAsync(_azureSQL);
+
+                if (checkCreateJourney && checkCreateDefaultTeam && checkCreateDefaultNickname)
                 {
                     return Redirect($"/{newJourney.JourneyName}");
                 }
