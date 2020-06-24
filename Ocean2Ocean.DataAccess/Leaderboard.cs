@@ -30,7 +30,7 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             return await connection
-                .QueryAsync<Leaderboard>("SELECT [Nickname], [JourneyName], [TeamName], SUM(Steps) As TotalSteps FROM [dbo].[Steps] WHERE [JourneyName] = 'KCIT' GROUP BY [Nickname], [JourneyName], [TeamName] ORDER BY TotalSteps DESC",
+                .QueryAsync<Leaderboard>("SELECT [Nickname], [JourneyName], [TeamName], SUM(Steps) As TotalSteps FROM [dbo].[Steps] WHERE [JourneyName] = @journeyName GROUP BY [Nickname], [JourneyName], [TeamName] ORDER BY TotalSteps DESC",
                 new { journeyName })
                 .ConfigureAwait(false);
         }
