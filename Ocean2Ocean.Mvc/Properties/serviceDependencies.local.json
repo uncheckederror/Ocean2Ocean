@@ -5,9 +5,6 @@
       "type": "mssql.azure",
       "connectionId": "AzureSQL",
       "secretStore": "LocalSecretsFile"
-    },
-    "appInsights1": {
-      "type": "appInsights.sdk"
     }
   }
 }
