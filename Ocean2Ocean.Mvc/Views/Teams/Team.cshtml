@@ -7,15 +7,16 @@
     <h1 class="display-4 pt-3 pb-3">
         @Model?.Team?.TeamName
     </h1>
-    <form class="needs-validation" novalidate="" method="put" action="/Teams/Update">
+    <form class="needs-validation" method="put" action="/Teams/Update">
         <input type="number" id="TeamId" name="TeamId" value="@Model?.Team.TeamId" hidden />
         <div class="row">
             <div class="col pb-3">
                 <label for="firstName">What will we call your Team?</label>
-                <input type="text" class="form-control" id="TeamName" name="TeamName" placeholder="KCIT Software Engineering" value="@Model?.Team?.TeamName" required>
+                <input type="text" class="form-control" id="TeamName" name="TeamName" placeholder="KCIT Software Engineering" value="@Model?.Team?.TeamName" pattern="[A-Za-z0-9\s]+" required>
                 <div class="invalid-feedback">
                     Valid team name is required.
                 </div>
+                <small id="nameHelp" class="form-text text-muted">Special characters are not allowed.</small>
             </div>
         </div>
         <div class="row">

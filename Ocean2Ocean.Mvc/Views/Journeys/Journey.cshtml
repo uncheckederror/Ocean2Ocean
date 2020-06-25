@@ -8,13 +8,13 @@
         @Model?.Journey?.JourneyName
     </h1>
 
-    <form class="needs-validation" novalidate="" method="put" action="/Journeys/Update">
+    <form class="needs-validation" method="put" action="/Journeys/Update">
         <input type="number" id="JourneyId" name="JourneyId" value="@Model?.Journey.JourneyId" hidden />
         <div class="row">
             <div class="col pb-3">
                 <label for="firstName">What will we call your Journey?</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" id="JourneyName" name="JourneyName" placeholder="Walk Across America" value="@Model?.Journey?.JourneyName" readonly>
+                    <input type="text" class="form-control" id="JourneyName" name="JourneyName" placeholder="Walk Across America" value="@Model?.Journey?.JourneyName" pattern="[A-Za-z0-9\s]+" readonly>
                     <div class="input-group-append">
                         <a class="btn btn-outline-secondary" href="/@Model?.Journey?.JourneyName/">Add Steps</a>
                     </div>
@@ -22,6 +22,7 @@
                 <div class="invalid-feedback">
                     Valid journey name is required.
                 </div>
+                <small id="nameHelp" class="form-text text-muted">Special characters are not allowed.</small>
             </div>
         </div>
         <div class="row">

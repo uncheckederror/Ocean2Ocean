@@ -7,20 +7,21 @@
     <h1 class="display-4 pt-3 pb-3">
         🚣 Start A New Journey
     </h1>
-    <form class="needs-validation" novalidate="" method="post">
+    <form class="needs-validation" method="post">
         <div class="row">
             <div class="col pb-3">
                 <label for="firstName">What will we call your Journey?</label>
-                <input type="text" class="form-control" id="JourneyName" name="JourneyName" placeholder="Walk Across America" value="" required>
+                <input type="text" class="form-control" id="JourneyName" name="JourneyName" placeholder="Walk Across America" pattern="[A-Za-z0-9\s]+" required>
                 <div class="invalid-feedback">
                     Valid journey name is required.
                 </div>
+                <small id="nameHelp" class="form-text text-muted">Special characters are not allowed.</small>
             </div>
         </div>
         <div class="row">
             <div class="col pb-3">
                 <label for="lastName">Why Do We Walk?</label>
-                <input type="text" class="form-control" id="Bio" name="Bio" placeholder="A team building exercise hosted by KCIT." value="" required>
+                <input type="text" class="form-control" id="Bio" name="Bio" placeholder="A team building exercise hosted by KCIT." required>
                 <div class="invalid-feedback">
                     Valid bio is required.
                 </div>

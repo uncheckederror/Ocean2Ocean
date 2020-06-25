@@ -7,15 +7,16 @@
     <h1 class="display-4 pt-3 pb-3">
         @Model?.Nickname?.Name
     </h1>
-    <form class="needs-validation" novalidate="" method="post" action="/Nicknames/Update">
+    <form class="needs-validation" method="post" action="/Nicknames/Update">
         <input type="number" name="NicknameId" value="@Model?.Nickname?.NicknameId" hidden />
         <div class="row">
             <div class="col pb-3">
                 <label for="firstName">What will we call you?</label>
-                <input type="text" class="form-control" id="Name" name="Name" placeholder="Speedy Spork" value="@Model?.Nickname?.Name" readonly>
+                <input type="text" class="form-control" id="Name" name="Name" placeholder="Speedy Spork" value="@Model?.Nickname?.Name" pattern="[A-Za-z0-9\s]+" readonly>
                 <div class="invalid-feedback">
                     Valid name is required.
                 </div>
+                <small id="nameHelp" class="form-text text-muted">Special characters are not allowed.</small>
             </div>
         </div>
         <div class="row">
