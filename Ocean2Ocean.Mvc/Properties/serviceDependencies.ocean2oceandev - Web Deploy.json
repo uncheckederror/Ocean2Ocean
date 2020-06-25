@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "mssql2": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroup')]/providers/Microsoft.Sql/servers/steps/databases/steps",
+      "type": "mssql.azure",
+      "connectionId": "AzureSQL",
+      "secretStore": "AzureAppSettings"
+    },
+    "appInsights1": {
+      "type": "appInsights",
+      "suggestion": "true",
+      "ignored": "true"
+    }
+  }
+}
