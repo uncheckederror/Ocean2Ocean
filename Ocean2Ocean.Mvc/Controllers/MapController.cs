@@ -127,7 +127,7 @@ namespace Ocean2Ocean.Controllers
         /// <param name="step"></param>
         /// <returns></returns>
         [Route("/AddSteps/")]
-        public async Task<IActionResult> AddSteps([Bind("Nickname,JourneyName,TeamName,Steps,StepsTaken,StepsInRoute")] Step step)
+        public async Task<IActionResult> AddSteps([Bind("Nickname,JourneyName,TeamName,Steps,DateStepped,StepsTaken,StepsInRoute")] Step step)
         {
             if (step != null && !string.IsNullOrWhiteSpace(step.JourneyName) && (step.JourneyName.Length < 50) && !string.IsNullOrWhiteSpace(step.Nickname) && (step.Nickname.Length < 50) && step.Steps > 1)
             {

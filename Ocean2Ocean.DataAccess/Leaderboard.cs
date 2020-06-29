@@ -61,12 +61,9 @@ namespace Ocean2Ocean.DataAccess
         {
             using var connection = new SqlConnection(connectionString);
 
-            var yesterday = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            var today = yesterday.AddDays(+1);
-
             return await connection
-                .QueryAsync<Leaderboard>("SELECT [Nickname], [JourneyName], [TeamName], SUM(Steps) As TotalSteps FROM [dbo].[Steps] WHERE [JourneyName] = @journeyName AND [Created] >= @yesterday AND [Created] <= @today GROUP BY [Nickname], [JourneyName], [TeamName] ORDER BY TotalSteps DESC",
-                new { journeyName, yesterday, today })
+                .QueryAsync<Leaderboard>("SELECT [Nickname], [JourneyName], [TeamName], SUM(Steps) As TotalSteps FROM [dbo].[Steps] WHERE [JourneyName] = @journeyName AND [DateStepped] = @date GROUP BY [Nickname], [JourneyName], [TeamName] ORDER BY TotalSteps DESC",
+                new { journeyName, date = DateTime.Now.ToShortDateString() })
                 .ConfigureAwait(false);
         }
 
@@ -80,12 +77,10 @@ namespace Ocean2Ocean.DataAccess
         {
             using var connection = new SqlConnection(connectionString);
 
-            var yesterday = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            var today = yesterday.AddDays(+1);
 
             return await connection
-                .QueryAsync<Leaderboard>("SELECT [JourneyName], [TeamName], SUM(Steps) As TotalSteps FROM [dbo].[Steps] WHERE [JourneyName] = @journeyName AND [Created] >= @yesterday AND [Created] <= @today GROUP BY [JourneyName], [TeamName] ORDER BY TotalSteps DESC",
-                new { journeyName, yesterday, today })
+                .QueryAsync<Leaderboard>("SELECT [JourneyName], [TeamName], SUM(Steps) As TotalSteps FROM [dbo].[Steps] WHERE [JourneyName] = @journeyName AND [DateStepped] = @date GROUP BY [JourneyName], [TeamName] ORDER BY TotalSteps DESC",
+                new { journeyName, date = DateTime.Now.ToShortDateString() })
                 .ConfigureAwait(false);
         }
 

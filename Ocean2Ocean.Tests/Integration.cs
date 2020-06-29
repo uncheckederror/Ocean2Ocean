@@ -42,6 +42,14 @@ namespace Ocean2Ocean.Tests
         }
 
         [Fact]
+        public async Task GetAllSteps()
+        {
+            var results = await Step.GetAllAsync(_azureSql);
+            Assert.NotNull(results);
+            Assert.True(results.Any());
+        }
+
+        [Fact]
         public async Task GetById()
         {
             var results = await Step.GetAllAsync(_azureSql);

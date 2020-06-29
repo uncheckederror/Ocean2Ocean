@@ -161,6 +161,13 @@
                                     <input type="number" id="stepsInRoute" name="stepsInRoute" hidden />
                                 </div>
                             </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="DateStepped">For Date</label>
+                                    <input type="date" name="DateStepped" class="form-control" id="DateStepped" required>
+                                    @*<small id="DateSteppedHelp" class="form-text text-muted">1 Mile is about 2000 steps.</small>*@
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary btn-block" asp-action="AddSteps" asp-route-journeyName="@Model?.Journey?.JourneyName">🚀 Submit</button>
@@ -292,6 +299,12 @@
 
 
 <script>
+    var date = new Date();
+    var datePicker = document.getElementById("DateStepped");
+    datePicker.value = date.getFullYear().toString() + '-'
+        + (date.getMonth() + 1).toString().padStart(2, 0) +
+        '-' + date.getDate().toString().padStart(2, 0);
+
         // Source: http://www.mredkj.com/javascript/numberFormat.html
         function addCommas(nStr) {
             nStr += '';

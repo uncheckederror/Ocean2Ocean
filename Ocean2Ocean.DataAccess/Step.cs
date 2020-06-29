@@ -16,6 +16,7 @@ namespace Ocean2Ocean.DataAccess
         public string TeamName { get; set; }
         public int Steps { get; set; }
         public DateTime Created { get; set; }
+        public DateTime DateStepped { get; set; }
         public int TotalSteps { get; set; }
         // These properties are for convenience and not present in the Db.
         public int StepsTaken { get; set; }
@@ -31,7 +32,7 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             return await connection
-                .QueryAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [Created] FROM [dbo].[Steps]")
+                .QueryAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [Created], [DateStepped] FROM [dbo].[Steps]")
                 .ConfigureAwait(false);
         }
 
@@ -46,7 +47,7 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             return await connection
-                .QueryFirstOrDefaultAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [Created] FROM [dbo].[Steps] WHERE [StepId] = @StepId",
+                .QueryFirstOrDefaultAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [Created], [DateStepped] FROM [dbo].[Steps] WHERE [StepId] = @StepId",
                 new { StepId })
                 .ConfigureAwait(false);
         }
@@ -65,7 +66,7 @@ namespace Ocean2Ocean.DataAccess
             Nickname = $"%{Nickname}%";
 
             return await connection
-                .QueryAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [Created] FROM [dbo].[Steps] WHERE [Nickname] LIKE @Nickname ORDER BY [Created] DESC",
+                .QueryAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [Created], [DateStepped] FROM [dbo].[Steps] WHERE [Nickname] LIKE @Nickname ORDER BY [Created] DESC",
                 new { Nickname })
                 .ConfigureAwait(false);
         }
@@ -81,7 +82,7 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             return await connection
-                .QueryAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [Created] FROM [dbo].[Steps] WHERE [Nickname] = @Nickname ORDER BY [Created] DESC",
+                .QueryAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [Created], [DateStepped] FROM [dbo].[Steps] WHERE [Nickname] = @Nickname ORDER BY [Created] DESC",
                 new { Nickname })
                 .ConfigureAwait(false);
         }
@@ -100,7 +101,7 @@ namespace Ocean2Ocean.DataAccess
             journeyName = $"%{journeyName}%";
 
             return await connection
-                .QueryAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [Created] FROM [dbo].[Steps] WHERE [JourneyName] LIKE @journeyName ORDER BY [Created] DESC",
+                .QueryAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [Created], [DateStepped] FROM [dbo].[Steps] WHERE [JourneyName] LIKE @journeyName ORDER BY [Created] DESC",
                 new { journeyName })
                 .ConfigureAwait(false);
         }
@@ -119,7 +120,7 @@ namespace Ocean2Ocean.DataAccess
             teamName = $"%{teamName}%";
 
             return await connection
-                .QueryAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [Created] FROM [dbo].[Steps] WHERE [TeamName] LIKE @teamName ORDER BY [Created] DESC",
+                .QueryAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [Created], [DateStepped] FROM [dbo].[Steps] WHERE [TeamName] LIKE @teamName ORDER BY [Created] DESC",
                 new { teamName })
                 .ConfigureAwait(false);
         }
@@ -133,11 +134,9 @@ namespace Ocean2Ocean.DataAccess
         {
             using var connection = new SqlConnection(connectionString);
 
-            var timeRange = DateTime.Now.AddHours(-1);
-
             var result = await connection
-                .QueryFirstOrDefaultAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [Created] FROM [dbo].[Steps] WHERE [Nickname] = @Nickname AND [JourneyName] = @JourneyName AND [Steps] = @Steps AND [Created] > @timeRange",
-                new { Nickname, JourneyName, Steps, timeRange })
+                .QueryFirstOrDefaultAsync<Step>("SELECT [StepId], [Nickname], [JourneyName], [TeamName], [Steps], [DateStepped] FROM [dbo].[Steps] WHERE [Nickname] = @Nickname AND [JourneyName] = @JourneyName AND [Steps] = @Steps AND [DateStepped] = @Date",
+                new { Nickname, JourneyName, Steps, Date = DateStepped.ToShortDateString() })
                 .ConfigureAwait(false);
 
             if (result != null && result.Steps > 0)
@@ -160,8 +159,8 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             var result = await connection
-                .ExecuteAsync("INSERT INTO [dbo].[Steps] ([Nickname], [JourneyName], [TeamName], [Steps], [Created]) VALUES (@Nickname, @JourneyName, @TeamName, @Steps, @Created)",
-                new { Nickname, JourneyName, TeamName, Steps, Created = DateTime.Now })
+                .ExecuteAsync("INSERT INTO [dbo].[Steps] ([Nickname], [JourneyName], [TeamName], [Steps], [Created], [DateStepped]) VALUES (@Nickname, @JourneyName, @TeamName, @Steps, @Created, @Date)",
+                new { Nickname, JourneyName, TeamName, Steps, Created = DateTime.Now, Date = DateStepped.ToShortDateString() })
                 .ConfigureAwait(false);
 
             if (result == 1)
@@ -184,8 +183,8 @@ namespace Ocean2Ocean.DataAccess
             using var connection = new SqlConnection(connectionString);
 
             var result = await connection
-                .ExecuteAsync("UPDATE [dbo].[Steps] SET [JourneyName] = @JourneyName, [TeamName] = @TeamName, [Steps] = @Steps, [Created] = @Created WHERE [StepId] = @StepId",
-                new { StepId, JourneyName, TeamName, Steps, Created = DateTime.Now })
+                .ExecuteAsync("UPDATE [dbo].[Steps] SET [JourneyName] = @JourneyName, [TeamName] = @TeamName, [Steps] = @Steps, [Created] = @Created, [DateStepped] = @Date WHERE [StepId] = @StepId",
+                new { StepId, JourneyName, TeamName, Steps, Created, Date = DateStepped.ToShortDateString() })
                 .ConfigureAwait(false);
 
             if (result == 1)

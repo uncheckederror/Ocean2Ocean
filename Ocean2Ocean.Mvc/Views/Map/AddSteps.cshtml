@@ -19,9 +19,9 @@
         commaString = string.Empty;
         foreach (var ingest in graphData)
         {
-            commaString += $"\"{ingest.Created.ToShortDateString()}\", ";
+            commaString += $"\"{ingest.DateStepped.ToShortDateString()}\", ";
         }
-        @Html.Raw($"var dateArr = [{commaString}\"{graphData.LastOrDefault().Created.AddDays(-1).ToShortDateString()}\"];");
+        @Html.Raw($"var dateArr = [{commaString}\"{graphData.LastOrDefault().DateStepped.AddDays(-1).ToShortDateString()}\"];");
     }
 </script>
 <div class="container">
@@ -49,7 +49,7 @@
                                         Steps
                                     </th>
                                     <th>
-                                        Created
+                                        Date
                                     </th>
                                     <th>
                                         Journey
@@ -81,7 +81,7 @@
                                                 @formattedSteps
                                             </td>
                                             <td>
-                                                @entry?.Created
+                                                @entry?.DateStepped.ToShortDateString()
                                             </td>
                                             <td>
                                                 @entry?.JourneyName
