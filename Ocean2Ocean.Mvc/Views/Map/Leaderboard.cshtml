@@ -18,9 +18,9 @@
         commaString = string.Empty;
         foreach (var ingest in graphData)
         {
-            commaString += $"\"{ingest.SummedDate.ToShortDateString()}\", ";
+            commaString += $"\"{ingest.DateStepped.ToShortDateString()}\", ";
         }
-        @Html.Raw($"var dateArr = [{commaString}\"{graphData.LastOrDefault().SummedDate.AddDays(-1).ToShortDateString()}\"];");
+        @Html.Raw($"var dateArr = [{commaString}\"{graphData.LastOrDefault().DateStepped.AddDays(-1).ToShortDateString()}\"];");
 
     }
 </script>

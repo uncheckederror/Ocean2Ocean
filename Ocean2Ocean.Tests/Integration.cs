@@ -171,7 +171,8 @@ namespace Ocean2Ocean.Tests
                 JourneyName = "Test",
                 TeamName = "Test Team",
                 Steps = 100,
-                Created = DateTime.Now
+                Created = DateTime.Now,
+                DateStepped = DateTime.Now
             };
 
             var checkSubmitted = await entry.PostAsync(_azureSql);
@@ -211,7 +212,8 @@ namespace Ocean2Ocean.Tests
                 JourneyName = "Test",
                 TeamName = "Test Team",
                 Steps = 100,
-                Created = DateTime.Now
+                Created = DateTime.Now,
+                DateStepped = DateTime.Now
             };
 
             var checkSubmitted = await entry.PostAsync(_azureSql);
@@ -232,7 +234,8 @@ namespace Ocean2Ocean.Tests
                 JourneyName = "Test",
                 TeamName = "Test Team",
                 Steps = 100,
-                Created = DateTime.Now
+                Created = DateTime.Now,
+                DateStepped = DateTime.Now
             };
 
             var checkSubmitted = await entry.PostAsync(_azureSql);

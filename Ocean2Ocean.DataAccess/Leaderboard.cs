@@ -14,10 +14,7 @@ namespace Ocean2Ocean.DataAccess
         public string JourneyName { get; set; }
         public string TeamName { get; set; }
         public int TotalSteps { get; set; }
-        private int SumYear { get; set; }
-        private int SumMonth { get; set; }
-        private int SumDay { get; set; }
-        public DateTime SummedDate { get; set; }
+        public DateTime DateStepped { get; set; }
 
         /// <summary>
         /// Get a list of objects ordered by the steps they've contributed to the Journey.
@@ -98,14 +95,9 @@ namespace Ocean2Ocean.DataAccess
             var today = yesterday.AddDays(+1);
 
             var results = await connection
-                .QueryAsync<Leaderboard>("SELECT [JourneyName], Year(Created) As SumYear, Month(Created) As SumMonth, Day(Created) As SumDay, SUM(Steps) As TotalSteps FROM[dbo].[Steps] WHERE [JourneyName] = @journeyName GROUP BY [JourneyName], Year(Created), Month(Created), Day(Created) ORDER BY SumDay DESC",
+                .QueryAsync<Leaderboard>("SELECT [JourneyName], [DateStepped], SUM(Steps) As TotalSteps FROM[dbo].[Steps] WHERE [JourneyName] = @journeyName GROUP BY [JourneyName], [DateStepped] ORDER BY [DateStepped] DESC",
                 new { journeyName })
                 .ConfigureAwait(false);
-
-            foreach (var result in results)
-            {
-                result.SummedDate = new DateTime(result.SumYear, result.SumMonth, result.SumDay);
-            }
 
             return results;
         }
