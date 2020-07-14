@@ -117,7 +117,7 @@ namespace Ocean2Ocean.Controllers
         }
 
         [Route("/Journeys/Add")]
-        public async Task<IActionResult> AddJourneyAsync([Bind("JourneyName,Bio,GeometryFileName,ImagePath")] Journey? newJourney)
+        public async Task<IActionResult> AddJourneyAsync([Bind("JourneyName,Bio,GeometryFileName,ImagePath")] Journey newJourney)
         {
             if (newJourney != null && !string.IsNullOrWhiteSpace(newJourney.JourneyName) && newJourney.JourneyName.Length <= 100
                 && !string.IsNullOrWhiteSpace(newJourney.Bio) && newJourney.Bio.Length <= 300
@@ -166,7 +166,7 @@ namespace Ocean2Ocean.Controllers
         }
 
         [Route("/Journeys/Update")]
-        public async Task<IActionResult> UpdateJourneyAsync([Bind("JourneyId,JourneyName,Bio,GeometryFileName,ImagePath")] Journey? newJourney)
+        public async Task<IActionResult> UpdateJourneyAsync([Bind("JourneyId,JourneyName,Bio,GeometryFileName,ImagePath")] Journey newJourney)
         {
             if (newJourney != null && !string.IsNullOrWhiteSpace(newJourney.JourneyName) && newJourney.JourneyName.Length <= 100
                 && !string.IsNullOrWhiteSpace(newJourney.Bio) && newJourney.Bio.Length <= 300

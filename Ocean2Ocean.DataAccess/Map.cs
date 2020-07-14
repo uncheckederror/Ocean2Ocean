@@ -17,5 +17,6 @@ namespace Ocean2Ocean.DataAccess
         public IEnumerable<Nickname> Nicknames { get; set; }
         public int StepsTaken { get; set; }
         public string ErrorMessage { get; set; }
+        public GeoJson Route { get; set; }
     }
 }

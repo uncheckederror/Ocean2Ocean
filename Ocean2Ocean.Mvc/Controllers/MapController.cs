@@ -7,6 +7,9 @@ using Ocean2Ocean.DataAccess;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System.IO;
+using Microsoft.ApplicationInsights.Extensibility.Implementation;
+using System.Text.Json;
 
 namespace Ocean2Ocean.Controllers
 {
