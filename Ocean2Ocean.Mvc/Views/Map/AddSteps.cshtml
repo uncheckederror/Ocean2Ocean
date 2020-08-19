@@ -6,7 +6,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 <script>
     @{
-        var graphData = Model?.OrderByDescending(x => x.DateStepped).Take(14).ToArray();
+        var graphData = Model?.OrderByDescending(x => x.DateStepped).Take(14).Reverse().ToArray();
         var commaString = string.Empty;
         foreach (var ingest in graphData)
         {
@@ -21,7 +21,7 @@
         {
             commaString += $"\"{ingest.DateStepped.ToShortDateString()}\", ";
         }
-        @Html.Raw($"var dateArr = [{commaString}\"{graphData.LastOrDefault().DateStepped.AddDays(-1).ToShortDateString()}\"];");
+        @Html.Raw($"var dateArr = [{commaString}\"{graphData.LastOrDefault().DateStepped.AddDays(1).ToShortDateString()}\"];");
     }
 </script>
 <div class="container">
@@ -87,7 +87,21 @@
                                                 @entry?.DateStepped.ToShortDateString()
                                             </td>
                                             <td>
-                                                @entry?.Created.ToShortDateString()
+                                                @{
+                                                    // Timezones have different names in Windows and Linux.
+                                                    if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+                                                    {
+                                                        var pst = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+                                                        var NowInPacificStandardTime = TimeZoneInfo.ConvertTimeFromUtc(entry.Created, pst);
+                                                        @NowInPacificStandardTime
+                                                    }
+                                                    else
+                                                    {
+                                                        var pst = TimeZoneInfo.FindSystemTimeZoneById("PST8PDT");
+                                                        var NowInPacificStandardTime = TimeZoneInfo.ConvertTimeFromUtc(entry.Created, pst);
+                                                        @NowInPacificStandardTime
+                                                    }
+                                                }
                                             </td>
                                             <td>
                                                 @entry?.JourneyName

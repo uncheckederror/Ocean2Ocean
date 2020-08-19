@@ -103,6 +103,9 @@
                         Created
                     </th>
                     <th>
+                        Date
+                    </th>
+                    <th>
                         Steps
                     </th>
                 </tr>
@@ -122,7 +125,24 @@
                                 <a class="btn btn-outline-dark" href="/Nicknames/@step?.Nickname/">@step?.Nickname</a>
                             </td>
                             <td>
-                                @step?.Created
+                                @{
+                                    // Timezones have different names in Windows and Linux.
+                                    if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+                                    {
+                                        var pst = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+                                        var NowInPacificStandardTime = TimeZoneInfo.ConvertTimeFromUtc(step.Created, pst);
+                                        @NowInPacificStandardTime
+                                    }
+                                    else
+                                    {
+                                        var pst = TimeZoneInfo.FindSystemTimeZoneById("PST8PDT");
+                                        var NowInPacificStandardTime = TimeZoneInfo.ConvertTimeFromUtc(step.Created, pst);
+                                        @NowInPacificStandardTime
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @step?.DateStepped.ToShortDateString()
                             </td>
                             <td>
                                 @step?.Steps
