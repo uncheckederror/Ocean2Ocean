@@ -321,6 +321,11 @@
 
         var stepsTaken = @Model?.StepsTaken;
 
+        // Make sure everything is a number.
+        for (var i = 0; i < route.length; i++) {
+            route[i] = route[i].map(Number);
+        }
+
         // Calculate the distance in kilometers between route start/end point.
         var line = turf.lineString(route);
         var lengthMiles = turf.length(line, { units: 'miles' });
@@ -340,23 +345,36 @@
         document.getElementById("stepsTaken").value = stepsTaken;
 
         // Calculate the distance traveled.
-        var milesFromSteps = stepsTaken / 2000;
-        console.log("milesFromSteps: " + milesFromSteps);
-        var start = 0;
-        var stop = milesFromSteps;
-        var routeTraveled = turf.lineSliceAlong(line, start, stop, { units: 'miles' });
+    var lengthOfASingleStep = 1 / 2000;
+    var beginningInMiles = 0;
+    var currentLocationInMiles = lengthOfASingleStep;
+    var endInMiles = lengthMiles;
+
+    // Line segments can't be of length 0, handle when no steps have been entered for the event.
+    if (stepsTaken > 0) {
+        currentLocationInMiles = stepsTaken / 2000;
+    }
+
+    console.log(`beginningInMiles ${beginningInMiles}`)
+    console.log(`currentLocationInMiles ${currentLocationInMiles}`)
+    console.log(`endInMiles ${endInMiles}`)
+
+    // Line segments can't be of zero length, handle when there are more steps than required to complete the route.
+    if (currentLocationInMiles >= endInMiles) {
+        currentLocationInMiles = endInMiles - lengthOfASingleStep;
+    }
+
+    // Create a line segment of non-zero length, that represents the distance traveled so far.
+    var routeTraveled = turf.lineSliceAlong(line, beginningInMiles, currentLocationInMiles, { units: 'miles' });
         console.log(routeTraveled);
 
-        // Calculate the distance remaining.
-        var milesFromSteps = stepsTaken / 2000;
-        var start = milesFromSteps;
-        var stop = lengthMiles;
-        var routeRemaining = turf.lineSliceAlong(line, start, stop, { units: 'miles' });
+    // Create a line segment of non-zero length, that represents the distance remaining.
+    var routeRemaining = turf.lineSliceAlong(line, currentLocationInMiles, endInMiles, { units: 'miles' });
         console.log(routeTraveled);
 
         // Get the point for the marker Icon
         var options = { units: 'miles' };
-        var along = turf.along(line, milesFromSteps, options);
+    var along = turf.along(line, currentLocationInMiles, options);
 
         // Set the progress bar
         var progressbarWidth = Math.round((stepsTaken / totalSteps) * 100);
