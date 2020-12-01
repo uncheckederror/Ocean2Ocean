@@ -24,6 +24,9 @@
     <Content Update="wwwroot\images\DSC06102small.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\js\altRoute.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\js\route.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
